@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Init pre-push guard (HARD RULE 3/4 in CLAUDE.md): push only to your own branch, never to main.
+# Owners are listed in .githooks/branch-owners.txt (email=branch).
+# Blocks: pushes to any branch other than the one owned by `git config user.email`,
+# deleting a remote branch, and non-fast-forward (force) pushes.
+# Enable once per clone:   git config core.hooksPath .githooks
+
+root="$(git rev-parse --show-toplevel)"
+email="$(git config user.email)"
+allowed=""
+while IFS='=' read -r owner_email owner_branch; do
+  case "$owner_email" in ''|\#*) continue ;; esac
+  [ "$owner_email" = "$email" ] && allowed="$owner_branch"
+done < "$root/.githooks/branch-owners.txt"
+
+if [ -z "$allowed" ]; then
+  echo "pre-push: BLOCKED. git user.email '$email' is not listed in .githooks/branch-owners.txt." >&2
+  exit 1
+fi
+
+zero="0000000000000000000000000000000000000000"
+while read -r local_ref local_sha remote_ref remote_sha; do
+  case "$remote_ref" in refs/heads/*) ;; *) continue ;; esac
+  target="${remote_ref#refs/heads/}"
+  if [ "$target" != "$allowed" ]; then
+    echo "pre-push: BLOCKED. $email may push only to '$allowed' (this push targets '$target')." >&2
+    exit 1
+  fi
+  if [ "$local_sha" = "$zero" ]; then
+    echo "pre-push: BLOCKED. Deleting the remote branch '$target' is not allowed from here." >&2
+    exit 1
+  fi
+  if [ "$remote_sha" != "$zero" ] && ! git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null; then
+    echo "pre-push: BLOCKED. This would rewrite '$target' (non-fast-forward). Force-push is not allowed." >&2
+    exit 1
+  fi
+done
+exit 0

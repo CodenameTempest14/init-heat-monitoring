@@ -12,18 +12,16 @@
 **Sonnet 5.5**, because the work is writing the proposed feature list and phase plan for approval. Switch to **Opus 5.5** when the Supabase schema and device-security design start.
 
 ## Next concrete step
-1. Owner reviews `hardware/schematic.html` and answers P00-10 (buck module, ESP32 board, BMS, OLED pin order).
-2. Propose a feature list in `documentation/specs/FEATURES.md` (proposal only, nothing built) and wait for approval (P00-11).
-3. Propose the phase plan (P00-12) and wait for approval.
+1. Owner confirms what "all open source" covers (D-010), then tick P00-11.
+2. Propose the phase plan (P00-12) and wait for approval.
 
 ## Waiting on the owner
-- Review of Rev A hardware (P00-10).
-- Approval of the feature list and phase plan (P00-11, P00-12). No feature work before that.
-- A pre-push hook (as in Ad Astra's `.githooks/`) that blocks pushes to `main`: not set up yet. Ask if you want it.
-- Unmarked 18650 cells: capacity and quality are unknown. Plan to measure them (or buy branded cells) before relying on the runtime estimate.
+- Meaning of the open-source condition (D-010); phase plan approval (P00-12). No feature work before that.
+- Power bank auto-off test at low load: needs the real ROMOSS bank and the board (bring-up step 1). Check its manual for a low-current mode.
+- Nothing pushed. Ask before any push, naming the target.
 
 ## Decisions so far (all in DECISIONS.md)
-D-001 hardware parts · D-002 stack Option A · D-003 scope · D-004 pocket 4G router/hotspot · D-005 unmarked 18650 cells · D-006 MP1584 buck at 5.20 V with D1 · D-007 brand name **Init** (owner may veto).
+D-001 hardware parts · D-002 stack Option A · D-003 scope · D-004 pocket 4G router/hotspot · D-005 unmarked 18650 cells · D-006 MP1584 buck at 5.20 V with D1 · D-007 brand name **Init** (owner may veto) · D-008 USB power bank replaces cells/buck/BMS (supersedes D-001 power, D-005, D-006) · D-009 30-pin ESP32, SSD1306 128×64, no BMS · D-010 features approved if open source · D-011 Wi-Fi option 1 · D-012 confirmed hardware and ROMOSS bank. Pre-push hook active via `core.hooksPath .githooks` (tested).
 
 ## Parking lot (out of scope — not being pursued)
 - Cellular module on the device (not chosen; revisit only if the hotspot plan fails).

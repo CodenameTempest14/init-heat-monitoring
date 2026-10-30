@@ -20,9 +20,9 @@ Checklist markers read by `tools/phase-report.mjs`: `- [x]` done · `UNVERIFIED:
 - [x] P00-08a Brand name chosen: Init — evidence: DECISIONS.md D-007 (agent's pick at owner's request; owner may veto)
 
 ## Hardware
-- [x] P00-09 Rev A schematic drafted (drafted only; not built, not measured) — evidence: hardware/schematic.html
-- [ ] P00-10 Owner reviews Rev A and confirms buck module model, ESP32 board variant, BMS type and OLED pin order
+- [x] P00-09 Schematic drafted (drafted only; not built, not measured). Rev A 2026-10-30, redrawn as Rev B for the power bank (D-008) — evidence: hardware/schematic.html; Rev B rendered in headless Edge and viewed, two label overlaps fixed and re-rendered clean
+- [x] P00-10 Owner confirms power source, ESP32 board variant, BMS and OLED pin order — evidence: D-008, D-009, D-012 (owner messages 2026-10-30 and 2026-10-31: power bank ROMOSS Sense 8P+, ESP32 30-pin Type-C, OLED GND/VCC/SCK/SDA). Rev B not built; the power bank low-load test is still open (bring-up step 1)
 
 ## Before Phase 1 can open
-- [ ] P00-11 Feature list proposed in documentation/specs/FEATURES.md and approved by the owner
+- [ ] PROG: P00-11 Feature list proposed in documentation/specs/FEATURES.md and approved by the owner. Owner approved all tiers 2026-10-31 on condition "all open source" (D-010); tick once the condition is confirmed
 - [ ] P00-12 Phase plan for the rest of the project proposed and approved by the owner
