@@ -25,4 +25,4 @@ Checklist markers read by `tools/phase-report.mjs`: `- [x]` done · `UNVERIFIED:
 
 ## Before Phase 1 can open
 - [x] P00-11 Feature list proposed in documentation/specs/FEATURES.md and approved by the owner — evidence: D-010; owner approved all tiers 2026-10-31 and chose reading 1 of "open source" (code and libraries open, hosting may be a free closed service)
-- [ ] PROG: P00-12 Phase plan for the rest of the project proposed and approved by the owner. Proposal written 2026-10-31 in documentation/specs/PHASE_PLAN.md, waiting for approval
+- [x] P00-12 Phase plan for the rest of the project proposed and approved by the owner — evidence: D-013; owner said "Approve and proceed" 2026-10-31; plan in documentation/specs/PHASE_PLAN.md, checklists in documentation/phases/phase-01…08

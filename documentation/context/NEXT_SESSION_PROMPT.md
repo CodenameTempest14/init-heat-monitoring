@@ -1,6 +1,6 @@
 # Continue Classroom Heat Index Monitoring (prompt generated 2026-10-30)
 
-You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Documents\Codes\classroom-heat-index-monitoring): a battery-powered ESP32 room monitor (DHT22 + OLED) plus a public web app (PWA on Supabase + free static hosting) showing temperature, humidity and heat index for one classroom. The owner is learning: explain before and while implementing.
+You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Documents\Codes\classroom-heat-index-monitoring): a power-bank-powered ESP32 room monitor (DHT22 + OLED) plus a public web app (PWA on Supabase + free static hosting) showing temperature, humidity and heat index for one classroom. The owner is learning: explain before and while implementing.
 
 ## HARD RULES (full text in CLAUDE.md)
 1. Read in this order and nothing more: CLAUDE.md, documentation/context/CURRENT_STATE.md, the current phase checklist in documentation/phases/, the last Session Close Report.
@@ -11,24 +11,30 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 6. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run `node tools/continuation-prompt.mjs` and **show the generated prompt and the progress table in the final message**.
 
 ## Where we are
-[P00 · Kickoff and decisions · 10/13 done · 0 blocked · unverified 0]
+[P00 · Kickoff and decisions · 13/13 done · 0 blocked · unverified 0]
 
 ### Phase Progress (end of the previous session)
 | Phase | Done / Total | Progress | % |
 |---|---|---|---|
-| P00 Kickoff and decisions | 10 / 13 | ████████░░ | 77% |
-| **Whole project** | 10 / 13 | ████████░░ | **77%** |
+| P00 Kickoff and decisions | 13 / 13 | ██████████ | 100% |
+| P01 Heat index core and bench bring-up | 0 / 8 | ░░░░░░░░░░ | 0% |
+| P02 Backend and secure upload | 0 / 6 | ░░░░░░░░░░ | 0% |
+| P03 Device firmware | 0 / 7 | ░░░░░░░░░░ | 0% |
+| P04 Web app core | 0 / 8 | ░░░░░░░░░░ | 0% |
+| P05 Admin, alerts and device health | 0 / 5 | ░░░░░░░░░░ | 0% |
+| P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
+| P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
+| P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
+| **Whole project** | 13 / 62 | ██░░░░░░░░ | **21%** |
 
 ### Recommended model for this session
-**Sonnet 5.5**, because the work is writing the proposed feature list and phase plan for approval. Switch to **Opus 5.5** when the Supabase schema and device-security design start.
+**Sonnet 5.5**, because P01 is the heat index function written test-first plus bench bring-up, which needs care but not deep architecture. Switch to **Opus 5.5** when P02 starts (Supabase schema, row-level rules, device-key security).
 
 ### Next concrete step
-1. Owner reviews `hardware/schematic.html` and answers P00-10 (buck module, ESP32 board, BMS, OLED pin order).
-2. Propose a feature list in `documentation/specs/FEATURES.md` (proposal only, nothing built) and wait for approval (P00-11).
-3. Propose the phase plan (P00-12) and wait for approval.
+1. Ask the phase-builder question, then start P01: write the heat index tests first (P01-01) and watch them fail. Explain the formula to the owner before coding.
+2. In parallel, when the owner has the parts: run the power bank low-load test (P01-04).
 
 ### Waiting on the owner
-- Review of Rev A hardware (P00-10).
-- Approval of the feature list and phase plan (P00-11, P00-12). No feature work before that.
-- Whether to run `git init` here, add a remote, and create branch `codenametempest14`. Needed before any push or the pre-push hook; nothing has been committed.
-- Unmarked 18650 cells: capacity and quality are unknown. Plan to measure them (or buy branded cells) before relying on the runtime estimate.
+- Nothing blocks the start of P01. The owner has the parts in hand and should check the ROMOSS manual for a low-current mode.
+- Power bank auto-off test at low load: needs the real ROMOSS bank and the board (bring-up step 1). Check its manual for a low-current mode.
+- Nothing pushed. Ask before any push, naming the target.

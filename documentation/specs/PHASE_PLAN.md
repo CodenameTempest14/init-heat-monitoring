@@ -1,6 +1,6 @@
 # Init: proposed phase plan (PROPOSAL, nothing approved)
 
-Status: **proposed 2026-10-31, waiting for the owner.** Only P00 exists as a checklist today. If you approve this plan, I create one checklist file per phase (`documentation/phases/phase-NN-*.md`) and the Phase Progress table then lists them all. Each phase opens only after the one before it is verified on the real thing.
+Status: **approved by the owner 2026-10-31 (D-013).** Checklists exist in `documentation/phases/phase-01…08`. Each phase opens only after the one before it is verified on the real thing.
 
 | Phase | Name | Features (FEATURES.md) | Why in this order | Suggested model |
 |---|---|---|---|---|

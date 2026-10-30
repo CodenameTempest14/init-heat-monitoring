@@ -26,7 +26,7 @@ const today = new Date().toISOString().slice(0, 10);
 
 const prompt = `# Continue Classroom Heat Index Monitoring (prompt generated ${today})
 
-You are continuing **classroom-heat-index-monitoring** (d:\\System Documents\\Documents\\Codes\\classroom-heat-index-monitoring): a battery-powered ESP32 room monitor (DHT22 + OLED) plus a public web app (PWA on Supabase + free static hosting) showing temperature, humidity and heat index for one classroom. The owner is learning: explain before and while implementing.
+You are continuing **classroom-heat-index-monitoring** (d:\\System Documents\\Documents\\Codes\\classroom-heat-index-monitoring): a power-bank-powered ESP32 room monitor (DHT22 + OLED) plus a public web app (PWA on Supabase + free static hosting) showing temperature, humidity and heat index for one classroom. The owner is learning: explain before and while implementing.
 
 ## HARD RULES (full text in CLAUDE.md)
 1. Read in this order and nothing more: CLAUDE.md, documentation/context/CURRENT_STATE.md, the current phase checklist in documentation/phases/, the last Session Close Report.
