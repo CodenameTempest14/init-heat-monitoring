@@ -1,10 +1,75 @@
 {
   "note": "Source of truth for the page registry. Edit this file, then run: node design/build-registry.mjs. Status flow: Proposed, Approved, Implemented, Verified, Baselined.",
   "pages": [
-    { "id": "home", "name": "Live room (home)", "features": ["F-01", "F-02", "F-03", "F-04", "F-05", "F-12", "F-15"], "phase": "P04", "template": null, "source": null, "license": null, "status": "Proposed" },
-    { "id": "kiosk", "name": "Kiosk display", "features": ["F-13"], "phase": "P06", "template": null, "source": null, "license": null, "status": "Proposed" },
-    { "id": "qr-poster", "name": "QR code poster", "features": ["F-14"], "phase": "P06", "template": null, "source": null, "license": null, "status": "Proposed" },
-    { "id": "admin", "name": "Admin: sign-in, settings, alerts, device health", "features": ["F-09", "F-10", "F-17"], "phase": "P05", "template": null, "source": null, "license": null, "status": "Proposed" },
-    { "id": "device-setup", "name": "Device Wi-Fi setup page (served by the ESP32)", "features": ["D-011"], "phase": "P03", "template": null, "source": null, "license": null, "status": "Proposed" }
-  ]
+    {
+      "id": "home",
+      "name": "Live room (home)",
+      "features": [
+        "F-01",
+        "F-02",
+        "F-03",
+        "F-04",
+        "F-05",
+        "F-12",
+        "F-15"
+      ],
+      "phase": "P04",
+      "template": "https://preview.tabler.io/ (dashboard cards and charts)",
+      "source": "Tabler",
+      "license": "MIT",
+      "status": "Proposed"
+    },
+    {
+      "id": "kiosk",
+      "name": "Kiosk display",
+      "features": [
+        "F-13"
+      ],
+      "phase": "P06",
+      "template": "https://preview.tabler.io/cards.html (card shell, numbers enlarged by our tokens)",
+      "source": "Tabler",
+      "license": "MIT",
+      "status": "Proposed"
+    },
+    {
+      "id": "qr-poster",
+      "name": "QR code poster",
+      "features": [
+        "F-14"
+      ],
+      "phase": "P06",
+      "template": "https://preview.tabler.io/cards.html (single card, print stylesheet ours)",
+      "source": "Tabler",
+      "license": "MIT",
+      "status": "Proposed"
+    },
+    {
+      "id": "admin",
+      "name": "Admin: sign-in, settings, alerts, device health",
+      "features": [
+        "F-09",
+        "F-10",
+        "F-17"
+      ],
+      "phase": "P05",
+      "template": "https://preview.tabler.io/sign-in.html (sign-in) and https://preview.tabler.io/settings.html (settings)",
+      "source": "Tabler",
+      "license": "MIT",
+      "status": "Proposed"
+    },
+    {
+      "id": "device-setup",
+      "name": "Device Wi-Fi setup page (served by the ESP32)",
+      "features": [
+        "D-011"
+      ],
+      "phase": "P03",
+      "template": "None: hand-written minimal HTML and CSS, because the ESP32 serves it from flash and Tabler is far too large. Visual language copied from the tokens only.",
+      "source": "Own code",
+      "license": "Own (same open licence as the repo)",
+      "status": "Proposed"
+    }
+  ],
+  "direction": "Light-first, calm, high-contrast, with dark mode. Neutral surfaces; the heat category colour is the only strong colour. Large numerals, system font, phone-first, category always shown with a text label (decided by agent 2026-10-31, owner delegated).",
+  "licenceCheck": "Tabler: MIT, read from https://github.com/tabler/tabler/blob/dev/LICENSE (GitHub licence API, 2026-10-31). Demo pages returned HTTP 200 but have not been looked at yet (screenshots are P04-D4)."
 }

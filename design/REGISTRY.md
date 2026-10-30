@@ -5,8 +5,8 @@ No page is built without an **Approved** template here (UI-GATE, D-016).
 
 | ID | Page | Features | Phase | Template | Source | Licence | Status |
 |---|---|---|---|---|---|---|---|
-| `home` | Live room (home) | F-01, F-02, F-03, F-04, F-05, F-12, F-15 | P04 | — | — | — | Proposed |
-| `kiosk` | Kiosk display | F-13 | P06 | — | — | — | Proposed |
-| `qr-poster` | QR code poster | F-14 | P06 | — | — | — | Proposed |
-| `admin` | Admin: sign-in, settings, alerts, device health | F-09, F-10, F-17 | P05 | — | — | — | Proposed |
-| `device-setup` | Device Wi-Fi setup page (served by the ESP32) | D-011 | P03 | — | — | — | Proposed |
+| `home` | Live room (home) | F-01, F-02, F-03, F-04, F-05, F-12, F-15 | P04 | https://preview.tabler.io/ (dashboard cards and charts) | Tabler | MIT | Proposed |
+| `kiosk` | Kiosk display | F-13 | P06 | https://preview.tabler.io/cards.html (card shell, numbers enlarged by our tokens) | Tabler | MIT | Proposed |
+| `qr-poster` | QR code poster | F-14 | P06 | https://preview.tabler.io/cards.html (single card, print stylesheet ours) | Tabler | MIT | Proposed |
+| `admin` | Admin: sign-in, settings, alerts, device health | F-09, F-10, F-17 | P05 | https://preview.tabler.io/sign-in.html (sign-in) and https://preview.tabler.io/settings.html (settings) | Tabler | MIT | Proposed |
+| `device-setup` | Device Wi-Fi setup page (served by the ESP32) | D-011 | P03 | None: hand-written minimal HTML and CSS, because the ESP32 serves it from flash and Tabler is far too large. Visual language copied from the tokens only. | Own code | Own (same open licence as the repo) | Proposed |
