@@ -51,3 +51,26 @@ export function heatIndexC(tempC, rh) {
 
   return fToC(hi);
 }
+
+// PAGASA heat index classification (°C), from PAGASA's own infographic:
+// https://pubfiles.pagasa.dost.gov.ph/iaas/heat_index/Heat%20days%20survival_heat%20index_infographics_%2020220302.png
+// PAGASA prints whole degrees, so we round before classifying (no gaps between bands).
+const BANDS = [
+  { min: 52, category: 'extreme-danger' },
+  { min: 42, category: 'danger' },
+  { min: 33, category: 'extreme-caution' },
+  { min: 27, category: 'caution' },
+];
+
+/**
+ * @param {number|null} hiC heat index in °C, or null (below range)
+ * @returns {string|null} 'caution' | 'extreme-caution' | 'danger' | 'extreme-danger', or null below 27 °C
+ */
+export function heatCategory(hiC) {
+  if (hiC === null) return null;
+  if (typeof hiC !== 'number') throw new TypeError('hiC must be a number or null');
+  if (!Number.isFinite(hiC)) throw new RangeError('hiC must be finite');
+  const whole = Math.round(hiC);
+  const band = BANDS.find((b) => whole >= b.min);
+  return band ? band.category : null;
+}

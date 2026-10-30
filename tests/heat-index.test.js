@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { heatIndexC } from '../src/heat-index.js';
+import { heatIndexC, heatCategory } from '../src/heat-index.js';
 
 const ref = JSON.parse(readFileSync(new URL('./heat-index-reference.json', import.meta.url), 'utf8'));
 const fToC = (f) => (f - 32) / 1.8;
@@ -56,4 +56,16 @@ test('heat index is never below the air temperature when a number is returned', 
 
 test('boundary: the chart cell that sits on the NWS switch (80F, 40%) is below range', () => {
   assert.equal(heatIndexC(fToC(ref.boundary.tF), ref.boundary.rh), null);
+});
+
+test('PAGASA categories: rounding to whole degrees, boundaries, below range', () => {
+  for (const { hiC, category } of ref.categories) {
+    assert.equal(heatCategory(hiC), category, `${hiC}C`);
+  }
+});
+
+test('heatCategory rejects values that are not numbers', () => {
+  for (const bad of [undefined, '40', NaN, Infinity]) {
+    assert.throws(() => heatCategory(bad), (e) => e instanceof RangeError || e instanceof TypeError, String(bad));
+  }
 });

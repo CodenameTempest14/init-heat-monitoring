@@ -115,5 +115,76 @@
     "note": "The chart prints 80 for 80F/40%, but the NWS switch rule gives 79.8F there, so we return null (documented edge).",
     "tF": 80,
     "rh": 40
-  }
+  },
+  "categorySource": "PAGASA infographic https://pubfiles.pagasa.dost.gov.ph/iaas/heat_index/Heat%20days%20survival_heat%20index_infographics_%2020220302.png (linked from https://www.pagasa.dost.gov.ph/weather/heat-index), read by eye 2026-10-31: Caution 27-32, Extreme Caution 33-41, Danger 42-51, Extreme Danger 52 and above (degrees C). PAGASA prints whole degrees, so the heat index is rounded to the nearest whole degree (half up) before classifying.",
+  "categories": [
+    {
+      "hiC": 26.4,
+      "category": null
+    },
+    {
+      "hiC": 26.7,
+      "category": "caution"
+    },
+    {
+      "hiC": 27,
+      "category": "caution"
+    },
+    {
+      "hiC": 32,
+      "category": "caution"
+    },
+    {
+      "hiC": 32.4,
+      "category": "caution"
+    },
+    {
+      "hiC": 32.6,
+      "category": "extreme-caution"
+    },
+    {
+      "hiC": 33,
+      "category": "extreme-caution"
+    },
+    {
+      "hiC": 41,
+      "category": "extreme-caution"
+    },
+    {
+      "hiC": 41.4,
+      "category": "extreme-caution"
+    },
+    {
+      "hiC": 41.5,
+      "category": "danger"
+    },
+    {
+      "hiC": 42,
+      "category": "danger"
+    },
+    {
+      "hiC": 51,
+      "category": "danger"
+    },
+    {
+      "hiC": 51.4,
+      "category": "danger"
+    },
+    {
+      "hiC": 51.5,
+      "category": "extreme-danger"
+    },
+    {
+      "hiC": 52,
+      "category": "extreme-danger"
+    },
+    {
+      "hiC": 60,
+      "category": "extreme-danger"
+    },
+    {
+      "hiC": null,
+      "category": null
+    }
+  ]
 }
