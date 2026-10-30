@@ -53,3 +53,7 @@ test('heat index is never below the air temperature when a number is returned', 
     }
   }
 });
+
+test('boundary: the chart cell that sits on the NWS switch (80F, 40%) is below range', () => {
+  assert.equal(heatIndexC(fToC(ref.boundary.tF), ref.boundary.rh), null);
+});

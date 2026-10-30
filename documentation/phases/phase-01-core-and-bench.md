@@ -9,7 +9,7 @@ Checklist markers read by `tools/phase-report.mjs`: `- [x]` done · `UNVERIFIED:
 
 ## Heat index logic (test-first)
 - [x] P01-01 Tests for the heat index written first, covering the valid range, the below-range case and edge values, and watched failing — evidence 2026-10-31: `node --test` fails with ERR_MODULE_NOT_FOUND (src/heat-index.js absent); 7 tests in tests/heat-index.test.js. Chart rows still to be confirmed against the published chart in P01-02.
-- [ ] P01-02 Implementation passes the tests and matches published reference values
+- [x] P01-02 Implementation passes the tests and matches published reference values — evidence 2026-10-31: `node --test` 8/8 pass; chart rows read from the NWS chart image (weather.gov heatindexchart-650.jpg). Found and handled the 80F/40% boundary (chart 80, rule gives 79.8 -> null).
 - [ ] P01-03 PAGASA category bands checked against PAGASA's own published table, with the source link recorded
 
 ## Bench bring-up
