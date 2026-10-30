@@ -35,14 +35,14 @@ void setup() {
     Serial.println("OLED not found at 0x3C: check SDA/SCL wiring");
   }
   dht.begin();
-  Serial.printf("wake #%u\n", wakeCount);
+  Serial.printf("wake #%lu\n", (unsigned long)wakeCount);
 
   uint32_t start = millis();
   while (millis() - start < AWAKE_MS) {
     float t = dht.readTemperature();
     float h = dht.readHumidity();
     char a[24], b[24], c[24];
-    snprintf(a, sizeof a, "wake #%u", wakeCount);
+    snprintf(a, sizeof a, "wake #%lu", (unsigned long)wakeCount);
     if (isnan(t) || isnan(h)) {
       snprintf(b, sizeof b, "DHT22 read failed");
       c[0] = 0;

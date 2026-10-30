@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-10-31 · s04
+P01 software side: heat index and PAGASA categories written test-first and checked against the NWS chart and PAGASA's own infographic (P01-01 to 03); library licences recorded (P01-08). Design canvas started (D-016): pages, tokens, contrast check, template choices (P04-D1 to D3). Bench sketch written and compiled, not run. D-015 and D-016 recorded. Bench work moved to the next day by the owner. Nothing pushed.
+
 ## 2026-10-31 · s03
 Owner changed the power to a USB power bank (ROMOSS Sense 8P+ 30 000 mAh): schematic redrawn as Rev B (D-008, D-009, D-012). Feature list F-01…F-20 written and approved on the open-source condition (D-010); Wi-Fi setup option 1 (D-011). Pre-push hook added and tested. Phase plan P01–P08 approved (D-013) and checklists created. P00 closed. Nothing built or measured on hardware; nothing pushed.
 
