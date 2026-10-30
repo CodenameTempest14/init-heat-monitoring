@@ -11,10 +11,12 @@ Rules below are carried over from the Ad Astra project (`D:\System Documents\Doc
    (The Ad Astra tooling `tools/phase-report.mjs` does not exist here yet. Until it is set up, keep the table by hand.)
 2. **Session end: leave a continuation prompt** the owner can copy and paste into the next session, and
    **show it in the final message**. No prompt, no finished session.
-3. **Push only to your own branch** and **ask before every push.** Owner = `codenametempest14`. Never push to
-   `main` or another person's branch. Check `git config user.email`.
+3. **Push only to your own branch (and, while the owner is the only builder, `main`; see D-014)** and **ask before
+   every push.** Owner = `codenametempest14`. Never push to another person's branch. Check `git config user.email`.
 4. **Ask before every push AND every merge to `main`, naming the target**, even if an earlier push was approved.
-   `main` changes only through a pull request that the other person reviews.
+   *Amended 2026-10-31 (D-014, owner):* while the owner is the only builder, the owner's email may push `main`
+   directly (no force-push, no deletion). **The moment Shem or anyone else works on the repo, this exception ends:**
+   `main` changes only through a pull request that the other person reviews, and the hook entry for `main` is removed.
 
 ## Every session
 - **Model advice:** the first reply says which Claude model to use and why. The Close Report recommends the model for the next session.

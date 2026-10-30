@@ -37,4 +37,4 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 ### Waiting on the owner
 - Nothing blocks the start of P01. Ask which parts the owner already has (ESP32, DHT22, OLED, resistors, breadboard).
 - ROMOSS has a low-current mode (owner, 2026-10-31). Still run the auto-off test at deep-sleep current with the real bank and board (P01-04).
-- Pushed `codenametempest14` to origin on 2026-10-31 (owner approved). `main` NOT pushed: the owner asked for it, but CLAUDE.md rules 3 and 4 and the pre-push hook forbid it. Waiting for the owner to either amend the rule explicitly or use a pull request.
+- Owner amended the push rule (D-014, 2026-10-31): the owner may push `main` directly while the only builder; this ends when Shem or anyone else works on the repo (remove the `main` line from `.githooks/branch-owners.txt`). Still ask before every push, naming the target.

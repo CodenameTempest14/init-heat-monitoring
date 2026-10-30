@@ -1,2 +1,4 @@
-# email=branch
+# email=branch   (one line per allowed target; an email may have several lines)
+# D-014: while the owner is the only builder, the owner may push `main`. Remove that line when anyone else joins.
 codename.tempest14@gmail.com=codenametempest14
+codename.tempest14@gmail.com=main

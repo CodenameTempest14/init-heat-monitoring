@@ -7,13 +7,13 @@
 
 root="$(git rev-parse --show-toplevel)"
 email="$(git config user.email)"
-allowed=""
+allowed=" "
 while IFS='=' read -r owner_email owner_branch; do
   case "$owner_email" in ''|\#*) continue ;; esac
-  [ "$owner_email" = "$email" ] && allowed="$owner_branch"
+  [ "$owner_email" = "$email" ] && allowed="$allowed$owner_branch "
 done < "$root/.githooks/branch-owners.txt"
 
-if [ -z "$allowed" ]; then
+if [ "$allowed" = " " ]; then
   echo "pre-push: BLOCKED. git user.email '$email' is not listed in .githooks/branch-owners.txt." >&2
   exit 1
 fi
@@ -22,10 +22,10 @@ zero="0000000000000000000000000000000000000000"
 while read -r local_ref local_sha remote_ref remote_sha; do
   case "$remote_ref" in refs/heads/*) ;; *) continue ;; esac
   target="${remote_ref#refs/heads/}"
-  if [ "$target" != "$allowed" ]; then
-    echo "pre-push: BLOCKED. $email may push only to '$allowed' (this push targets '$target')." >&2
-    exit 1
-  fi
+  case "$allowed" in *" $target "*) ;; *)
+    echo "pre-push: BLOCKED. $email may push only to:$allowed(this push targets '$target')." >&2
+    exit 1 ;;
+  esac
   if [ "$local_sha" = "$zero" ]; then
     echo "pre-push: BLOCKED. Deleting the remote branch '$target' is not allowed from here." >&2
     exit 1
