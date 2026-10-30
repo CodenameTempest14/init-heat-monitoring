@@ -14,6 +14,7 @@ Status: **approved by the owner 2026-10-31 (D-013).** Checklists exist in `docum
 | P08 | Over-the-air updates (optional) | F-19 | Only after P07; a bad update bricks the device | Opus 5.5 |
 
 ## Notes
+- Design canvas (D-016): added as a section at the top of the P04 checklist (items P04-D1 to P04-D5). It is software only, so it can be done early, but no page is built until it is approved.
 - Each phase ends with a close report and a ticked checklist with evidence. A feature is done only when I've seen it work in the running app or on the device.
 - P03 and P04 can overlap once P02 is verified. I'd keep them separate so one unverified change is open at a time.
 - Open-source rule (D-010, reading 1): code and libraries must have open licences; hosting may be a free closed service. I'll record each library's licence in the phase that adds it.

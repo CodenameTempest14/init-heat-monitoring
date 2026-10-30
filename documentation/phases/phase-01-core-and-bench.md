@@ -17,4 +17,4 @@ Checklist markers read by `tools/phase-report.mjs`: `- [x]` done · `UNVERIFIED:
 - [ ] P01-05 Breadboard built per the Rev B wire list; 3V3 pin measured
 - [ ] P01-06 DHT22 and OLED show a live reading on the bench from a test sketch
 - [ ] P01-07 Sleep and awake currents measured with a USB meter; runtime estimate in the schematic corrected
-- [ ] P01-08 Licence of every library used recorded (open-source rule, D-010)
+- [x] P01-08 Licence of every library used recorded (open-source rule, D-010) — evidence 2026-10-31: THIRD_PARTY_NOTICES.md; licence files read on GitHub (curl to the licence API and raw licence text). Only libraries planned for the bench sketch; later libraries are added in their own phase.
