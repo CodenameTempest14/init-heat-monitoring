@@ -11,30 +11,30 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 6. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run `node tools/continuation-prompt.mjs` and **show the generated prompt and the progress table in the final message**.
 
 ## Where we are
-[P00 · Kickoff and decisions · 13/13 done · 0 blocked · unverified 0]
+[P01 · Heat index core and bench bring-up · 4/8 done · 0 blocked · unverified 0]
 
 ### Phase Progress (end of the previous session)
 | Phase | Done / Total | Progress | % |
 |---|---|---|---|
 | P00 Kickoff and decisions | 13 / 13 | ██████████ | 100% |
-| P01 Heat index core and bench bring-up | 0 / 8 | ░░░░░░░░░░ | 0% |
+| P01 Heat index core and bench bring-up | 4 / 8 | █████░░░░░ | 50% |
 | P02 Backend and secure upload | 0 / 6 | ░░░░░░░░░░ | 0% |
 | P03 Device firmware | 0 / 7 | ░░░░░░░░░░ | 0% |
-| P04 Web app core | 0 / 8 | ░░░░░░░░░░ | 0% |
+| P04 Web app core | 3 / 13 | ██░░░░░░░░ | 23% |
 | P05 Admin, alerts and device health | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 13 / 62 | ██░░░░░░░░ | **21%** |
+| **Whole project** | 20 / 67 | ███░░░░░░░ | **30%** |
 
 ### Recommended model for this session
 **Sonnet 5.5**, because P01 is the heat index function written test-first plus bench bring-up, which needs care but not deep architecture. Switch to **Opus 5.5** when P02 starts (Supabase schema, row-level rules, device-key security).
 
 ### Next concrete step
-1. Ask the phase-builder question, then start P01: write the heat index tests first (P01-01) and watch them fail. Explain the formula to the owner before coding.
-2. In parallel, when the owner has the parts: run the power bank low-load test (P01-04).
+1. Ask the phase-builder question. Then the owner does the bench with the agent guiding: P01-04 power bank low-load test, P01-05 breadboard and 3V3 measurement, P01-06 upload `firmware/bench` (`pio run -t upload`) and watch the OLED, P01-07 awake and sleep current with a USB meter. Record results in the phase file with evidence; correct the runtime estimate in the schematic.
+2. Software-only work that can follow: P04-D4 (Playwright screenshots of the chosen templates) and P04-D5 (UI-GATE).
 
 ### Waiting on the owner
-- Nothing blocks the start of P01. Ask which parts the owner already has (ESP32, DHT22, OLED, resistors, breadboard).
-- ROMOSS has a low-current mode (owner, 2026-10-31). Still run the auto-off test at deep-sleep current with the real bank and board (P01-04).
-- Owner amended the push rule (D-014, 2026-10-31): the owner may push `main` directly while the only builder; this ends when Shem or anyone else works on the repo (remove the `main` line from `.githooks/branch-owners.txt`). Still ask before every push, naming the target.
+- The bench work above (owner, next day). All parts are in hand (owner, 2026-10-31).
+- Two small calls to confirm: PAGASA bands are applied to the heat index rounded to whole °C (agent's choice); F-01's "40 % RH" wording vs the NWS range rule used in the code.
+- Nothing pushed. Ask before any push, naming the target (`codenametempest14` or `main`, D-014).
