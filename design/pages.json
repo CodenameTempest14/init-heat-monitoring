@@ -1,0 +1,10 @@
+{
+  "note": "Source of truth for the page registry. Edit this file, then run: node design/build-registry.mjs. Status flow: Proposed, Approved, Implemented, Verified, Baselined.",
+  "pages": [
+    { "id": "home", "name": "Live room (home)", "features": ["F-01", "F-02", "F-03", "F-04", "F-05", "F-12", "F-15"], "phase": "P04", "template": null, "source": null, "license": null, "status": "Proposed" },
+    { "id": "kiosk", "name": "Kiosk display", "features": ["F-13"], "phase": "P06", "template": null, "source": null, "license": null, "status": "Proposed" },
+    { "id": "qr-poster", "name": "QR code poster", "features": ["F-14"], "phase": "P06", "template": null, "source": null, "license": null, "status": "Proposed" },
+    { "id": "admin", "name": "Admin: sign-in, settings, alerts, device health", "features": ["F-09", "F-10", "F-17"], "phase": "P05", "template": null, "source": null, "license": null, "status": "Proposed" },
+    { "id": "device-setup", "name": "Device Wi-Fi setup page (served by the ESP32)", "features": ["D-011"], "phase": "P03", "template": null, "source": null, "license": null, "status": "Proposed" }
+  ]
+}

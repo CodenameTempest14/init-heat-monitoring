@@ -15,3 +15,4 @@ CLAUDE.local.md
 node_modules/
 dist/
 .pio/
+.pio-build.log

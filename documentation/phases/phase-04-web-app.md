@@ -9,7 +9,7 @@ Checklist markers: see phase-01.
 
 ## Design canvas (D-016, owner chose option 1; agent placed it here)
 Software only. Needs no data or hardware, so it may be done before P04 opens; it must be finished and approved before any page is built (UI-GATE).
-- [ ] P04-D1 `design/` folder with README, a small template manifest and registry, and one token file (colours, type, spacing)
+- [x] P04-D1 `design/` folder with README, a small template manifest and registry, and one token file (colours, type, spacing) — evidence 2026-10-31: design/README.md, pages.json (5 pages), tokens.json (provisional), build-registry.mjs run -> REGISTRY.md. No "small template manifest" beyond pages.json; templates themselves come in D2.
 - [ ] P04-D2 Page list for the app taken from the approved features, one open-source template chosen per page, licence recorded
 - [ ] P04-D3 Tokens for light and dark, including the four heat category colours, with contrast checked by a script (text 4.5:1, non-text 3:1) and an icon or text label so colour is never the only signal
 - [ ] P04-D4 Reference screenshots of each chosen template at phone and desktop widths, owner approves them
