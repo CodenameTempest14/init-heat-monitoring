@@ -31,7 +31,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 **Sonnet 5.5**, because P01 is the heat index function written test-first plus bench bring-up, which needs care but not deep architecture. Switch to **Opus 5.5** when P02 starts (Supabase schema, row-level rules, device-key security).
 
 ### Next concrete step
-1. Ask the phase-builder question. Then the owner does the bench with the agent guiding: P01-04 power bank low-load test, P01-05 breadboard and 3V3 measurement, P01-06 upload `firmware/bench` (`pio run -t upload`) and watch the OLED, P01-07 awake and sleep current with a USB meter. Record results in the phase file with evidence; correct the runtime estimate in the schematic.
+1. Ask the phase-builder question (last answer: owner only). The walkthrough was given in s05 but nothing is built yet. Order: P01-05 breadboard per the Rev B wire list and measure 3V3 (expect 3.2 to 3.4 V, USB from the PC); P01-06 upload `firmware/bench` (`pio run -t upload`, `pio device monitor`) and watch the OLED; P01-04 one hour on the ROMOSS bank; P01-07 currents. Owner has a multimeter only: agree how to measure current (USB inline meter recommended, or series mA with a spliced cable). Record results in the phase file with evidence; correct the runtime estimate in the schematic.
 2. Software-only work that can follow: P04-D4 (Playwright screenshots of the chosen templates) and P04-D5 (UI-GATE).
 
 ### Waiting on the owner

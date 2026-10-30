@@ -3,7 +3,7 @@
 > Overwritten at every session close. The first file read in every session (CLAUDE.md).
 
 **Current phase:** P01 in progress (4/8): heat index logic done (P01-01 to 03, 08); bench items P01-04 to 07 wait for the owner. Design canvas (D-016) started inside P04 (P04-D1 to D3 done; D4, D5 open). Checklist: [P01](../phases/phase-01-core-and-bench.md).
-**Last session:** 2026-10-31 s04 — [close report](../phase-reports/phase-01-core-and-bench/sessions/2026-10-31_s04_CLOSE.md)
+**Last session:** 2026-10-31 s05 — [close report](../phase-reports/phase-01-core-and-bench/sessions/2026-10-31_s05_CLOSE.md)
 **Branches:** owner = `codenametempest14`. Repo initialised 2026-10-30; remote `origin` = https://github.com/CodenameTempest14/init-heat-monitoring.git. First push goes to `codenametempest14` only (owner approved); `main` stays empty until a reviewed pull request. See `git log -1` for the latest commit.
 **Status line:** run `node tools/phase-report.mjs` · progress table: `node tools/phase-report.mjs --md`
 **Phase builder:** owner only (answered 2026-10-30). Ask again at the start of every session.
@@ -12,7 +12,7 @@
 **Sonnet 5.5**, because P01 is the heat index function written test-first plus bench bring-up, which needs care but not deep architecture. Switch to **Opus 5.5** when P02 starts (Supabase schema, row-level rules, device-key security).
 
 ## Next concrete step
-1. Ask the phase-builder question. Then the owner does the bench with the agent guiding: P01-04 power bank low-load test, P01-05 breadboard and 3V3 measurement, P01-06 upload `firmware/bench` (`pio run -t upload`) and watch the OLED, P01-07 awake and sleep current with a USB meter. Record results in the phase file with evidence; correct the runtime estimate in the schematic.
+1. Ask the phase-builder question (last answer: owner only). The walkthrough was given in s05 but nothing is built yet. Order: P01-05 breadboard per the Rev B wire list and measure 3V3 (expect 3.2 to 3.4 V, USB from the PC); P01-06 upload `firmware/bench` (`pio run -t upload`, `pio device monitor`) and watch the OLED; P01-04 one hour on the ROMOSS bank; P01-07 currents. Owner has a multimeter only: agree how to measure current (USB inline meter recommended, or series mA with a spliced cable). Record results in the phase file with evidence; correct the runtime estimate in the schematic.
 2. Software-only work that can follow: P04-D4 (Playwright screenshots of the chosen templates) and P04-D5 (UI-GATE).
 
 ## Waiting on the owner
