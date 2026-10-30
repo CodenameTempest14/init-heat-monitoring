@@ -35,6 +35,6 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 2. In parallel, when the owner has the parts: run the power bank low-load test (P01-04).
 
 ### Waiting on the owner
-- Nothing blocks the start of P01. The owner has the parts in hand and should check the ROMOSS manual for a low-current mode.
+- Nothing blocks the start of P01. Ask which parts the owner already has (ESP32, DHT22, OLED, resistors, breadboard) and have them check the ROMOSS manual for a low-current mode.
 - Power bank auto-off test at low load: needs the real ROMOSS bank and the board (bring-up step 1). Check its manual for a low-current mode.
 - Nothing pushed. Ask before any push, naming the target.
