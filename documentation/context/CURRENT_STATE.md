@@ -12,11 +12,11 @@
 **Sonnet 5.5**, because the work is writing the proposed feature list and phase plan for approval. Switch to **Opus 5.5** when the Supabase schema and device-security design start.
 
 ## Next concrete step
-1. Owner confirms what "all open source" covers (D-010), then tick P00-11.
-2. Propose the phase plan (P00-12) and wait for approval.
+1. Owner reviews `documentation/specs/PHASE_PLAN.md` (P00-12): approve or change.
+2. On approval, create the P01 checklist and close P00.
 
 ## Waiting on the owner
-- Meaning of the open-source condition (D-010); phase plan approval (P00-12). No feature work before that.
+- Phase plan approval (P00-12). No feature work before that.
 - Power bank auto-off test at low load: needs the real ROMOSS bank and the board (bring-up step 1). Check its manual for a low-current mode.
 - Nothing pushed. Ask before any push, naming the target.
 

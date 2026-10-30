@@ -24,5 +24,5 @@ Checklist markers read by `tools/phase-report.mjs`: `- [x]` done · `UNVERIFIED:
 - [x] P00-10 Owner confirms power source, ESP32 board variant, BMS and OLED pin order — evidence: D-008, D-009, D-012 (owner messages 2026-10-30 and 2026-10-31: power bank ROMOSS Sense 8P+, ESP32 30-pin Type-C, OLED GND/VCC/SCK/SDA). Rev B not built; the power bank low-load test is still open (bring-up step 1)
 
 ## Before Phase 1 can open
-- [ ] PROG: P00-11 Feature list proposed in documentation/specs/FEATURES.md and approved by the owner. Owner approved all tiers 2026-10-31 on condition "all open source" (D-010); tick once the condition is confirmed
-- [ ] P00-12 Phase plan for the rest of the project proposed and approved by the owner
+- [x] P00-11 Feature list proposed in documentation/specs/FEATURES.md and approved by the owner — evidence: D-010; owner approved all tiers 2026-10-31 and chose reading 1 of "open source" (code and libraries open, hosting may be a free closed service)
+- [ ] PROG: P00-12 Phase plan for the rest of the project proposed and approved by the owner. Proposal written 2026-10-31 in documentation/specs/PHASE_PLAN.md, waiting for approval
