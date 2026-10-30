@@ -1,0 +1,34 @@
+{
+  "source": "NWS/WPC heat index equation (https://www.wpc.ncep.noaa.gov/html/heatindex_equation.shtml, read 2026-10-31). Temperatures in the cases are degrees F as the NWS publishes them; the test converts to C.",
+  "status": "chart rows are from the NWS heat index chart as I remember it, NOT yet checked against the published chart (P01-02 must do that). The adjustment rows are computed by hand from the NWS adjustment formulas.",
+  "chartToleranceF": 1,
+  "chart": [
+    { "tF": 80,  "rh": 40, "hiF": 80 },
+    { "tF": 90,  "rh": 50, "hiF": 95 },
+    { "tF": 90,  "rh": 70, "hiF": 106 },
+    { "tF": 100, "rh": 40, "hiF": 109 },
+    { "tF": 100, "rh": 50, "hiF": 118 },
+    { "tF": 110, "rh": 40, "hiF": 136 }
+  ],
+  "adjustments": [
+    { "name": "low humidity, subtract", "tF": 95, "rh": 10, "hiF": 89.45, "toleranceF": 0.1 },
+    { "name": "high humidity, add",     "tF": 85, "rh": 90, "hiF": 101.78, "toleranceF": 0.1 }
+  ],
+  "belowRange": [
+    { "tC": 25, "rh": 50 },
+    { "tC": 20, "rh": 90 },
+    { "tC": 26, "rh": 60 }
+  ],
+  "invalid": [
+    { "tC": "30", "rh": 60 },
+    { "tC": 30, "rh": "60" },
+    { "tC": null, "rh": 60 },
+    { "tC": 30, "rh": null },
+    { "tC": "NaN", "rh": 60 },
+    { "tC": 30, "rh": "NaN" },
+    { "tC": 30, "rh": -1 },
+    { "tC": 30, "rh": 100.5 },
+    { "tC": 90, "rh": 50 },
+    { "tC": -50, "rh": 50 }
+  ]
+}
