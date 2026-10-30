@@ -1,0 +1,17 @@
+# Secrets: never committed (Wi-Fi passwords, API keys, tokens)
+.env
+.env.*
+secrets/
+secrets.h
+*.pfx
+*.key
+
+# Editor and tool folders
+.qodo/
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Node / build output
+node_modules/
+dist/
+.pio/

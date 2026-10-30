@@ -1,0 +1,377 @@
+<title>Heat Monitor Schematic</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Libre+Franklin:wght@400;500;700&display=swap">
+<style>
+/* Layout: single column drafting sheet. Schematic first, then parts, wiring, bring-up. */
+:root {
+  --bg: #f2f5f3; --fg: #14201d; --panel: #ffffff; --muted: #566762; --rule: #cbd6d2;
+  --accent: #0b6e5f; --warn-bg: #fff3e0; --warn-fg: #7a3d00;
+  --vbat: #b3261e; --v5: #b85c00; --v33: #6f42c1; --sig: #1556b8; --gnd: #6b7a76;
+  --font-body: "Libre Franklin", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101716; --fg: #e3ece9; --panel: #172220; --muted: #93a7a1; --rule: #2a3835;
+    --accent: #4fd1b5; --warn-bg: #2d2113; --warn-fg: #ffc27a;
+    --vbat: #ff7b72; --v5: #ffa657; --v33: #b79cff; --sig: #6cb6ff; --gnd: #93a7a1;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101716; --fg: #e3ece9; --panel: #172220; --muted: #93a7a1; --rule: #2a3835;
+  --accent: #4fd1b5; --warn-bg: #2d2113; --warn-fg: #ffc27a;
+  --vbat: #ff7b72; --v5: #ffa657; --v33: #b79cff; --sig: #6cb6ff; --gnd: #93a7a1;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.55;
+  padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+h2 { font-size: 1.15rem; margin: 0 0 10px; text-wrap: balance; }
+p, li { max-width: 72ch; }
+.meta { font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+.callout { background: var(--warn-bg); color: var(--warn-fg); border-left: 4px solid var(--v5); padding: 12px 16px; }
+.callout ul { margin: 6px 0 0; padding-left: 20px; }
+.sheet { background: var(--panel); border: 1px solid var(--rule); padding: 12px; overflow-x: auto; }
+.sheet svg { display: block; min-width: 860px; width: 100%; height: auto; }
+figcaption { font-size: 13px; color: var(--muted); margin-top: 8px; max-width: 80ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--font-mono); font-size: 12px; margin-top: 10px; }
+.legend span::before { content: ""; display: inline-block; width: 22px; height: 0; border-top: 3px solid currentColor; vertical-align: middle; margin-right: 6px; }
+.l-vbat { color: var(--vbat); } .l-v5 { color: var(--v5); } .l-v33 { color: var(--v33); } .l-sig { color: var(--sig); } .l-gnd { color: var(--gnd); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--rule); background: var(--panel); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 640px; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-mono); font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td.ref { font-family: var(--font-mono); font-weight: 600; white-space: nowrap; }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font-family: var(--font-mono); font-size: .92em; }
+ol.steps { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.cols > div { min-width: 0; }
+
+/* SVG schematic styling (kept here so the SVG stays theme-aware) */
+.box { fill: var(--panel); stroke: var(--fg); stroke-width: 1.6; }
+.sym { fill: none; stroke: var(--fg); stroke-width: 1.6; }
+.solid { fill: var(--fg); stroke: var(--fg); stroke-width: 1.4; }
+.w { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.vbat { stroke: var(--vbat); } .v5 { stroke: var(--v5); } .v33 { stroke: var(--v33); } .sig { stroke: var(--sig); } .gnd { stroke: var(--gnd); }
+.dot { fill: var(--fg); }
+.t { fill: var(--fg); font: 11px var(--font-mono); }
+.tb { font-weight: 600; font-size: 12px; }
+.tm { fill: var(--muted); }
+.ta { fill: var(--accent); font-weight: 600; }
+.tc { text-anchor: middle; } .te { text-anchor: end; }
+.sec { fill: var(--muted); font: 600 11px var(--font-mono); letter-spacing: .08em; }
+.rule { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 4 4; }
+.n-vbat { fill: var(--vbat); } .n-v5 { fill: var(--v5); } .n-v33 { fill: var(--v33); } .n-sig { fill: var(--sig); }
+</style>
+
+<main>
+  <header>
+    <div class="meta">Rev A · 2026-10-30 · one room · battery only</div>
+    <h1>Classroom Heat Monitor: hardware schematic</h1>
+    <p>ESP32 reads a DHT22 once per wake-up, shows the result on an OLED for a few seconds, sends it over Wi-Fi, then deep-sleeps. Two 18650 cells in series feed a 5&nbsp;V buck converter through a protection board.</p>
+    <p class="meta">Status: drafted, not yet built or measured on real hardware.</p>
+  </header>
+
+  <section class="callout" aria-label="Read before wiring">
+    <strong>Read before you wire anything</strong>
+    <ul>
+      <li>Never connect the two cells in series until you have measured each one. Both must be 3.6–4.2&nbsp;V and within 0.1&nbsp;V of each other, same brand, same capacity, same age.</li>
+      <li>Set the buck converter to its output voltage with <strong>nothing connected to its output</strong>, then switch off and wire it to the ESP32.</li>
+      <li>Your ESP32 board's pin positions may differ from other 38-pin boards. Match the <strong>GPIO numbers printed on the board</strong>, not the position in this drawing.</li>
+      <li>Charge the cells outside the device, one at a time, in a normal single-cell 18650 charger. There is no charging circuit in this design on purpose.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Schematic</h2>
+    <figure class="sheet" style="margin:0">
+      <svg viewBox="0 0 1120 780" role="img" aria-label="Schematic: two 18650 cells go through a 2S protection board, a 1 amp fuse and a switch to a buck converter set to 5.2 volts. A Schottky diode and capacitors feed the 5 volt pin of the ESP32. The ESP32 3.3 volt pin powers the DHT22, the OLED and a wake button. A resistor divider on the battery feeds GPIO34.">
+        <defs>
+          <g id="gnd"><path class="sym" d="M0 0V8M-9 8H9M-5.5 13H5.5M-2 18H2"/></g>
+          <g id="res"><path class="sym" d="M0 0V7M0 33V40"/><rect class="sym" x="-5" y="7" width="10" height="26"/></g>
+          <g id="cap"><path class="sym" d="M-10 -3H10M-10 3H10"/></g>
+        </defs>
+
+        <!-- ================= POWER ================= -->
+        <text class="sec" x="30" y="60">POWER: 2S Li-ion → 5 V</text>
+
+        <!-- battery pack -->
+        <rect class="box" x="30" y="90" width="110" height="170" rx="4"/>
+        <rect class="sym" x="42" y="98" width="56" height="64" rx="6"/>
+        <rect class="sym" x="42" y="188" width="56" height="64" rx="6"/>
+        <text class="t tb tc" x="70" y="128">BT1</text><text class="t tm tc" x="70" y="144">18650</text>
+        <text class="t tb tc" x="70" y="218">BT2</text><text class="t tm tc" x="70" y="234">18650</text>
+        <text class="t" x="47" y="113">+</text><text class="t" x="47" y="157">−</text>
+        <text class="t" x="47" y="203">+</text><text class="t" x="47" y="247">−</text>
+        <path class="w vbat" d="M98 110H210"/>
+        <path class="w vbat" d="M70 162V188M70 175H210"/>
+        <path class="w gnd" d="M98 245H210"/>
+        <circle class="dot" cx="70" cy="175" r="3"/>
+        <circle class="dot" cx="140" cy="110" r="3"/><circle class="dot" cx="140" cy="175" r="3"/><circle class="dot" cx="140" cy="245" r="3"/>
+        <text class="t tm tc" x="85" y="276">2S holder, wired in series</text>
+
+        <!-- BMS -->
+        <rect class="box" x="210" y="90" width="130" height="170" rx="4"/>
+        <text class="t tb tc" x="275" y="150">2S BMS</text>
+        <text class="t tm tc" x="275" y="168">protect + balance</text>
+        <text class="t" x="218" y="114">B+</text><text class="t" x="218" y="179">BM</text><text class="t" x="218" y="249">B−</text>
+        <text class="t te" x="332" y="114">P+ (= B+)</text><text class="t te" x="332" y="249">P−</text>
+        <circle class="dot" cx="210" cy="110" r="3"/><circle class="dot" cx="210" cy="175" r="3"/><circle class="dot" cx="210" cy="245" r="3"/>
+        <circle class="dot" cx="340" cy="110" r="3"/><circle class="dot" cx="340" cy="245" r="3"/>
+
+        <!-- P+ -> F1 -> SW1 -> VBAT_SW -->
+        <path class="w vbat" d="M340 110H380M420 110H452M498 110H640"/>
+        <rect class="sym" x="380" y="103" width="40" height="14"/><path class="sym" d="M380 110H420"/>
+        <text class="t tb tc" x="400" y="90">F1</text><text class="t tm tc" x="400" y="78">1 A</text>
+        <circle class="solid" cx="455" cy="110" r="3"/><circle class="solid" cx="495" cy="110" r="3"/>
+        <path class="sym" d="M455 110L490 94"/>
+        <text class="t tb tc" x="475" y="82">SW1</text><text class="t tm tc" x="475" y="70">power</text>
+        <circle class="dot" cx="540" cy="110" r="3"/>
+        <text class="t tm" x="548" y="104">VBAT_SW</text>
+
+        <!-- battery divider -->
+        <path class="w vbat" d="M540 110V130"/>
+        <use href="#res" x="540" y="130"/>
+        <path class="w sig" d="M540 170V190H446"/>
+        <use href="#res" x="540" y="190"/>
+        <path class="w gnd" d="M540 230V245"/>
+        <circle class="dot" cx="540" cy="190" r="3"/><circle class="dot" cx="540" cy="245" r="3"/>
+        <text class="t tb" x="553" y="154">R3</text><text class="t tm" x="574" y="154">100 kΩ</text>
+        <text class="t tb" x="553" y="214">R4</text><text class="t tm" x="574" y="214">47 kΩ</text>
+        <!-- C5 -->
+        <path class="w sig" d="M470 190V212"/><use href="#cap" x="470" y="215"/><path class="w gnd" d="M470 218V245"/>
+        <circle class="dot" cx="470" cy="190" r="3"/><circle class="dot" cx="470" cy="245" r="3"/>
+        <text class="t tb te" x="458" y="212">C5</text><text class="t tm te" x="458" y="226">100 nF</text>
+        <polygon class="n-sig" points="438,190 446,185 446,195"/>
+        <text class="t te" x="430" y="194">VBAT_DIV</text>
+
+        <!-- GND bus -->
+        <path class="w gnd" d="M340 245H990"/>
+        <circle class="dot" cx="890" cy="245" r="3"/><circle class="dot" cx="950" cy="245" r="3"/>
+        <use href="#gnd" x="990" y="245"/>
+        <text class="t tm" x="1002" y="270">GND</text>
+
+        <!-- buck -->
+        <rect class="box" x="640" y="90" width="130" height="170" rx="4"/>
+        <text class="t tb tc" x="705" y="150">U1 buck</text>
+        <text class="t tm tc" x="705" y="167">MP1584 type</text>
+        <text class="t ta tc" x="705" y="200">trim to 5.20 V</text>
+        <text class="t" x="648" y="114">IN+</text><text class="t" x="648" y="249">IN−</text>
+        <text class="t te" x="762" y="114">OUT+</text><text class="t te" x="762" y="249">OUT−</text>
+        <circle class="dot" cx="640" cy="110" r="3"/><circle class="dot" cx="640" cy="245" r="3"/>
+        <circle class="dot" cx="770" cy="110" r="3"/><circle class="dot" cx="770" cy="245" r="3"/>
+
+        <!-- D1, +5V node, C1, C2 -->
+        <path class="w v5" d="M770 110H805M833 110H1000"/>
+        <polygon class="solid" points="805,100 805,120 833,110"/><path class="sym" d="M833 100V120"/>
+        <text class="t tb tc" x="819" y="90">D1</text><text class="t tm tc" x="819" y="78">1N5819</text>
+        <circle class="dot" cx="890" cy="110" r="3"/><circle class="dot" cx="950" cy="110" r="3"/>
+        <!-- C1 polarised -->
+        <path class="w v5" d="M890 110V162"/>
+        <path class="sym" d="M880 162H900M880 169Q890 175 900 169"/>
+        <path class="w gnd" d="M890 172V245"/>
+        <text class="t" x="866" y="157">+</text>
+        <text class="t tb te" x="878" y="206">C1</text><text class="t tm te" x="878" y="220">470 µF 16 V</text>
+        <!-- C2 -->
+        <path class="w v5" d="M950 110V162"/><use href="#cap" x="950" y="165"/><path class="w gnd" d="M950 168V245"/>
+        <text class="t tb" x="962" y="206">C2</text><text class="t tm" x="962" y="220">100 nF</text>
+        <path class="sym" d="M1000 102V118"/>
+        <text class="t tb n-v5" x="1010" y="114">+5V</text>
+
+        <path class="rule" d="M30 296H1090"/>
+
+        <!-- ================= LOGIC ================= -->
+        <text class="sec" x="30" y="316">LOGIC: ESP32, sensor, display, wake button</text>
+
+        <!-- ESP32 -->
+        <rect class="box" x="440" y="340" width="200" height="380" rx="4"/>
+        <text class="t tb tc" x="540" y="430">U2 ESP32 DevKit</text>
+        <text class="t tm tc" x="540" y="447">38-pin, WROOM-32</text>
+        <text class="t tm tc" x="540" y="464">USB port facing down</text>
+        <!-- 5V -->
+        <path class="w v5" d="M540 340V312"/><path class="sym" d="M531 312H549"/>
+        <text class="t tb n-v5 tc" x="540" y="303">+5V</text>
+        <text class="t tc" x="540" y="358">5V / VIN</text>
+        <circle class="dot" cx="540" cy="340" r="3"/>
+        <!-- right pins -->
+        <text class="t te" x="632" y="394">3V3</text>
+        <path class="w v33" d="M640 390H690"/><path class="sym" d="M690 382V398"/>
+        <text class="t tb n-v33" x="700" y="394">3V3</text>
+        <circle class="dot" cx="640" cy="390" r="3"/>
+        <text class="t te" x="632" y="484">GPIO22 · SCL</text>
+        <text class="t te" x="632" y="544">GPIO21 · SDA</text>
+        <circle class="dot" cx="640" cy="480" r="3"/><circle class="dot" cx="640" cy="540" r="3"/>
+        <path class="w sig" d="M640 480H720V520H840"/>
+        <path class="w sig" d="M640 540H760V560H840"/>
+        <!-- left pins -->
+        <text class="t" x="448" y="424">GPIO4</text>
+        <text class="t" x="448" y="504">GPIO34 · ADC1</text>
+        <text class="t" x="448" y="604">GPIO33 · RTC</text>
+        <circle class="dot" cx="440" cy="420" r="3"/><circle class="dot" cx="440" cy="500" r="3"/><circle class="dot" cx="440" cy="600" r="3"/>
+        <path class="w sig" d="M440 500H412"/>
+        <polygon class="n-sig" points="404,500 412,495 412,505"/>
+        <text class="t te" x="396" y="504">VBAT_DIV</text>
+        <!-- GND -->
+        <text class="t tc" x="540" y="712">GND</text>
+        <path class="w gnd" d="M540 720V732"/><use href="#gnd" x="540" y="732"/>
+        <circle class="dot" cx="540" cy="720" r="3"/>
+
+        <!-- DHT22 -->
+        <rect class="box" x="40" y="350" width="120" height="180" rx="4"/>
+        <text class="t tb" x="50" y="436">U3 DHT22</text>
+        <text class="t tm" x="50" y="452">grille facing</text>
+        <text class="t tm" x="50" y="466">you, pins down</text>
+        <text class="t te" x="152" y="384">1 VCC</text><text class="t te" x="152" y="424">2 DATA</text>
+        <text class="t te" x="152" y="464">3 NC</text><text class="t te" x="152" y="504">4 GND</text>
+        <circle class="dot" cx="160" cy="380" r="3"/><circle class="dot" cx="160" cy="420" r="3"/><circle class="dot" cx="160" cy="500" r="3"/>
+        <path class="sym" d="M163 456L171 464M171 456L163 464"/>
+        <!-- pin 1 to 3V3 -->
+        <path class="w v33" d="M160 380H230M230 380V358"/>
+        <path class="sym" d="M221 358H239"/><text class="t tb n-v33 tc" x="230" y="350">3V3</text>
+        <circle class="dot" cx="190" cy="380" r="3"/><circle class="dot" cx="230" cy="380" r="3"/>
+        <!-- R1 -->
+        <use href="#res" x="230" y="380"/>
+        <text class="t tb" x="244" y="398">R1</text><text class="t tm" x="262" y="398">10 kΩ</text>
+        <!-- data wire with hop over C3 -->
+        <path class="w sig" d="M160 420H183A7 7 0 0 1 197 420H440"/>
+        <circle class="dot" cx="230" cy="420" r="3"/>
+        <text class="t tm" x="300" y="412">DATA → GPIO4</text>
+        <!-- C3 -->
+        <path class="w v33" d="M190 380V437"/><use href="#cap" x="190" y="440"/><path class="w gnd" d="M190 443V500"/>
+        <circle class="dot" cx="190" cy="500" r="3"/>
+        <text class="t tb" x="204" y="452">C3</text><text class="t tm" x="224" y="452">100 nF</text>
+        <!-- pin 4 GND -->
+        <path class="w gnd" d="M160 500H230"/><use href="#gnd" x="230" y="500"/>
+
+        <!-- wake button -->
+        <path class="w v33" d="M330 552V560"/><path class="sym" d="M321 552H339"/>
+        <text class="t tb n-v33 tc" x="330" y="544">3V3</text>
+        <use href="#res" x="330" y="560"/>
+        <text class="t tb te" x="318" y="578">R2</text><text class="t tm te" x="318" y="592">10 kΩ</text>
+        <path class="w sig" d="M330 600H440"/>
+        <circle class="dot" cx="330" cy="600" r="3"/><circle class="dot" cx="380" cy="600" r="3"/>
+        <path class="w sig" d="M330 600V630"/>
+        <circle class="solid" cx="330" cy="633" r="3"/><circle class="solid" cx="330" cy="665" r="3"/>
+        <path class="sym" d="M330 633L346 652"/>
+        <path class="w gnd" d="M330 668V690"/>
+        <text class="t tb te" x="318" y="646">SW2</text><text class="t tm te" x="318" y="660">wake button</text>
+        <path class="w sig" d="M380 600V637"/><use href="#cap" x="380" y="640"/><path class="w gnd" d="M380 643V690"/>
+        <text class="t tb" x="394" y="652">C4</text><text class="t tm" x="414" y="652">100 nF</text>
+        <path class="w gnd" d="M330 690H380"/><use href="#gnd" x="355" y="690"/>
+        <circle class="dot" cx="330" cy="690" r="3"/><circle class="dot" cx="380" cy="690" r="3"/>
+        <text class="t tm" x="40" y="640">Optional. LOW on GPIO33</text>
+        <text class="t tm" x="40" y="656">wakes the board from sleep</text>
+        <text class="t tm" x="40" y="672">to show the OLED.</text>
+
+        <!-- OLED -->
+        <rect class="box" x="840" y="410" width="150" height="170" rx="4"/>
+        <text class="t tb" x="880" y="486">U4 OLED</text>
+        <text class="t tm" x="880" y="503">0.96″ 128×64</text>
+        <text class="t tm" x="880" y="520">SSD1306 · I²C</text>
+        <text class="t tm" x="880" y="537">addr 0x3C</text>
+        <text class="t" x="850" y="444">GND</text><text class="t" x="850" y="484">VCC</text>
+        <text class="t" x="850" y="524">SCL</text><text class="t" x="850" y="564">SDA</text>
+        <circle class="dot" cx="840" cy="440" r="3"/><circle class="dot" cx="840" cy="480" r="3"/>
+        <circle class="dot" cx="840" cy="520" r="3"/><circle class="dot" cx="840" cy="560" r="3"/>
+        <path class="w v33" d="M840 480H790V402"/>
+        <path class="sym" d="M781 402H799"/><text class="t tb n-v33 tc" x="790" y="394">3V3</text>
+        <path class="w gnd" d="M840 440H815"/><use href="#gnd" x="815" y="440"/>
+        <text class="t tm" x="842" y="600">Check pin order on your</text>
+        <text class="t tm" x="842" y="616">module: some print VCC</text>
+        <text class="t tm" x="842" y="632">before GND.</text>
+      </svg>
+      <figcaption>Battery path (red) runs through the protection board, fuse and switch into the buck converter; the buck output (orange) reaches the ESP32 only through D1. Everything else hangs off the ESP32's 3V3 pin (violet), with signals in blue. All ground symbols are one net.</figcaption>
+    </figure>
+    <div class="legend" aria-label="Wire colours">
+      <span class="l-vbat">battery 6.0–8.4 V</span><span class="l-v5">+5 V</span><span class="l-v33">3.3 V</span><span class="l-sig">signal</span><span class="l-gnd">ground</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Parts list</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Ref</th><th>Part</th><th>Qty</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="ref">U2</td><td>ESP32 DevKit, 38-pin, ESP32-WROOM-32</td><td class="num">1</td><td>Your board. Power only through the 5V/VIN pin. Leave USB unplugged while the battery switch is on, or at least flip SW1 off before plugging in.</td></tr>
+        <tr><td class="ref">U3</td><td>DHT22 (AM2302), 4-pin</td><td class="num">1</td><td>Pins from the left with the grille facing you: 1 VCC, 2 DATA, 3 NC, 4 GND. If you have the 3-pin module version, R1 is already on it, so leave R1 out.</td></tr>
+        <tr><td class="ref">U4</td><td>OLED 0.96″ 128×64, I²C, SSD1306, 4-pin</td><td class="num">1</td><td>Has its own I²C pull-ups. Powered from 3V3.</td></tr>
+        <tr><td class="ref">BT1, BT2</td><td>18650 Li-ion cells</td><td class="num">2</td><td>Matched pair. Flat-top cells in a 2S holder, or two single holders joined by a short thick wire. "16F84" on your message was a PIC chip, so I assumed 18650; please confirm.</td></tr>
+        <tr><td class="ref">BMS</td><td>2S Li-ion protection board with balancing (7.4 V, 8.4 V full)</td><td class="num">1</td><td>Three sense wires B−, BM, B+ plus P−. On this common type, P+ is the same pad as B+. At least 3 A rating. Cuts off at about 2.5–3.0 V per cell.</td></tr>
+        <tr><td class="ref">U1</td><td>Adjustable buck converter, MP1584EN type</td><td class="num">1</td><td>Input range must cover 6–8.4 V, at least 1 A. Pick one with low idle current. Avoid LM2596 modules; they waste several mA doing nothing.</td></tr>
+        <tr><td class="ref">D1</td><td>1N5819 Schottky diode, 1 A</td><td class="num">1</td><td>Stops the battery circuit from feeding back into USB when you program the board. Band (cathode) toward the ESP32.</td></tr>
+        <tr><td class="ref">F1</td><td>1 A resettable fuse (PTC) or inline 1 A fuse</td><td class="num">1</td><td>Protects against a short after the BMS.</td></tr>
+        <tr><td class="ref">SW1</td><td>SPST slide switch, 1 A or more</td><td class="num">1</td><td>Master power switch. The battery divider is wired after it, so it does not drain the cells when off.</td></tr>
+        <tr><td class="ref">SW2</td><td>Tactile push button</td><td class="num">1</td><td>Optional. Wakes the display.</td></tr>
+        <tr><td class="ref">R1, R2</td><td>10 kΩ resistor, 1/4 W</td><td class="num">2</td><td>R1: DHT22 data pull-up. R2: button pull-up.</td></tr>
+        <tr><td class="ref">R3</td><td>100 kΩ resistor, 1 %</td><td class="num">1</td><td>Battery voltage divider, top.</td></tr>
+        <tr><td class="ref">R4</td><td>47 kΩ resistor, 1 %</td><td class="num">1</td><td>Battery divider, bottom. At 8.4 V the midpoint is 2.69 V, safe for the ADC; at 6.0 V it is 1.92 V.</td></tr>
+        <tr><td class="ref">C1</td><td>470 µF 16 V electrolytic</td><td class="num">1</td><td>Absorbs Wi-Fi current bursts. Long leg (+) to +5V. Mount close to the ESP32.</td></tr>
+        <tr><td class="ref">C2–C5</td><td>100 nF ceramic</td><td class="num">4</td><td>C2: 5 V decoupling. C3: DHT22 supply. C4: button debounce. C5: ADC filter.</td></tr>
+        <tr><td class="ref">–</td><td>Perfboard or breadboard, dupont wire, enclosure, heat-shrink</td><td class="num">1 set</td><td>Mount the DHT22 outside or at a vent, away from the ESP32 and the buck converter, which both give off heat.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Wire list</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>#</th><th>From</th><th>To</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>BT1 (+)</td><td>BMS B+</td></tr>
+        <tr><td class="num">2</td><td>BT1 (−) joined to BT2 (+)</td><td>BMS BM</td></tr>
+        <tr><td class="num">3</td><td>BT2 (−)</td><td>BMS B−</td></tr>
+        <tr><td class="num">4</td><td>BMS P+ (= B+)</td><td>F1 → SW1 → node VBAT_SW</td></tr>
+        <tr><td class="num">5</td><td>BMS P−</td><td>GND bus (U1 IN−, R4 bottom, C5, then onward)</td></tr>
+        <tr><td class="num">6</td><td>VBAT_SW</td><td>U1 IN+ and top of R3</td></tr>
+        <tr><td class="num">7</td><td>R3/R4 midpoint (VBAT_DIV)</td><td>ESP32 GPIO34; C5 from here to GND</td></tr>
+        <tr><td class="num">8</td><td>U1 OUT+</td><td>D1 anode. D1 cathode → +5V node; C1 (+) and C2 from +5V node to GND</td></tr>
+        <tr><td class="num">9</td><td>+5V node</td><td>ESP32 5V/VIN pin</td></tr>
+        <tr><td class="num">10</td><td>U1 OUT− (same net as GND bus)</td><td>ESP32 GND</td></tr>
+        <tr><td class="num">11</td><td>ESP32 3V3 pin</td><td>DHT22 pin 1, R1, R2, C3, OLED VCC (use one breadboard rail)</td></tr>
+        <tr><td class="num">12</td><td>DHT22 pin 2 (DATA)</td><td>ESP32 GPIO4; R1 between pin 2 and 3V3</td></tr>
+        <tr><td class="num">13</td><td>DHT22 pin 4</td><td>GND; C3 between pin 1 and pin 4</td></tr>
+        <tr><td class="num">14</td><td>ESP32 GPIO21 / GPIO22</td><td>OLED SDA / OLED SCL; OLED GND to GND</td></tr>
+        <tr><td class="num">15</td><td>ESP32 GPIO33</td><td>SW2 to GND; R2 from GPIO33 to 3V3; C4 across SW2</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="cols">
+    <div>
+      <h2>Bring-up order</h2>
+      <ol class="steps">
+        <li>Measure each cell. Both 3.6–4.2 V, within 0.1 V.</li>
+        <li>Wire the BMS per its sheet: B− first, then BM, then B+ last. Measure across P+ and P−: you should see 7.2–8.4 V.</li>
+        <li>Fit F1 and SW1 with the switch off. Connect U1 input only. Switch on and trim the output to <strong>5.20 V</strong> with a multimeter. Switch off.</li>
+        <li>Add D1, C1, C2 and the 5V/VIN and GND wires. Switch on. At the ESP32 VIN pin you should read about 4.8–5.0 V, and the 3V3 pin should read 3.3 V. Fix this before adding anything else.</li>
+        <li>Switch off. Add the DHT22, OLED, button and divider. Switch on and check the divider midpoint reads about 2.3–2.7 V on a fresh pack.</li>
+        <li>Flash the firmware over USB with SW1 off.</li>
+      </ol>
+    </div>
+    <div>
+      <h2>Runtime estimate</h2>
+      <p>Approximate figures from datasheet-class numbers, not measured on your build. The pack is about 2500 mAh at 7.4 V, roughly 15 Wh usable.</p>
+      <div class="tablewrap"><table style="min-width:0">
+        <thead><tr><th>Wake every</th><th>Estimated life</th></tr></thead>
+        <tbody>
+          <tr><td>5 min (6 s awake)</td><td class="num">about 10 days</td></tr>
+          <tr><td>15 min</td><td class="num">about 13 days</td></tr>
+        </tbody>
+      </table></div>
+      <p>The limit is the devkit itself: its voltage regulator and USB chip draw 5–10 mA even in deep sleep. A low-power ESP32 board (about 10 µA asleep) would stretch this to months. Measure real sleep current with a multimeter in series before trusting any of these numbers.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Open items</h2>
+    <ul>
+      <li><strong>The classroom has no Wi-Fi.</strong> This schematic only gets the device powered and measuring. For readings to reach a public web app, something in or near the room must supply internet: a pocket 4G router or phone hotspot (ESP32 stays as drawn), or a cellular module on the device (changes this schematic). Needs your decision.</li>
+      <li>Cell type, buck module model and ESP32 board variant are assumed. Send photos or part names if they differ.</li>
+      <li>Heat index is only meaningful above about 27 °C and 40 % RH. The DHT22 is accurate to about ±0.5 °C and ±2–5 % RH, so the displayed value is an estimate.</li>
+    </ul>
+  </section>
+</main>
