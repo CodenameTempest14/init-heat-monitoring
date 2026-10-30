@@ -16,9 +16,9 @@
 2. In parallel, when the owner has the parts: run the power bank low-load test (P01-04).
 
 ## Waiting on the owner
-- Nothing blocks the start of P01. Ask which parts the owner already has (ESP32, DHT22, OLED, resistors, breadboard) and have them check the ROMOSS manual for a low-current mode.
-- Power bank auto-off test at low load: needs the real ROMOSS bank and the board (bring-up step 1). Check its manual for a low-current mode.
-- Nothing pushed. Ask before any push, naming the target.
+- Nothing blocks the start of P01. Ask which parts the owner already has (ESP32, DHT22, OLED, resistors, breadboard).
+- ROMOSS has a low-current mode (owner, 2026-10-31). Still run the auto-off test at deep-sleep current with the real bank and board (P01-04).
+- Pushed `codenametempest14` to origin on 2026-10-31 (owner approved). `main` NOT pushed: the owner asked for it, but CLAUDE.md rules 3 and 4 and the pre-push hook forbid it. Waiting for the owner to either amend the rule explicitly or use a pull request.
 
 ## Decisions so far (all in DECISIONS.md)
 D-001 hardware parts · D-002 stack Option A · D-003 scope · D-004 pocket 4G router/hotspot · D-005 unmarked 18650 cells · D-006 MP1584 buck at 5.20 V with D1 · D-007 brand name **Init** (owner may veto) · D-008 USB power bank replaces cells/buck/BMS (supersedes D-001 power, D-005, D-006) · D-009 30-pin ESP32, SSD1306 128×64, no BMS · D-010 features approved if open source · D-011 Wi-Fi option 1 · D-012 confirmed hardware and ROMOSS bank. Pre-push hook active via `core.hooksPath .githooks` (tested).
