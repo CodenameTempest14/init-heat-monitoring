@@ -25,12 +25,13 @@ Why a database function (RPC) and not a separate Edge Function: the check and th
 | Column | Type | Notes |
 |---|---|---|
 | `id` | uuid, primary key | |
-| `name` | text | e.g. "Room 1". No personal data. |
+| `name` | text | which device, e.g. "Init 1". No personal data. |
+| `room` | text, default "Unassigned" | where it is now, e.g. "Room 204" (F-21, D-024). The admin changes it in P05. |
 | `key_hash` | text, unique | SHA-256 of the device key. The key itself is never stored: if the database leaks, the key does not. |
 | `created_at` | timestamptz | |
 | `last_seen_at` | timestamptz | set by `ingest_reading`; drives the online/offline badge (F-03) |
 
-Not readable by the public (it holds `key_hash`). The app reads a view `device_status (id, name, last_seen_at)` instead.
+Not readable by the public (it holds `key_hash`). The app reads a view `device_status (id, name, room, last_seen_at)` instead.
 
 ### `readings`
 | Column | Type | Notes |
@@ -42,13 +43,14 @@ Not readable by the public (it holds `key_hash`). The app reads a view `device_s
 | `temp_c` | numeric(4,1) | corrected value (raw + offset) |
 | `rh_pct` | numeric(4,1) | corrected value |
 | `temp_offset_c`, `rh_offset_pct` | numeric(3,1) | the offset that was applied, so history stays explainable after the offset changes |
+| `room` | text | copied by the server from `devices.room` at upload, so a reading keeps the room it was taken in (F-21, D-024). The device never sends it. |
 | `heat_index_c` | numeric(4,1), null allowed | **computed by the server** from the corrected values (D-023); `null` when below the NWS range, like the JS |
 
 Unique on `(device_id, recorded_at)`: the same buffered reading sent twice is stored once.
 The device never sends a heat index; the server computes it with a SQL port of `src/heat-index.js`, tested against the same `tests/heat-index-reference.json` (D-015, D-023). Trusting a number the device worked out is avoided.
 
 ### `readings_hourly` (F-20, D-023)
-One row per device per hour. Primary key `(device_id, hour)`. Public read.
+One row per device, hour and room. Primary key `(device_id, hour, room)`: an hour in which the device was moved gets one row per room (F-21). Public read.
 | Columns | Notes |
 |---|---|
 | `temp_avg`, `temp_min`, `temp_max`, `temp_max_at` | |

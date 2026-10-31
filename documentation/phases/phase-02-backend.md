@@ -3,7 +3,7 @@
 **Objective:** A Supabase backend that stores readings, lets anyone read them, and accepts writes only from the device and the admin, validated on the server.
 **Entry criteria:** P01 closed.
 **Exit criteria:** A fake device can post readings with a key; bad or unauthenticated posts are rejected; anonymous users can read but not write.
-**Features:** F-06, F-07, F-20. Model: Opus 5.5 (security design).
+**Features:** F-06, F-07, F-20, F-21 (room data). Model: Opus 5.5 (security design).
 
 Checklist markers: see phase-01.
 
@@ -13,3 +13,4 @@ Checklist markers: see phase-01.
 - [ ] P02-04 Ingest checks value ranges, timestamp and rate; tests prove bad payloads are rejected
 - [ ] P02-05 Retention: raw readings kept 90 days, then hourly averages (F-20)
 - [ ] P02-06 Security review of the backend, findings recorded
+- [ ] P02-07 Room assignment data (F-21, D-024): device has a `room`, readings and hourly rows keep the room they were taken in; the public can read the room but not change it — PROG: 2026-10-31 s07: room tests written first (4 failed on the missing column), migration `20261031130000_device_room.sql` pushed to `init-test`, 11/11 pass, advisor 0 findings. Still open: the "old readings keep their room after a move" test needs `ingest_reading` (P02-04).

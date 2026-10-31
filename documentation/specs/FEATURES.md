@@ -41,6 +41,12 @@ Effort: S = about a session, M = a few sessions, L = a phase of its own.
 | F-19 | Over-the-air firmware updates | Convenient but a security risk (a bad update bricks the device). Not before F-06 is solid. | L |
 | F-20 | Data housekeeping | Keep raw readings 90 days, then store hourly averages, to stay inside the free tier. | S |
 
+## Added 2026-10-31 (s07), owner's request: APPROVED by the owner (D-024)
+
+| ID | Feature | What the user sees | Notes / risk | Effort |
+|---|---|---|---|---|
+| F-21 | Device room assignment | The app shows which room the device is in ("Room 204"). The admin can change it when the device is moved. Old readings keep the room they were taken in. | Still one device and one room at a time (D-003). History: the room is saved on each reading (owner's choice). Data part in P02 (before the live database is created), admin screen in P05 with F-09, room name on the public page in P04. | S |
+
 ## Needs your decision (not a feature, a design choice)
 
 **Changing Wi-Fi from the web app (D-003).** If the device can only reach the internet through the hotspot, a wrong Wi-Fi name sent from the app would cut it off for good. Two options:

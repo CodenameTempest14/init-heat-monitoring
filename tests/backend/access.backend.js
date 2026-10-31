@@ -27,7 +27,7 @@ function assertDenied(res) {
 const fakeReading = {
   device_id: '00000000-0000-0000-0000-000000000000',
   recorded_at: new Date().toISOString(),
-  temp_c: 30, rh_pct: 60, temp_offset_c: 0, rh_offset_pct: 0, heat_index_c: 33,
+  temp_c: 30, rh_pct: 60, temp_offset_c: 0, rh_offset_pct: 0, heat_index_c: 33, room: 'Unassigned',
 };
 
 test('anyone can read readings', async () => {
@@ -84,10 +84,22 @@ test('a row written with the secret key is visible to anyone, but not its key ha
     assert.deepEqual(seen.body, [{ temp_c: 30, rh_pct: 60 }]);
     const status = await anon(`device_status?id=eq.${id}`);
     assert.equal(status.body[0]?.name, 'test device');
+    assert.equal(status.body[0]?.room, 'Unassigned', 'a new device starts in "Unassigned" (F-21)');
     assertDenied(await anon(`devices?id=eq.${id}&select=key_hash`));
   } finally {
     await admin(`devices?id=eq.${id}`, 'DELETE'); // cascades to its readings
   }
+});
+
+test('the public can read the room, and every reading keeps its room (F-21)', async () => {
+  for (const path of ['device_status?select=room&limit=1', 'readings?select=room&limit=1', 'readings_hourly?select=room&limit=1']) {
+    const res = await anon(path);
+    assert.equal(res.status, 200, `${path}: ${JSON.stringify(res.body)}`);
+  }
+});
+
+test('an anonymous change of the device room is denied (F-21)', async () => {
+  assertDenied(await anon('devices?room=neq.x', { method: 'PATCH', body: { room: 'Hacked' } }));
 });
 
 test('an anonymous insert of a device is denied', async () => {

@@ -3,7 +3,7 @@
 **Objective:** The public app: live readings, heat category, history and an installable phone app.
 **Entry criteria:** P03 closed (real data is flowing).
 **Exit criteria:** A logged-out visitor on a phone sees correct, current data; the app is checked in a real browser and on a real phone.
-**Features:** F-01 to F-05, F-07 (checked from the front end), F-12. Model: Sonnet 5.5.
+**Features:** F-01 to F-05, F-07 (checked from the front end), F-12, F-21 (room name). Model: Sonnet 5.5.
 
 Checklist markers: see phase-01.
 
@@ -17,7 +17,7 @@ Software only. Needs no data or hardware, so it may be done before P04 opens; it
 
 ## Build
 - [ ] P04-01 App skeleton built and deployed on free hosting
-- [ ] P04-02 Live cards for temperature, humidity, heat index and PAGASA category (F-01, F-02)
+- [ ] P04-02 Live cards for temperature, humidity, heat index and PAGASA category, with the room name (F-01, F-02, F-21)
 - [ ] P04-03 Online/offline badge (F-03)
 - [ ] P04-04 24-hour and 7-day charts (F-04)
 - [ ] P04-05 Installable PWA, phone-first layout, light and dark (F-05)
