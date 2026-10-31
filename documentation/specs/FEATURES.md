@@ -8,7 +8,7 @@ Effort: S = about a session, M = a few sessions, L = a phase of its own.
 
 | ID | Feature | What the user sees | Notes / risk | Effort |
 |---|---|---|---|---|
-| F-01 | Live reading | Big cards for temperature, humidity and heat index, with "updated 2 min ago". | The heat index formula is written test-first (CLAUDE.md). It is only valid above about 27 °C and 40 % RH; below that the app says "below heat-index range" instead of a made-up number. | S |
+| F-01 | Live reading | Big cards for temperature, humidity and heat index, with "updated 2 min ago". | The heat index formula is written test-first (CLAUDE.md). It uses the NWS rule: below a heat index of about 80 °F (26.7 °C) the regression is not valid; below that the app says "below heat-index range" instead of a made-up number. | S |
 | F-02 | Heat category colour | The card turns Caution / Extreme caution / Danger / Extreme danger, using the PAGASA heat index bands (27–32, 33–41, 42–51, 52 °C and up). | I'll check the bands against PAGASA's published table before building. | S |
 | F-03 | Device online / offline | A badge: online, or "no reading for 12 min". | Replaces a battery level: a power bank can't report its charge, so "offline" is the warning that it died or lost the hotspot. | S |
 | F-04 | History chart | 24 hours and 7 days of temperature, humidity and heat index. | Free tier is enough: 288 readings a day. | M |
