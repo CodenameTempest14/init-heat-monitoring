@@ -81,7 +81,7 @@ ol.steps { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; 
     <ul>
       <li>The power bank may switch itself off when the load is tiny (deep sleep draws only about 10 mA). Test this first, with the bare board (bring-up step 1), before building the rest.</li>
       <li>Use a data-capable USB cable, USB-A on the power bank side. Flash from the PC first, then move the cable to the power bank: one USB source at a time.</li>
-      <li>Your ESP32 board's pin positions may differ from other 30-pin boards. Match the <strong>GPIO numbers printed on the board</strong>, not the position in this drawing.</li>
+      <li>Your ESP32 board's pin positions may differ from other ESP32 boards. Match the <strong>GPIO numbers printed on the board</strong>, not the position in this drawing.</li>
       <li>Keep the power bank out of direct sun and away from the DHT22: a warm bank heats the sensor reading, and Li-ion packs should not sit above about 45 °C.</li>
     </ul>
   </section>
@@ -89,7 +89,7 @@ ol.steps { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; 
   <section>
     <h2>Schematic</h2>
     <figure class="sheet" style="margin:0">
-      <svg viewBox="0 0 1120 780" role="img" aria-label="Schematic: a USB power bank feeds the USB port of a 30-pin ESP32 board. The ESP32 3.3 volt pin powers the DHT22, the OLED and a wake button.">
+      <svg viewBox="0 0 1120 780" role="img" aria-label="Schematic: a USB power bank feeds the USB port of a 38-pin ESP32 board. The ESP32 3.3 volt pin powers the DHT22, the OLED and a wake button.">
         <defs>
           <g id="gnd"><path class="sym" d="M0 0V8M-9 8H9M-5.5 13H5.5M-2 18H2"/></g>
           <g id="res"><path class="sym" d="M0 0V7M0 33V40"/><rect class="sym" x="-5" y="7" width="10" height="26"/></g>
@@ -119,7 +119,7 @@ ol.steps { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; 
         <!-- ESP32 -->
         <rect class="box" x="440" y="340" width="200" height="380" rx="4"/>
         <text class="t tb tc" x="540" y="430">U2 ESP32 DevKit</text>
-        <text class="t tm tc" x="540" y="447">30-pin, WROOM-32</text>
+        <text class="t tm tc" x="540" y="447">38-pin, WROOM-32</text>
         <text class="t tm tc" x="540" y="464">USB port facing up</text>
         <!-- USB in -->
         <text class="t tc" x="540" y="358">USB port (5 V in)</text>
@@ -219,7 +219,7 @@ ol.steps { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; 
     <div class="tablewrap"><table>
       <thead><tr><th>Ref</th><th>Part</th><th>Qty</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td class="ref">U2</td><td>ESP32 DevKit, 30-pin, ESP32-WROOM-32 ("30 Pin ESP32 Development Board WiFi + Bluetooth")</td><td class="num">1</td><td>Powered through its Type-C USB port (owner confirmed). GPIO4, 21, 22 and 33 all exist on the 30-pin layout.</td></tr>
+        <tr><td class="ref">U2</td><td>ESP32 DevKit, 38-pin (slim body, fits a breadboard), ESP32-WROOM-32</td><td class="num">1</td><td>Powered through its Type-C USB port (owner confirmed). GPIO4, 21, 22 and 33 all exist on the 38-pin layout.</td></tr>
         <tr><td class="ref">U3</td><td>DHT22 (AM2302), 4-pin</td><td class="num">1</td><td>Pins from the left with the grille facing you: 1 VCC, 2 DATA, 3 NC, 4 GND. If you have the 3-pin module version, R1 is already on it, so leave R1 out.</td></tr>
         <tr><td class="ref">U4</td><td>OLED 0.96″ 128×64 (listed as "128x63"), I²C, SSD1306, 4-pin</td><td class="num">1</td><td>SSD1306 panels are 128×64. Has its own I²C pull-ups. Powered from 3V3. Pin order, owner confirmed: GND, VCC, SCK (= SCL), SDA, which matches the drawing.</td></tr>
         <tr><td class="ref">PB1</td><td>ROMOSS Sense 8P+ power bank, 30 000 mAh (111 Wh), 5 V 3 A output (owner's bank)</td><td class="num">1</td><td>Built-in protection. A low-current mode is documented for other ROMOSS models, not confirmed for the 8P+: check its manual, and test (bring-up step 1). Use its 5 V USB-A port. The 9 V / 12 V outputs are not needed.</td></tr>
