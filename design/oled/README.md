@@ -2,7 +2,7 @@
 
 OLED screen design canvas (D-022, same method as the web canvas in D-016). P03-D1 is this README. P03-D2 adds a 1:1 reference image per screen, which the owner approves. P03-D3 checks the drawing code against those images. Nothing is drawn on the real OLED (P03-04) before the images are approved.
 
-Status: **P03-D1 done; reference images (P03-D2) waiting for owner approval.** Owner answers of 2026-11-01 are applied below (D-025).
+Status: **P03-D1 to D3 done: owner approved the 9 reference images (2026-11-01); the OLED-GATE test guards them.** Owner answers of 2026-11-01 are applied below (D-025).
 
 ## The display
 SSD1306, 128 x 64 pixels, 1 bit per pixel (D-009). Origin top-left, x 0 to 127, y 0 to 63. Pixels are on or off: no colour, no grey. The owner's module is **blue only** (single colour), so the preview images are blue on black. The 1:1 reference images are white on black, because only on/off matters.
@@ -42,9 +42,10 @@ Each screen is code in `screens.mjs`: the same calls as Adafruit_GFX, so the fir
 
 Category words: CAUTION (27 to 32), EXTREME CAUTION (33 to 41), DANGER (42 to 51), EXTREME DANGER (52 and up).
 
-### Open for owner review
-- The setup network name `Init-Setup` and the address `192.168.4.1` (the ESP32 default) are proposals. P03-05 decides the final values.
-- Whether the heat index should show a decimal (`39.5`) instead of whole degrees. Whole degrees match the category rule and fit at size 4.
+### Decided by the owner (2026-11-01)
+- Approved: all 9 screens, whole-degree heat index, setup names `Init-Setup` and `192.168.4.1` (P03-05 can still change them).
+
+### Noted, not planned
 - An always-on OLED wears out (blue SSD1306 modules are typically rated for some tens of thousands of hours). Not a problem for the field trial. A later option is dimming at night; not planned.
 
 ## Files
@@ -55,5 +56,7 @@ Category words: CAUTION (27 to 32), EXTREME CAUTION (33 to 41), DANGER (42 to 51
 | `render.mjs` | 128 x 64 one-bit screen with Adafruit_GFX-style calls, and the PNG writer | P03-D2 |
 | `screens.mjs` | The screens as drawing code with made-up inputs | P03-D2 |
 | `build-refs.mjs` | `node design/oled/build-refs.mjs` writes `ref/` and `preview/` | P03-D2 |
+| `compare.mjs` | Reads a PNG and lists the pixels where a drawn screen differs (the OLED-GATE) | P03-D3 |
+| `../../tests/oled.test.js` | Fails if any screen differs from its `ref/` image; also proves the check fails on a mismatch | P03-D3 |
 | `ref/*.png` | 128 x 64 reference images, 1:1 (what the owner approves, and what P03-D3 compares against) | P03-D2 |
 | `preview/*@4x.png` | The same, 4 times larger and blue, for looking at | P03-D2 |
