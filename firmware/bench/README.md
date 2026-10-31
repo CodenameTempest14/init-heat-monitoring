@@ -11,4 +11,4 @@ Pins (Rev B wire list): DHT22 DATA = GPIO4 (4.7 to 10 kΩ pull-up; 5 kΩ used on
 
 Behaviour (D-018, no deep sleep): scans Wi-Fi continuously (load for the power bank, no password), reads the DHT22 every 2 s, shows temperature, humidity, uptime in minutes and the number of networks seen. Used for the one-hour power bank test (P01-04).
 
-Status: the no-sleep version without Wi-Fi ran on 2026-10-31 and the bank still switched off after ~1 min. This Wi-Fi scan version is built but not yet run.
+Status: Wi-Fi scan version ran 61 min on the ROMOSS bank on 2026-10-31 (P01-04). The no-Wi-Fi no-sleep version and the deep-sleep version both made the bank switch off.
