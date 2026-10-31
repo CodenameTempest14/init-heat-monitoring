@@ -2,7 +2,7 @@
 
 > Overwritten at every session close. The first file read in every session (CLAUDE.md).
 
-**Current phase:** P01 complete (7/7, P01-07 ruled out, D-021). Next: P02 backend. Design canvas (D-016) started inside P04 (P04-D1 to D3 done; D4, D5 open). Checklist: [P02](../phases/phase-02-backend.md).
+**Current phase:** P02 backend, in progress (P02-01 schema approved s07, `documentation/specs/SCHEMA.md`). P01 complete (7/7, P01-07 ruled out, D-021). Design canvas (D-016) started inside P04 (P04-D1 to D3 done; D4, D5 open). Checklist: [P02](../phases/phase-02-backend.md).
 **Last session:** 2026-10-31 s06 — [close report](../phase-reports/phase-01-core-and-bench/sessions/2026-10-31_s06_CLOSE.md)
 **Branches:** owner = `codenametempest14`. Remote `origin` = https://github.com/CodenameTempest14/init-heat-monitoring.git. Pushed 2026-10-31 to `codenametempest14` and to `main` (D-014, owner approved each). See `git log -1` for the latest commit.
 **Status line:** run `node tools/phase-report.mjs` · progress table: `node tools/phase-report.mjs --md`

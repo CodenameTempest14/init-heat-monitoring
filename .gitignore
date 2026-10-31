@@ -1,6 +1,7 @@
 # Secrets: never committed (Wi-Fi passwords, API keys, tokens)
 .env
 .env.*
+!.env.example
 secrets/
 secrets.h
 *.pfx
