@@ -11,32 +11,32 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 6. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run `node tools/continuation-prompt.mjs` and **show the generated prompt and the progress table in the final message**.
 
 ## Where we are
-[P01 · Heat index core and bench bring-up · 7/7 done · 0 blocked · unverified 0]
+[P02 · Backend and secure upload · 4/7 done · 0 blocked · unverified 0]
 
 ### Phase Progress (end of the previous session)
 | Phase | Done / Total | Progress | % |
 |---|---|---|---|
 | P00 Kickoff and decisions | 13 / 13 | ██████████ | 100% |
 | P01 Heat index core and bench bring-up | 7 / 7 | ██████████ | 100% |
-| P02 Backend and secure upload | 0 / 6 | ░░░░░░░░░░ | 0% |
-| P03 Device firmware | 0 / 7 | ░░░░░░░░░░ | 0% |
+| P02 Backend and secure upload | 4 / 7 (+1 partly) | ██████░░░░ | 57% |
+| P03 Device firmware | 0 / 10 | ░░░░░░░░░░ | 0% |
 | P04 Web app core | 3 / 13 | ██░░░░░░░░ | 23% |
-| P05 Admin, alerts and device health | 0 / 5 | ░░░░░░░░░░ | 0% |
+| P05 Admin, alerts and device health | 0 / 6 | ░░░░░░░░░░ | 0% |
 | P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 23 / 66 | ████░░░░░░ | **35%** |
+| **Whole project** | 27 / 71 | ████░░░░░░ | **38%** |
 
 ### Recommended model for this session
-**Opus 5.5**, because P02 is the Supabase schema, row-level rules and device-key security, which needs deeper reasoning. Return to Sonnet 5.5 for P03 firmware and P04 UI work.
+**Opus 5.5**, because P02-05 (retention job), P02-06 (security review) and the first push to the live database are security and data-loss sensitive. Return to Sonnet 5.5 for P03 firmware and P04 UI work.
 
 ### Next concrete step
-1. Ask the phase-builder question (last answer: owner only). Start P02: read `documentation/phases/phase-02-backend.md`. P02-01 first: propose the schema (readings, device, settings) and wait for the owner's approval before building. Remember D-018: the device stays awake and the bank needs about Wi-Fi-level load, so the ingest rate should assume a reading every few minutes from an always-on device.
-2. Software-only work that can interleave: P04-D4 (screenshots of the chosen templates; install Playwright first, it is not in the repo) and P04-D5 (UI-GATE).
-3. Owner request (s06): design the OLED screens (128x64) with the same canvas method as D-016 and Ad Astra (design/ entry, tokens or a small pixel-font spec, reference mock-ups the owner approves, check against the approved image). Not started. Propose where it sits (suggest a short step at the start of P03) and get it approved in documentation/specs/FEATURES.md before building. Read the Ad Astra method at D:/System Documents/Documents/Codes/projects/ad-astra first.
+1. Ask the phase-builder question (last answer: owner only). Then P02-05: test-first retention job (`pg_cron`, daily): readings older than 90 days → `readings_hourly` (avg/min/max, max with its exact time, grouped by room), then deleted, in one transaction. The test inserts old readings with the secret key and runs the job function directly. This also finishes P02-07 (hourly rows keep the room).
+2. P02-06: security review of the backend; record findings. Known items to include: the accepted advisor warning (anon may run `ingest_reading`, intended); wrong-key calls are not rate limited (only accepted calls are); the free-tier project pause risk.
+3. Then ask the owner before applying the migrations to the live `init` project (`node --env-file=.env tools/db.mjs live db push`) and registering the device there (`node --env-file=.env tools/device-key.mjs register live "<name>"`; room stays "Unassigned", owner s07).
+4. Interleavable software work: P04-D4 (template screenshots; install Playwright first) and P04-D5 (UI-GATE). P03 starts with the OLED design canvas P03-D1 to D3 (D-022).
 
 ### Waiting on the owner
-- Nothing blocking. Bench work is finished and the board can stay unplugged.
-- Approval of where the OLED screen design (owner's request) sits in the phase plan (see next step 3).
+- Nothing blocking.
+- Approval before the first push of migrations to the live `init` project.
 - Later (P07): a USB inline meter to measure the awake current; the schematic runtime figures are estimates until then.
-- Work up to commit `0c4a1ca` is pushed to `codenametempest14` and `main`. The s06 close commit is not. Ask before the next push, naming the target.
