@@ -11,32 +11,31 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 6. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run `node tools/continuation-prompt.mjs` and **show the generated prompt and the progress table in the final message**.
 
 ## Where we are
-[P02 · Backend and secure upload · 4/7 done · 0 blocked · unverified 0]
+[P02 · Backend and secure upload · 7/7 done · 0 blocked · unverified 0]
 
 ### Phase Progress (end of the previous session)
 | Phase | Done / Total | Progress | % |
 |---|---|---|---|
 | P00 Kickoff and decisions | 13 / 13 | ██████████ | 100% |
 | P01 Heat index core and bench bring-up | 7 / 7 | ██████████ | 100% |
-| P02 Backend and secure upload | 4 / 7 (+1 partly) | ██████░░░░ | 57% |
+| P02 Backend and secure upload | 7 / 7 | ██████████ | 100% |
 | P03 Device firmware | 0 / 10 | ░░░░░░░░░░ | 0% |
 | P04 Web app core | 3 / 13 | ██░░░░░░░░ | 23% |
 | P05 Admin, alerts and device health | 0 / 6 | ░░░░░░░░░░ | 0% |
 | P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 27 / 71 | ████░░░░░░ | **38%** |
+| **Whole project** | 30 / 71 | ████░░░░░░ | **42%** |
 
 ### Recommended model for this session
-**Opus 5.5**, because P02-05 (retention job), P02-06 (security review) and the first push to the live database are security and data-loss sensitive. Return to Sonnet 5.5 for P03 firmware and P04 UI work.
+**Sonnet 5.5**, because the next items (OLED design canvas P03-D1 to D3, web template screenshots P04-D4) are design work with no security-sensitive changes. Switch to Opus 5.5 for P03-02 (device key in firmware, TLS certificate check) and P03-05 (setup page).
 
 ### Next concrete step
-1. Ask the phase-builder question (last answer: owner only). Then P02-05: test-first retention job (`pg_cron`, daily): readings older than 90 days → `readings_hourly` (avg/min/max, max with its exact time, grouped by room), then deleted, in one transaction. The test inserts old readings with the secret key and runs the job function directly. This also finishes P02-07 (hourly rows keep the room).
-2. P02-06: security review of the backend; record findings. Known items to include: the accepted advisor warning (anon may run `ingest_reading`, intended); wrong-key calls are not rate limited (only accepted calls are); the free-tier project pause risk.
-3. Then ask the owner before applying the migrations to the live `init` project (`node --env-file=.env tools/db.mjs live db push`) and registering the device there (`node --env-file=.env tools/device-key.mjs register live "<name>"`; room stays "Unassigned", owner s07).
-4. Interleavable software work: P04-D4 (template screenshots; install Playwright first) and P04-D5 (UI-GATE). P03 starts with the OLED design canvas P03-D1 to D3 (D-022).
+1. Ask the phase-builder question (last answer: owner only). Ask whether the owner did the dashboard actions S-4, S-5, S-6 from `documentation/specs/SECURITY_REVIEW.md` on both projects; if yes, read the settings back with the read-only token (auth `disable_signup`, `ssl-enforcement`) and note it in SECURITY_REVIEW.md.
+2. P03-D1: `design/oled/` with README: screen list from the approved features (F-08, offline and setup states of F-03 and D-011), the 128×64 grid spec, open-source pixel fonts (D-010). Then P03-D2 reference images for the owner to approve.
+3. Interleavable: P04-D4 (template screenshots; install Playwright first) and P04-D5 (UI-GATE).
+4. Optional check: after 18:30 UTC, read `cron.job_run_details` on `init-test` to see the first scheduled run succeeded (nothing to roll up yet, so `{hours:0, deleted:0}`).
 
 ### Waiting on the owner
-- Nothing blocking.
-- Approval before the first push of migrations to the live `init` project.
+- SECURITY_REVIEW S-4 (turn off sign-ups), S-5 (enforce SSL), S-6 (new generated DB passwords, update `.env`), on both projects.
 - Later (P07): a USB inline meter to measure the awake current; the schematic runtime figures are estimates until then.

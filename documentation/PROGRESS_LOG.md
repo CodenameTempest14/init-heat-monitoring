@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-10-31 · s08
+P02 complete. 90-day retention job (`rollup_old_readings`, daily `pg_cron` at 18:30 UTC) built test-first and mutation-checked; hourly rows keep the room (P02-05, P02-07): 45/45 backend tests. Security review written (P02-06, `SECURITY_REVIEW.md`, S-1 to S-11); owner actions open: turn off sign-ups, enforce SSL, longer DB passwords. Owner ran the live migration and registered "Init 1" (the assistant's live push was blocked by the auto-mode classifier); checked from outside on live. Push asked at close.
+
 ## 2026-10-31 · s07
 P02 started. Schema approved (P02-01) with the owner's additions: server-computed heat index and hourly maxima with time (D-023). Two Supabase projects set up (`init-test`, `init`). Tables and access rules (P02-02), device key with only its hash in the database (P02-03), and `ingest_reading` with a SQL heat index matching the JS (P02-04) built test-first on `init-test`: 41/41 backend tests. New feature F-21 device room (D-024, P02-07 partly). OLED design canvas placed at the start of P03 (D-022). Live project still empty. Pushed to `codenametempest14` and `main`.
 
