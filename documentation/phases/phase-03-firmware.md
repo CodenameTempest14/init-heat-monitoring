@@ -9,7 +9,8 @@ Checklist markers: see phase-01.
 
 ## OLED design canvas (D-022, owner approved the placement 2026-10-31)
 Same method as the web canvas (D-016). Must be finished and approved before P03-04 draws anything on the real OLED.
-- [ ] P03-D1 `design/oled/` entry with README: screen list taken from the approved features (F-08, plus the offline / setup states of F-03 and D-011), and a small spec of the 128×64 grid, fonts (open-source pixel fonts only, D-010) and sizes
+- [x] P03-D1 `design/oled/` entry with README: screen list taken from the approved features (F-08, plus the offline / setup states of F-03 and D-011), and a small spec of the 128×64 grid, fonts (open-source pixel fonts only, D-010) and sizes
+  - Evidence (s09, 2026-11-01): `design/oled/README.md` lists 5 screens (OLED-01 to 05) with source feature for each, the grid and font candidates; `node tools/check-readmes.mjs` passes. Three owner questions are open inside it (wake button / screen-off, sensor error screen, module colour); they block P03-D2, not D1.
 - [ ] P03-D2 A 1:1 reference image (128×64, monochrome) of each screen with made-up readings; the owner approves them
 - [ ] P03-D3 OLED-GATE: the screen drawing code is checked against the approved image (rendered on the PC or photographed on the device), and the check is shown to fail on a deliberate mismatch
 

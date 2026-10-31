@@ -9,9 +9,9 @@ The live `init` project has no tables yet. Every migration result here is from `
 | S-1 | The public can run `ingest_reading` (security definer) | by design | accepted |
 | S-2 | Calls with a wrong key are not rate limited | low | accepted |
 | S-3 | A stolen device key can write believable fake readings | medium | accepted, mitigations listed |
-| S-4 | Anyone can sign up for an account on both projects | medium (from P05) | **owner action** |
-| S-5 | SSL is not enforced for direct database connections | low | **owner action** |
-| S-6 | Test database password is 11 characters | low | **owner action** |
+| S-4 | Anyone can sign up for an account on both projects | medium (from P05) | **closed 2026-11-01** (read back) |
+| S-5 | SSL is not enforced for direct database connections | low | **closed 2026-11-01** (read back) |
+| S-6 | Test database password is 11 characters | low | **done by owner 2026-11-01** (login works; length not checked) |
 | S-7 | Supabase gives new tables and functions to the public by default | process | rule added |
 | S-8 | One bad hourly row stops the retention job every night | low | accepted, check in P05/P07 |
 | S-9 | The free project may pause when idle | operational | check in P07 |
@@ -62,3 +62,14 @@ The live `init` project has no tables yet. Every migration result here is from `
 - The live `init` project's tables and rules (none exist yet). After the live migration: the advisor and a public write probe on live.
 - Supabase Auth email limits and templates (only relevant once an admin signs in, P05).
 - Whether the Supabase CLI uses TLS for `db push` / `db query` (S-5 makes this moot once enforced).
+
+## Read-back of owner actions S-4 to S-6 (2026-11-01, s09)
+Read with the read-only access token through the Management API (`/config/auth`, `/ssl-enforcement`), on both projects:
+
+| Project | `disable_signup` | SSL enforced (database) | `db push --dry-run` with `.env` password |
+|---|---|---|---|
+| `init-test` | true | true | connects, up to date |
+| `init` (live) | true | true | connects, up to date |
+
+First read the same day showed live `init` still open (`disable_signup` false, SSL false); the owner fixed it and the second read shows the table above.
+S-6: the connection works with the `.env` passwords on both projects after SSL was enforced. I did not read `.env`, so I did not check that the passwords are new or their length.
