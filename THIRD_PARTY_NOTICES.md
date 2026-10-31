@@ -16,6 +16,14 @@ Licences below were read from each project's own licence file on GitHub on 2026-
 | Adafruit GFX Library 1.13.0 | Drawing for the OLED | BSD (same note) | https://github.com/adafruit/Adafruit-GFX-Library/blob/master/license.txt |
 | Adafruit BusIO | I2C helper pulled in by the Adafruit libraries | MIT | https://github.com/adafruit/Adafruit_BusIO/blob/master/LICENSE |
 
+## Backend (P02)
+
+| Library / tool | Used for | Licence | Source of the licence |
+|---|---|---|---|
+| Supabase CLI 2.121.0 (npm `supabase`, dev only, pinned in `package.json`) | Send database migrations to the Supabase projects | MIT | `npm view supabase@2.121.0 license`, 2026-10-31 |
+
+Supabase itself is the hosting (free tier); hosting may be a closed service (D-010).
+
 ## Notes
 - All are open source, so the D-010 condition is met. The ESP32 core is LGPL-2.1: fine for an open-source repo, and if firmware binaries are ever shared, the source (this repo) must be available.
 - The Node code in `src/` and `tests/` uses only Node built-ins (no packages).

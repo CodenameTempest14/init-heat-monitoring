@@ -2,5 +2,11 @@
   "name": "init-heat-monitoring",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node --test" }
+  "scripts": {
+    "test": "node --test",
+    "test:backend": "node --env-file=.env --test \"tests/backend/*.backend.js\""
+  },
+  "devDependencies": {
+    "supabase": "2.121.0"
+  }
 }
