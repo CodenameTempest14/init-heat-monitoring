@@ -215,6 +215,45 @@ ol.steps { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; 
   </section>
 
   <section>
+    <h2>DHT22 on the breadboard</h2>
+    <p>Each of the four sensor pins sits in its own column of connected holes. Everything drawn in the same column is joined. The 10 kΩ resistor R1 is a pull-up: it goes from the DATA column to the 3V3 rail, and it is <strong>not</strong> in the DATA wire.</p>
+    <figure class="sheet" style="margin:0">
+      <svg viewBox="0 0 760 360" role="img" aria-label="Breadboard view of the DHT22: pin 1 to the 3V3 rail, pin 2 to GPIO4 with a 10 kilohm resistor from the same column to 3V3, pin 3 unused, pin 4 to the ground rail, and a 100 nanofarad capacitor across pins 1 and 4.">
+        <rect class="box" x="70" y="20" width="240" height="50" rx="4"/>
+        <text class="t tb tc" x="190" y="50">U3 DHT22 (grille facing you)</text>
+        <text class="t tc" x="100" y="86">1 VCC</text><text class="t tc" x="160" y="86">2 DATA</text>
+        <text class="t tc" x="220" y="86">3 NC</text><text class="t tc" x="280" y="86">4 GND</text>
+        <path class="w" d="M100 70V110M160 70V110M220 70V110M280 70V110"/>
+        <circle class="dot" cx="100" cy="110" r="3"/><circle class="dot" cx="160" cy="110" r="3"/>
+        <circle class="dot" cx="220" cy="110" r="3"/><circle class="dot" cx="280" cy="110" r="3"/>
+
+        <!-- rails -->
+        <path class="w v33" d="M40 300H480"/><text class="t tb n-v33" x="486" y="304">3V3 rail</text>
+        <path class="w gnd" d="M40 330H480"/><text class="t tb" x="486" y="334">GND rail</text>
+
+        <!-- pin 1 to 3V3, C3 -->
+        <path class="w v33" d="M100 110V300"/><circle class="dot" cx="100" cy="300" r="3"/>
+        <circle class="dot" cx="100" cy="170" r="3"/>
+        <!-- pin 4 to GND, hopping over the 3V3 rail -->
+        <path class="w gnd" d="M280 110V293A7 7 0 0 1 280 307V330"/><circle class="dot" cx="280" cy="330" r="3"/>
+        <circle class="dot" cx="280" cy="170" r="3"/>
+        <path class="w gnd" d="M100 170H187M193 170H280"/>
+        <use href="#cap" transform="translate(190,170) rotate(90)"/>
+        <text class="t tm" x="300" y="174">C3 100 nF, across pins 1 and 4</text>
+
+        <!-- pin 2: wire to GPIO4 and R1 to 3V3 -->
+        <path class="w sig" d="M160 110V140H540"/><circle class="dot" cx="160" cy="140" r="3"/>
+        <text class="t tm" x="300" y="132">direct wire, nothing in series</text>
+        <text class="t tb" x="548" y="144">to GPIO4</text>
+        <path class="w sig" d="M160 140V220"/><use href="#res" x="160" y="220"/>
+        <path class="w v33" d="M160 260V300"/><circle class="dot" cx="160" cy="300" r="3"/>
+        <text class="t tb" x="174" y="236">R1</text><text class="t tm" x="174" y="252">10 kΩ pull-up</text>
+      </svg>
+      <figcaption>Blue: the DATA column. Its two jobs are the direct wire to GPIO4 and the 10 kΩ pull-up to the 3V3 rail. Violet: 3.3 V. Grey: ground.</figcaption>
+    </figure>
+  </section>
+
+  <section>
     <h2>Parts list</h2>
     <div class="tablewrap"><table>
       <thead><tr><th>Ref</th><th>Part</th><th>Qty</th><th>Notes</th></tr></thead>
@@ -240,7 +279,7 @@ ol.steps { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; 
       <tbody>
         <tr><td class="num">1</td><td>PB1 USB-A output</td><td>USB cable → ESP32 USB port</td></tr>
         <tr><td class="num">2</td><td>ESP32 3V3 pin</td><td>DHT22 pin 1, R1, R2, C3, OLED VCC (use one breadboard rail)</td></tr>
-        <tr><td class="num">3</td><td>DHT22 pin 2 (DATA)</td><td>ESP32 GPIO4; R1 between pin 2 and 3V3</td></tr>
+        <tr><td class="num">3</td><td>DHT22 pin 2 (DATA)</td><td>ESP32 GPIO4 (direct wire); R1 from the pin 2 column to the 3V3 rail (pull-up, not in series)</td></tr>
         <tr><td class="num">4</td><td>DHT22 pin 4</td><td>GND; C3 between pin 1 and pin 4</td></tr>
         <tr><td class="num">5</td><td>ESP32 GPIO21 / GPIO22</td><td>OLED SDA / OLED SCL; OLED GND to GND</td></tr>
         <tr><td class="num">6</td><td>ESP32 GPIO33</td><td>SW2 to GND; R2 from GPIO33 to 3V3; C4 across SW2</td></tr>
