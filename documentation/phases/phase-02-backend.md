@@ -5,6 +5,8 @@
 **Exit criteria:** A fake device can post readings with a key; bad or unauthenticated posts are rejected; anonymous users can read but not write.
 **Features:** F-06, F-07, F-20, F-21 (room data). Model: Opus 5.5 (security design).
 
+**Live `init` project (2026-10-31 s08):** the owner approved and ran `tools/db.mjs live db push` and `tools/device-key.mjs register live "Init 1"` (Claude Code's auto-mode classifier blocks production deploys from the assistant). Checked by me from outside: `migration list` shows all 5 migrations local = remote; `device_status` = one device "Init 1", room "Unassigned", default settings row; its `key_hash` equals the SHA-256 of `.env` `DEVICE_KEY` (compared in SQL, only the boolean printed); anon insert into `readings` 42501, anon read of `key_hash` 42501, anon `rollup_old_readings` 42501, wrong-key ingest 403 `bad_key`; `cron.job` `rollup-old-readings` active at `30 18 * * *`; advisor: only the accepted S-1 warning. Not run on live: a real accepted upload (would put a fake reading in the live history; the device's first upload in P03-02 proves it).
+
 Checklist markers: see phase-01.
 
 - [x] P02-01 Schema (readings, device, settings) designed and approved by the owner — evidence 2026-10-31 s07: `documentation/specs/SCHEMA.md` written, changed at the owner's request (server-side heat index, hourly maxima with time, D-023), owner replied "yes" to the final version. Design only; nothing built on Supabase yet.
