@@ -7,7 +7,7 @@
 
 Checklist markers: see phase-01.
 
-- [ ] P02-01 Schema (readings, device, settings) designed and approved by the owner
+- [x] P02-01 Schema (readings, device, settings) designed and approved by the owner — evidence 2026-10-31 s07: `documentation/specs/SCHEMA.md` written, changed at the owner's request (server-side heat index, hourly maxima with time, D-023), owner replied "yes" to the final version. Design only; nothing built on Supabase yet.
 - [ ] P02-02 Row-level rules: public read-only; an anonymous write attempt is tried and denied
 - [ ] P02-03 Device key issued; it is not in the repository
 - [ ] P02-04 Ingest checks value ranges, timestamp and rate; tests prove bad payloads are rejected

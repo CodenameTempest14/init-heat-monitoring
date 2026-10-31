@@ -17,6 +17,8 @@ Effort: S = about a session, M = a few sessions, L = a phase of its own.
 | F-07 | Public read-only access | Anyone with the link sees the readings; nobody can write except the device and the admin. | Database row-level rules decide this, not hidden buttons. | S |
 | F-08 | On-device OLED | Temperature, humidity and heat index on the OLED; the wake button shows it on demand. | Firmware, no app work. | M |
 
+**Approved design work (not a new feature):** OLED screen design canvas for F-08, owner's request (s06), placed at the start of P03 as P03-D1 to D3 (D-022, owner approved 2026-10-31).
+
 ## Tier 2: strong additions (my recommendation)
 
 | ID | Feature | What the user sees | Notes / risk | Effort |
