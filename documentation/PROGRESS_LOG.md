@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-10-31 · s06
+Bench bring-up done on the real board: 38-pin ESP32 (D-017), 3V3 = 3.273 V, OLED and DHT22 live (P01-05, P01-06). The ROMOSS bank switched off at deep-sleep current and also after about 1 min without Wi-Fi load; the always-awake design (D-018) with a Wi-Fi scan load ran 61 min (P01-04). PAGASA rounding and the NWS range rule confirmed (D-019, D-020); P01-07 ruled out (D-021). New DHT22 breadboard diagram in the schematic; VS Code upload task added. P01 complete. Pushed to `codenametempest14` and `main`.
+
 ## 2026-10-31 · s05
 Start report, phase-builder answer (owner only), breadboard walkthrough for P01-05 given. Owner paused before building; bench work continues the next day. Owner has a multimeter only, so P01-07 needs a plan for measuring current. No code changes; nothing pushed.
 

@@ -2,29 +2,31 @@
 
 > Overwritten at every session close. The first file read in every session (CLAUDE.md).
 
-**Current phase:** P01 in progress (4/8): heat index logic done (P01-01 to 03, 08); bench items P01-04 to 07 wait for the owner. Design canvas (D-016) started inside P04 (P04-D1 to D3 done; D4, D5 open). Checklist: [P01](../phases/phase-01-core-and-bench.md).
-**Last session:** 2026-10-31 s05 — [close report](../phase-reports/phase-01-core-and-bench/sessions/2026-10-31_s05_CLOSE.md)
-**Branches:** owner = `codenametempest14`. Repo initialised 2026-10-30; remote `origin` = https://github.com/CodenameTempest14/init-heat-monitoring.git. First push goes to `codenametempest14` only (owner approved); `main` stays empty until a reviewed pull request. See `git log -1` for the latest commit.
+**Current phase:** P01 complete (7/7, P01-07 ruled out, D-021). Next: P02 backend. Design canvas (D-016) started inside P04 (P04-D1 to D3 done; D4, D5 open). Checklist: [P02](../phases/phase-02-backend.md).
+**Last session:** 2026-10-31 s06 — [close report](../phase-reports/phase-01-core-and-bench/sessions/2026-10-31_s06_CLOSE.md)
+**Branches:** owner = `codenametempest14`. Remote `origin` = https://github.com/CodenameTempest14/init-heat-monitoring.git. Pushed 2026-10-31 to `codenametempest14` and to `main` (D-014, owner approved each). See `git log -1` for the latest commit.
 **Status line:** run `node tools/phase-report.mjs` · progress table: `node tools/phase-report.mjs --md`
 **Phase builder:** owner only (answered 2026-10-30). Ask again at the start of every session.
 
 ## Recommended model for the next session (MDL-1)
-**Sonnet 5.5**, because P01 is the heat index function written test-first plus bench bring-up, which needs care but not deep architecture. Switch to **Opus 5.5** when P02 starts (Supabase schema, row-level rules, device-key security).
+**Opus 5.5**, because P02 is the Supabase schema, row-level rules and device-key security, which needs deeper reasoning. Return to Sonnet 5.5 for P03 firmware and P04 UI work.
 
 ## Next concrete step
-1. Ask the phase-builder question (last answer: owner only). The walkthrough was given in s05 but nothing is built yet. Order: P01-05 breadboard per the Rev B wire list and measure 3V3 (expect 3.2 to 3.4 V, USB from the PC); P01-06 upload `firmware/bench` (`pio run -t upload`, `pio device monitor`) and watch the OLED; P01-04 one hour on the ROMOSS bank; P01-07 currents. Owner has a multimeter only: agree how to measure current (USB inline meter recommended, or series mA with a spliced cable). Record results in the phase file with evidence; correct the runtime estimate in the schematic.
-2. Software-only work that can follow: P04-D4 (Playwright screenshots of the chosen templates) and P04-D5 (UI-GATE).
+1. Ask the phase-builder question (last answer: owner only). Start P02: read `documentation/phases/phase-02-backend.md`. P02-01 first: propose the schema (readings, device, settings) and wait for the owner's approval before building. Remember D-018: the device stays awake and the bank needs about Wi-Fi-level load, so the ingest rate should assume a reading every few minutes from an always-on device.
+2. Software-only work that can interleave: P04-D4 (screenshots of the chosen templates; install Playwright first, it is not in the repo) and P04-D5 (UI-GATE).
+3. Owner request (s06): design the OLED screens (128x64) with the same canvas method as D-016 and Ad Astra (design/ entry, tokens or a small pixel-font spec, reference mock-ups the owner approves, check against the approved image). Not started. Propose where it sits (suggest a short step at the start of P03) and get it approved in documentation/specs/FEATURES.md before building. Read the Ad Astra method at D:/System Documents/Documents/Codes/projects/ad-astra first.
 
 ## Waiting on the owner
-- The bench work above (owner, next day). All parts are in hand (owner, 2026-10-31).
-- Two small calls to confirm: PAGASA bands are applied to the heat index rounded to whole °C (agent's choice); F-01's "40 % RH" wording vs the NWS range rule used in the code.
-- Nothing pushed. Ask before any push, naming the target (`codenametempest14` or `main`, D-014).
+- Nothing blocking. Bench work is finished and the board can stay unplugged.
+- Approval of where the OLED screen design (owner's request) sits in the phase plan (see next step 3).
+- Later (P07): a USB inline meter to measure the awake current; the schematic runtime figures are estimates until then.
+- Work up to commit `0c4a1ca` is pushed to `codenametempest14` and `main`. The s06 close commit is not. Ask before the next push, naming the target.
 
 ## Decisions so far (all in DECISIONS.md)
-D-001 hardware parts · D-002 stack Option A · D-003 scope · D-004 pocket 4G router/hotspot · D-005 unmarked 18650 cells · D-006 MP1584 buck at 5.20 V with D1 · D-007 brand name **Init** (owner may veto) · D-008 USB power bank replaces cells/buck/BMS (supersedes D-001 power, D-005, D-006) · D-009 30-pin ESP32, SSD1306 128×64, no BMS · D-010 features approved if open source · D-011 Wi-Fi option 1 · D-012 confirmed hardware and ROMOSS bank · D-013 phase plan · D-014 owner may push main · D-015 heat index option A (JS + shared reference table) · D-016 design canvas option 1. Pre-push hook active via `core.hooksPath .githooks` (tested).
+D-001 hardware parts · D-002 stack Option A · D-003 scope · D-004 pocket 4G router/hotspot · D-005 unmarked 18650 cells · D-006 MP1584 buck at 5.20 V with D1 · D-007 brand name **Init** (owner may veto) · D-008 USB power bank replaces cells/buck/BMS (supersedes D-001 power, D-005, D-006) · D-009 30-pin ESP32, SSD1306 128×64, no BMS · D-010 features approved if open source · D-011 Wi-Fi option 1 · D-012 confirmed hardware and ROMOSS bank · D-013 phase plan · D-014 owner may push main · D-015 heat index option A (JS + shared reference table) · D-016 design canvas option 1 · D-017 38-pin ESP32 with Type-C · D-018 no deep sleep (bank needs Wi-Fi-level load) · D-019 PAGASA bands on rounded heat index · D-020 NWS range rule wins over the 40 % RH wording · D-021 P01-07 ruled out, awake current in P07. Pre-push hook active via `core.hooksPath .githooks` (tested).
 
 ## Built so far
-`src/heat-index.js` (heatIndexC, heatCategory) and tests (14/14 pass: `node --test`); `design/` (pages, tokens, contrast check, registry); `firmware/bench` (compiles, not run on the board); `THIRD_PARTY_NOTICES.md`.
+`src/heat-index.js` (heatIndexC, heatCategory) and tests (14/14 pass: `node --test`); `design/` (pages, tokens, contrast check, registry); `firmware/bench` (Wi-Fi scan load sketch, ran 61 min on the ROMOSS bank; deep sleep removed); `THIRD_PARTY_NOTICES.md`.
 
 ## Parking lot (out of scope — not being pursued)
 - Cellular module on the device (not chosen; revisit only if the hotspot plan fails).
