@@ -5,5 +5,7 @@ Never edit a file that has been pushed; add a new one.
 
 - `20261031120000_core_schema.sql` — tables and access rules (P02-01, P02-02).
 - `20261031130000_device_room.sql` — device room, room on each reading (F-21, P02-07).
+- `20261031140000_ingest.sql` — `heat_index_c` (SQL port of `src/heat-index.js`, D-023) and `ingest_reading`, the device's only way in (P02-04).
+- `20261031150000_ingest_anon_only.sql` — only the public (device) role may call `ingest_reading`.
 
 (The CLI prints "Skipping migration README.md": harmless, this file is not SQL.)
