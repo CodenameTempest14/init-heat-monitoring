@@ -7,5 +7,6 @@ Never edit a file that has been pushed; add a new one.
 - `20261031130000_device_room.sql` — device room, room on each reading (F-21, P02-07).
 - `20261031140000_ingest.sql` — `heat_index_c` (SQL port of `src/heat-index.js`, D-023) and `ingest_reading`, the device's only way in (P02-04).
 - `20261031150000_ingest_anon_only.sql` — only the public (device) role may call `ingest_reading`.
+- `20261031160000_retention.sql` — `rollup_old_readings` and its daily `pg_cron` job (18:30 UTC): readings older than 90 days → `readings_hourly`, then deleted (P02-05, F-20).
 
 (The CLI prints "Skipping migration README.md": harmless, this file is not SQL.)

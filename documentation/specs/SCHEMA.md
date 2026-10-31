@@ -1,4 +1,4 @@
-# Backend schema (P02-01): APPROVED by the owner 2026-10-31 (s07), nothing built yet
+# Backend schema (P02-01): APPROVED by the owner 2026-10-31 (s07); built on `init-test` (s07, s08), not yet on live `init`
 
 Supabase (Postgres) for one room (D-003). Features: F-06 secure upload, F-07 public read, F-09 settings, F-20 housekeeping.
 Load (D-018, F-04): one always-awake device, about one reading every 5 minutes → 288 rows a day, about 26 000 rows in 90 days. Far inside the free tier (500 MB).
@@ -94,6 +94,13 @@ Row-level security is ON for every table.
 
 ## Retention (P02-05)
 A daily `pg_cron` job: readings older than 90 days are averaged into `readings_hourly`, then deleted, in one transaction.
+
+As built (P02-05): `public.rollup_old_readings()` runs daily at 18:30 UTC (02:30 Manila), job name `rollup-old-readings`.
+- One statement: the `DELETE` hands its rows straight to the `INSERT`, so exactly the deleted rows are summarised.
+- Cut-off = start of the UTC hour 90 days ago: only whole hours, never one hour split over two runs. UTC hours are whole local hours (UTC+8).
+- A tie for a maximum keeps the earliest time. `hi_avg` is the average of the readings that had a heat index; `n` counts all readings.
+- If an hour already has a row, the job fails and deletes nothing. This can only happen after a manual insert with the secret key; the job then fails every night until it is fixed (see P02-06).
+- Callable by the secret key (tests) and by `postgres` (pg_cron). Not by the public. Returns `{"hours": n, "deleted": m}`.
 
 ## Device key (P02-03)
 Made once with a random generator (32 bytes, hex). It goes into `firmware/.../secrets.h` (gitignored) and only its hash goes into the database. Rotating the key = make a new one, update the hash, re-flash.
