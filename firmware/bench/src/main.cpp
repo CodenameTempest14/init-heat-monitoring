@@ -1,10 +1,12 @@
 // Bench bring-up sketch (P01-04, P01-06). Not product firmware.
-// D-018: never deep-sleeps, because the ROMOSS bank switches off at sleep current.
+// D-018: never deep-sleeps. The ROMOSS bank also switched off ~1 min after boot with only the CPU and OLED running,
+// so this version keeps the Wi-Fi radio busy (scan loop, no password needed) to give the bank a realistic load.
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <DHT.h>
+#include <WiFi.h>
 
 constexpr uint8_t PIN_DHT = 4;
 constexpr uint8_t PIN_SDA = 21;
@@ -32,23 +34,31 @@ void setup() {
     Serial.println("OLED not found at 0x3C: check SDA/SCL wiring");
   }
   dht.begin();
-  Serial.println("awake, no sleep");
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  Serial.println("awake, no sleep, wifi scanning");
 }
 
+uint32_t lastRead = 0;
+float lastT = NAN, lastH = NAN;
+
 void loop() {
-  float t = dht.readTemperature();
-  float h = dht.readHumidity();
+  int nets = WiFi.scanNetworks();  // blocks ~2 s with the radio busy: this is the load
+  if (millis() - lastRead >= 2000) {  // DHT22 needs at least 2 s between reads
+    lastRead = millis();
+    lastT = dht.readTemperature();
+    lastH = dht.readHumidity();
+  }
   char a[24], b[24], c[24];
-  snprintf(a, sizeof a, "up %lu min", (unsigned long)(millis() / 60000));
-  if (isnan(t) || isnan(h)) {
+  snprintf(a, sizeof a, "up %lu min  wifi %d", (unsigned long)(millis() / 60000), nets);
+  if (isnan(lastT) || isnan(lastH)) {
     snprintf(b, sizeof b, "DHT22 read failed");
     c[0] = 0;
     Serial.println("DHT22 read failed: check DATA wire and pull-up");
   } else {
-    snprintf(b, sizeof b, "Temp %.1f C", t);
-    snprintf(c, sizeof c, "Hum  %.1f %%", h);
-    Serial.printf("T=%.1f C  RH=%.1f %%\n", t, h);
+    snprintf(b, sizeof b, "Temp %.1f C", lastT);
+    snprintf(c, sizeof c, "Hum  %.1f %%", lastH);
+    Serial.printf("T=%.1f C  RH=%.1f %%  nets=%d\n", lastT, lastH, nets);
   }
   show(a, b, c);
-  delay(2000);  // DHT22 needs at least 2 s between reads
 }

@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Bench: upload and monitor",
+      "type": "shell",
+      "command": "pio run -t upload -t monitor -d firmware/bench",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "Bench: build only",
+      "type": "shell",
+      "command": "pio run -d firmware/bench",
+      "problemMatcher": []
+    }
+  ]
+}
