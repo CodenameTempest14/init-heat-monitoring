@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-01 · s09
+Owner closed sign-ups and enforced SSL on both Supabase projects (S-4, S-5; read back with the read-only token) and reset the DB passwords (S-6; logins work). OLED design canvas done (P03-D1 to D3): 9 screens as Adafruit-GFX-style drawing code with the 5x7 font scaled 1 to 4, reference images approved by the owner, and an OLED-GATE test that compares the drawing with the images (red first, mutation-checked). D-025: screen always on (no button yet), sensor error screen approved, blue-only module. 18/18 tests. Nothing on the real OLED yet.
+
 ## 2026-10-31 · s08
 P02 complete. 90-day retention job (`rollup_old_readings`, daily `pg_cron` at 18:30 UTC) built test-first and mutation-checked; hourly rows keep the room (P02-05, P02-07): 45/45 backend tests. Security review written (P02-06, `SECURITY_REVIEW.md`, S-1 to S-11); owner actions open: turn off sign-ups, enforce SSL, longer DB passwords. Owner ran the live migration and registered "Init 1" (the assistant's live push was blocked by the auto-mode classifier); checked from outside on live. Push asked at close.
 
