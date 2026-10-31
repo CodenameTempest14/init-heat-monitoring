@@ -15,7 +15,7 @@ Same method as the web canvas (D-016). Must be finished and approved before P03-
 
 ## Build
 - [ ] P03-01 PlatformIO project builds; `secrets.h` is gitignored
-- [ ] P03-02 Connects through the hotspot and an HTTPS upload is accepted by the backend
+- [ ] P03-02 Connects through the hotspot and an HTTPS upload is accepted by the backend; the server certificate is checked (root CA in the firmware, no `setInsecure()`, SECURITY_REVIEW S-11), and an upload to a server with the wrong certificate is shown to fail
 - [ ] P03-03 Always-awake loop (D-018): reads and uploads on the interval, interval read from the settings, and the bank stays on through the gaps between sends
 - [ ] P03-04 OLED shows temperature, humidity and heat index; wake button works (F-08)
 - [ ] P03-05 Setup page opens when Wi-Fi fails, and credentials can be changed from a phone (D-011)

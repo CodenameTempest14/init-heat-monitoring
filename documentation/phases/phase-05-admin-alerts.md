@@ -11,5 +11,5 @@ Checklist markers: see phase-01.
 - [ ] P05-02 Settings page: interval, thresholds and calibration offset; the device picks them up (F-09)
 - [ ] P05-03 Push alert at Danger level with a quiet period, received on a phone (F-10)
 - [ ] P05-04 Device health page: Wi-Fi signal, last reboot reason, firmware version (F-17)
-- [ ] P05-05 Admin actions refused for anonymous users, tested on the server
-- [ ] P05-06 Admin can change the device's room; new readings get the new room, old readings keep theirs (F-21, D-024)
+- [ ] P05-05 Admin actions refused for anonymous users **and for any signed-in user who is not the named admin** (SECURITY_REVIEW S-4: policies check an admin list, never just `authenticated`), tested on the server
+- [ ] P05-06 Admin can change the device's room; new readings get the new room, old readings keep theirs (F-21, D-024). The room input says not to use people's names (SECURITY_REVIEW S-10)
