@@ -17,7 +17,7 @@
       "template": "https://preview.tabler.io/ (dashboard cards and charts)",
       "source": "Tabler",
       "license": "MIT",
-      "status": "Proposed"
+      "status": "Approved"
     },
     {
       "id": "kiosk",
@@ -29,7 +29,7 @@
       "template": "https://preview.tabler.io/cards.html (card shell, numbers enlarged by our tokens)",
       "source": "Tabler",
       "license": "MIT",
-      "status": "Proposed"
+      "status": "Approved"
     },
     {
       "id": "qr-poster",
@@ -41,7 +41,7 @@
       "template": "https://preview.tabler.io/cards.html (single card, print stylesheet ours)",
       "source": "Tabler",
       "license": "MIT",
-      "status": "Proposed"
+      "status": "Approved"
     },
     {
       "id": "admin",
@@ -55,7 +55,7 @@
       "template": "https://preview.tabler.io/sign-in.html (sign-in) and https://preview.tabler.io/settings.html (settings)",
       "source": "Tabler",
       "license": "MIT",
-      "status": "Proposed"
+      "status": "Approved"
     },
     {
       "id": "device-setup",
@@ -71,5 +71,5 @@
     }
   ],
   "direction": "Light-first, calm, high-contrast, with dark mode. Neutral surfaces; the heat category colour is the only strong colour. Large numerals, system font, phone-first, category always shown with a text label (decided by agent 2026-10-31, owner delegated).",
-  "licenceCheck": "Tabler: MIT, read from https://github.com/tabler/tabler/blob/dev/LICENSE (GitHub licence API, 2026-10-31). Demo pages returned HTTP 200 but have not been looked at yet (screenshots are P04-D4)."
+  "licenceCheck": "Tabler: MIT, read from https://github.com/tabler/tabler/blob/dev/LICENSE (GitHub licence API, 2026-10-31). Demo pages captured 2026-11-02 (design/templates/, P04-D4); owner approved the screenshots 2026-11-02."
 }
