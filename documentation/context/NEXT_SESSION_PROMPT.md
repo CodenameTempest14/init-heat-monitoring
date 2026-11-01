@@ -11,7 +11,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 6. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run `node tools/continuation-prompt.mjs` and **show the generated prompt and the progress table in the final message**.
 
 ## Where we are
-[P03 · Device firmware · 6/10 done · 0 blocked · unverified 0]
+[P03 · Device firmware · 7/10 done · 0 blocked · unverified 0]
 
 ### Phase Progress (end of the previous session)
 | Phase | Done / Total | Progress | % |
@@ -19,26 +19,27 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | P00 Kickoff and decisions | 13 / 13 | ██████████ | 100% |
 | P01 Heat index core and bench bring-up | 7 / 7 | ██████████ | 100% |
 | P02 Backend and secure upload | 7 / 7 | ██████████ | 100% |
-| P03 Device firmware | 6 / 10 | ██████░░░░ | 60% |
+| P03 Device firmware | 7 / 10 | ███████░░░ | 70% |
 | P04 Web app core | 5 / 13 | ████░░░░░░ | 38% |
 | P05 Admin, alerts and device health | 0 / 6 | ░░░░░░░░░░ | 0% |
 | P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 38 / 71 | █████░░░░░ | **54%** |
+| **Whole project** | 39 / 71 | ██████░░░░ | **55%** |
 
 ### Recommended model for this session
-**Sonnet 5.5** for P03-03, P03-04 and P03-06. **Opus 5.5** for P03-05 (setup page: it takes Wi-Fi passwords from a phone).
+**Sonnet 5.5** for P03-06 and P03-07. **Opus 5.5** for P03-05 (setup page: it takes Wi-Fi passwords from a phone).
 
 ### Next concrete step
 1. Ask the phase-builder question (last answer: owner only).
-2. **P03-04**: OLED shows temperature, humidity and heat index and stays on (D-025), drawn to match the approved `design/oled/ref/` images (OLED-GATE: also check the photographed real OLED). Check `display.cp437(true)` gives the degree sign and the size-4 digits look clean. Uploads must keep running every 60 s (D-027).
-3. Then P03-06 (offline buffer), P03-05 (setup page, Opus 5.5), P03-07 (24 h on the bank).
-4. Open: the Tabler dashboard is about 832 px wide at a 390 px viewport (cause not diagnosed); our home page must not scroll sideways.
-5. The secret-scan one-liner used at commit time must exit non-zero on a hit (in s12 it printed hits but let the commit through; the hits were false positives). Make it a small tool before the next commit.
+2. **P03-06** offline buffer (F-11): keep readings while the hotspot is down, send them later, show `N to send` on the offline screen (OLED-04; `screens::reading` already takes `queued`). Test-first the buffer logic on the PC. `loop()` still blocks up to 20 s in `joinWifi()`: restructure so the display and sensor keep running while offline.
+3. Then **P03-05** (setup page, Opus 5.5), then P03-07 (24 h on the bank).
+4. Open: the OLED strip says `Room 1` from `config.h`. Ask the owner whether the server should send the room name in the upload reply (like `interval_s`). The sensor-error and offline screens were only checked in the screens build.
+5. Open: the Tabler dashboard is about 832 px wide at a 390 px viewport (cause not diagnosed); our home page must not scroll sideways.
+6. Before every commit run `node tools/secret-scan.mjs` (exits 1 on a hit). `tools/db.mjs` now quotes arguments, so inline SQL works: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`.
 
 ### Waiting on the owner
-- **D-027:** apply the 6th migration to live `init` and set the live "Init 1" interval to 60 (the server default 300 s switches the ROMOSS bank off). Later decide: dummy load or another bank.
+- **Live setup (commands given in s13, output not seen yet):** apply the 6th migration to live `init` and set the live "Init 1" interval to 60 (the server default 300 s switches the ROMOSS bank off). Later decide: dummy load or another bank.
 - A push button for the OLED wake (D-025: until then the screen stays on; button part of F-08 deferred).
 - Optional: confirm the S-6 passwords are the generated, longer ones (the assistant only knows the logins work).
 - Later (P07): a USB inline meter to measure the awake current; the schematic runtime figures are estimates until then.
