@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s11
+P04-D4 done: owner approved the 8 Tabler screenshots; 4 pages Approved in the registry. P03-01 skeleton flashed and run on the board (after one upload of the bench project by mistake, now documented). P03-02 done: the board joins the hotspot, sets the clock and uploads over HTTPS with the certificate checked (GTS R1, R4, GlobalSign; no `setInsecure()`); rows confirmed on init-test, and a wrong-root build is refused with X509 -9984 while the server receives nothing. S-11 closed. D-026. Board left on the wrong-root test build: reflash first next session. Push asked at close.
+
 ## 2026-11-02 · s10
 P03-01 done: the product firmware project `firmware/init/` builds with PlatformIO (`[SUCCESS]`, platform and 5 libraries pinned, `secrets.h` gitignored); skeleton not flashed. P04-D5 done: UI-GATE mechanism (Playwright screenshot vs approved image) built test-first, fails on a changed number, colour or width; 23/23 tests. P04-D4: 8 Tabler template screenshots taken, awaiting owner approval. s08 cron check passed (`rollup-old-readings` ran `succeeded` 2026-10-31 18:30 UTC). Push asked at close.
 
