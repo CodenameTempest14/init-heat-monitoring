@@ -17,7 +17,8 @@ Same method as the web canvas (D-016). Must be finished and approved before P03-
   - Evidence (s09): `tests/oled.test.js` (4 tests, red first: module missing) compares every screen with its `ref/` PNG pixel for pixel; shown to fail on a flipped pixel, a different number and the wrong image. Mutation of the real code (footer moved 1 px) made 2 tests fail with 185 differing pixels; restored, 4/4 pass; `npm test` 18/18. Decoder also checked on a PNG re-encoded by Pillow (0 differences). This is the PC render. The same check on the photographed real OLED is done when P03-04 draws on the device.
 
 ## Build
-- [ ] P03-01 PlatformIO project builds; `secrets.h` is gitignored
+- [x] P03-01 PlatformIO project builds; `secrets.h` is gitignored
+  - Evidence (s10, 2026-11-02): `firmware/init/`, `pio run` ends `[SUCCESS]` (222 s first build; RAM 6.7%, flash 22.9%), platform espressif32@6.9.0 and the 5 libraries pinned. `git check-ignore -v firmware/init/include/secrets.h` shows `.gitignore:6:secrets.h`; only `secrets.h.example` is committed. Not run on the board: the skeleton is only built, not flashed.
 - [ ] P03-02 Connects through the hotspot and an HTTPS upload is accepted by the backend; the server certificate is checked (root CA in the firmware, no `setInsecure()`, SECURITY_REVIEW S-11), and an upload to a server with the wrong certificate is shown to fail
 - [ ] P03-03 Always-awake loop (D-018): reads and uploads on the interval, interval read from the settings, and the bank stays on through the gaps between sends
 - [ ] P03-04 OLED shows temperature, humidity and heat index and stays on (D-025); the wake button is added when a button is bought (F-08)
