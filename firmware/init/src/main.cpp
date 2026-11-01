@@ -1,7 +1,8 @@
-// Init room monitor. P03-03: join the hotspot, get the time, send one reading over HTTPS every interval_s seconds
-// (the server tells us in its reply; 60 s until the first reply).
+// Init room monitor. P03-04: join the hotspot, get the time, send one reading over HTTPS every interval_s seconds
+// (the server tells us in its reply; 60 s until the first reply), and keep the OLED showing the latest reading.
 // The server certificate is checked against root_ca.h (S-11): no setInsecure().
-// Still to come: OLED screens (P03-04), setup page (P03-05), offline buffer (P03-06).
+// Still to come: setup page (P03-05), offline buffer (P03-06).
+// Build `esp32dev_screens` instead draws the 9 approved screens and dumps them over serial (screen_test.h).
 #include <Arduino.h>
 #include <Wire.h>
 #include <WiFi.h>
@@ -15,19 +16,32 @@
 #include "secrets.h"
 #include "root_ca.h"
 #include "interval.h"
+#include "screens.h"
+#ifdef SCREEN_TEST
+#include "screen_test.h"
+#endif
 
 DHT dht(PIN_DHT, DHT22);
 Adafruit_SSD1306 oled(128, 64, &Wire, -1);
 
 uint32_t intervalS = INTERVAL_MIN_S;  // until the server says otherwise; it refuses more than one call per 30 s
 
-void status(const char* line) {
-  Serial.println(line);
-  oled.clearDisplay();
-  oled.setCursor(0, 0);
-  oled.println("Init");
-  oled.println(line);
-  oled.display();
+// Latest sensor reading, refreshed every DISPLAY_REFRESH_MS; the upload sends this one.
+float lastT = NAN, lastH = NAN;
+bool sensorOk = false;
+
+void showReading() {
+  const char* link = WiFi.status() == WL_CONNECTED ? "Wi-Fi OK" : "NO WI-FI";
+  if (sensorOk) screens::reading(oled, OLED_ROOM_LABEL, link, lastT, lastH);
+  else screens::sensorError(oled, OLED_ROOM_LABEL, link);
+}
+
+void readSensor() {
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+  sensorOk = !isnan(t) && !isnan(h);
+  if (sensorOk) { lastT = t; lastH = h; }
+  else Serial.println("sensor read failed");
 }
 
 bool joinWifi() {
@@ -89,40 +103,54 @@ void setup() {
 #ifdef WRONG_CA_TEST
   Serial.println("*** WRONG_CA_TEST build: uploads are expected to FAIL ***");
 #endif
-  status("joining Wi-Fi");
-  if (!joinWifi()) status("Wi-Fi failed");
+#ifdef SCREEN_TEST
+}
+
+void loop() {
+  screenTestLoop(oled);
+}
+#else
+  screens::starting(oled);
+  Serial.println("joining Wi-Fi");
+  if (!joinWifi()) Serial.println("Wi-Fi failed");
   configTime(0, 0, "pool.ntp.org", "time.google.com");  // UTC; the app shows local time
 }
 
 uint32_t lastUpload = 0;
+uint32_t lastRead = 0;
 bool first = true;
 
 void loop() {
-  if (!first && !intervalDue(millis(), lastUpload, intervalS * 1000UL)) {
+  const uint32_t now = millis();
+  if (first || intervalDue(now, lastRead, DISPLAY_REFRESH_MS)) {
+    lastRead = now;
+    readSensor();
+    showReading();
+  }
+
+  if (!first && !intervalDue(now, lastUpload, intervalS * 1000UL)) {
     delay(200);
     return;
   }
   if (!joinWifi()) {
-    status("Wi-Fi failed");
+    Serial.println("Wi-Fi failed");
+    showReading();  // now says NO WI-FI
     delay(5000);
     return;
   }
   if (!clockSet()) {
-    status("waiting for time");
+    Serial.println("waiting for time");
     delay(1000);
+    return;
+  }
+  if (!sensorOk) {  // nothing to send; try again after the next read, not after a whole interval
+    first = false;
+    delay(200);
     return;
   }
   first = false;
   lastUpload = millis();
-
-  float t = dht.readTemperature();
-  float h = dht.readHumidity();
-  if (isnan(t) || isnan(h)) {
-    status("sensor read failed");
-    return;
-  }
-  int code = upload(t, h);
-  char line[24];
-  snprintf(line, sizeof line, "sent: %d", code);
-  status(line);
+  upload(lastT, lastH);
+  showReading();
 }
+#endif

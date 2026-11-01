@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s13
+P03-04 done: the OLED shows the live reading and heat index on the real board. Heat index ported to C++ and tested against the JS and the shared reference table on about 20 000 points. All 9 approved screens were drawn on the real OLED and the frame buffer read back over serial equals the approved images pixel for pixel; the owner's photos agree. The owner read the real screen (29.5 °C, 71 %, big 34) and it matches the server row. New `tools/secret-scan.mjs` (exits 1 on a hit). Fixed `tools/db.mjs` splitting quoted SQL. Live "Init 1" setup commands given to the owner; not yet run.
+
 ## 2026-11-02 · s12
 Reflashed the normal build. P03-03 done: the upload reply carries `interval_s`, the board follows it (90 s then 60 s). On the ROMOSS bank 90 s made the bank switch off, 60 s ran 10 minutes without a gap, so the bank limits the interval to the server's 60 s floor (D-027). Untracked PlatformIO files handled.
 

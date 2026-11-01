@@ -4,7 +4,9 @@ Tests that run on the PC, not on the board. They cover the parts of the firmware
 
 - `interval_test.cpp` — `include/interval.h` (P03-03): reading `interval_s` from the server's reply, the 60 to 3600 s limits, and the wait that must survive `millis()` wrapping.
 
-Build and run from `firmware/init` (needs g++):
+- `heat_index_test.cpp` — `include/heat_index.h` (P03-04): the device's heat index and PAGASA band. It has no answers of its own: `tests/firmware-heat-index.test.js` (repo root, run by `npm test`) builds it and feeds it points made by `src/heat-index.js`.
+
+Build and run `interval_test` from `firmware/init` (needs g++):
 ```
 g++ -std=c++17 -Wall -Wextra -o interval_test tests/interval_test.cpp && ./interval_test
 ```

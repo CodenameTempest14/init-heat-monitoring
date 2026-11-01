@@ -57,6 +57,7 @@ Category words: CAUTION (27 to 32), EXTREME CAUTION (33 to 41), DANGER (42 to 51
 | `screens.mjs` | The screens as drawing code with made-up inputs | P03-D2 |
 | `build-refs.mjs` | `node design/oled/build-refs.mjs` writes `ref/` and `preview/` | P03-D2 |
 | `compare.mjs` | Reads a PNG and lists the pixels where a drawn screen differs (the OLED-GATE) | P03-D3 |
+| `dump.mjs`, `check-dump.mjs` | Read the frame buffer that `firmware/init` build `esp32dev_screens` prints over serial and compare it with `ref/` (OLED-GATE on the real OLED, P03-04: all 9 equal, 2026-11-02) | P03-04 |
 | `../../tests/oled.test.js` | Fails if any screen differs from its `ref/` image; also proves the check fails on a mismatch | P03-D3 |
 | `ref/*.png` | 128 x 64 reference images, 1:1 (what the owner approves, and what P03-D3 compares against) | P03-D2 |
 | `preview/*@4x.png` | The same, 4 times larger and blue, for looking at | P03-D2 |

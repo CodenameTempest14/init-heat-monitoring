@@ -23,7 +23,10 @@ if (!ref || !password || !token) {
 const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => !k.startsWith('SUPABASE_')));
 Object.assign(env, { SUPABASE_ACCESS_TOKEN: token, SUPABASE_DB_PASSWORD: password });
 
-const run = (cliArgs) => spawnSync('npx', ['supabase', ...cliArgs], { env, stdio: 'inherit', shell: true }).status;
+// shell: true (needed for npx on Windows) joins the arguments with spaces, so quote any argument that has
+// whitespace or a quote, or a SQL string reaches the CLI split into words.
+const quote = (a) => (/[\s"]/.test(a) ? `"${a.replace(/"/g, '\\"')}"` : a);
+const run = (cliArgs) => spawnSync('npx', ['supabase', ...cliArgs.map(quote)], { env, stdio: 'inherit', shell: true }).status;
 
 console.log(`[db] target: ${target}`);
 if (run(['link', '--project-ref', ref]) !== 0) process.exit(1);
