@@ -3,7 +3,8 @@
 import { inflateSync } from 'node:zlib';
 import { W, H } from './render.mjs';
 
-export function decodePng(buf) {
+/** Decode an 8-bit, non-interlaced grey/RGB/RGBA PNG to { w, h, bpp, data } (data = raw channels, bpp per pixel). */
+export function decodePngRaw(buf) {
   if (buf.readUInt32BE(0) !== 0x89504e47) throw new Error('not a PNG');
   let pos = 8;
   let w, h, colorType;
@@ -47,8 +48,13 @@ export function decodePng(buf) {
       out[y * stride + i] = v & 255;
     }
   }
+  return { w, h, bpp, data: out };
+}
+
+export function decodePng(buf) {
+  const { w, h, bpp, data } = decodePngRaw(buf);
   const px = new Uint8Array(w * h);
-  for (let i = 0; i < w * h; i++) px[i] = out[i * bpp] > 127 ? 1 : 0;
+  for (let i = 0; i < w * h; i++) px[i] = data[i * bpp] > 127 ? 1 : 0;
   return { w, h, px };
 }
 

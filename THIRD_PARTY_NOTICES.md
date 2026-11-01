@@ -24,8 +24,16 @@ Licences below were read from each project's own licence file on GitHub on 2026-
 
 Supabase itself is the hosting (free tier); hosting may be a closed service (D-010).
 
+## Design checks (P04)
+
+| Library / tool | Used for | Licence | Source of the licence |
+|---|---|---|---|
+| Playwright 1.49.1 (npm `playwright`, dev only, pinned) | Template screenshots and the UI-GATE | Apache-2.0 | `npm view playwright@1.49.1 license`, 2026-11-02 |
+
+Tabler (MIT) is only looked at: its demo pages are screenshotted for reference (`design/templates/`). No Tabler code is in the repo yet.
+
 ## Notes
 - All are open source, so the D-010 condition is met. The ESP32 core is LGPL-2.1: fine for an open-source repo, and if firmware binaries are ever shared, the source (this repo) must be available.
 - The Node code in `src/` and `tests/` uses only Node built-ins (no packages).
-- Node, Supabase client, the app template and Playwright are not chosen or installed yet; their licences are recorded when they are added.
+- Node and the Supabase client are not chosen or installed yet; the app template is chosen (Tabler) but not copied in yet; their licences are recorded when they are added.
 - Not verified: whether the SSD1306 and GFX licences are the 2-clause or 3-clause BSD variant. Both are open licences either way.
