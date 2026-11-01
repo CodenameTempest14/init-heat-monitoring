@@ -19,6 +19,7 @@ Same method as the web canvas (D-016). Must be finished and approved before P03-
 ## Build
 - [x] P03-01 PlatformIO project builds; `secrets.h` is gitignored
   - Evidence (s10, 2026-11-02): `firmware/init/`, `pio run` ends `[SUCCESS]` (222 s first build; RAM 6.7%, flash 22.9%), platform espressif32@6.9.0 and the 5 libraries pinned. `git check-ignore -v firmware/init/include/secrets.h` shows `.gitignore:6:secrets.h`; only `secrets.h.example` is committed. Not run on the board: the skeleton is only built, not flashed.
+  - Run on the board (s11, 2026-11-02): flashed from `firmware/init` (log shows `Espressif 32 (6.9.0)`, owner held BOOT). Owner saw "Init" on the OLED. Serial read by the assistant on COM8: `T=28.4 H=64.5`, one line every 2.00 s (timestamps 1.71, 3.72, 5.72, 7.73, 9.73, 11.74 s). A first upload from the VS Code toolbar had flashed `bench` by mistake (serial showed `nets=`); now documented in `firmware/README.md`.
 - [ ] P03-02 Connects through the hotspot and an HTTPS upload is accepted by the backend; the server certificate is checked (root CA in the firmware, no `setInsecure()`, SECURITY_REVIEW S-11), and an upload to a server with the wrong certificate is shown to fail
 - [ ] P03-03 Always-awake loop (D-018): reads and uploads on the interval, interval read from the settings, and the bank stays on through the gaps between sends
 - [ ] P03-04 OLED shows temperature, humidity and heat index and stays on (D-025); the wake button is added when a button is bought (F-08)

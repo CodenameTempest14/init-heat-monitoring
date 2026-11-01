@@ -2,7 +2,9 @@
 
 The product firmware for the Init room monitor (P03). Arduino framework on PlatformIO (D-002).
 
-Status: P03-01 skeleton only. It builds and shows "Init" on the OLED; reading, upload, setup page and buffer come in P03-02 to P03-06.
+Status: P03-01 skeleton only. It builds, and since 2026-11-02 it runs on the board: "Init" on the OLED and one
+`T=.. H=..` line every 2 s on serial. Reading, upload, setup page and buffer come in P03-02 to P03-06.
+See `../README.md` for how to flash this project and not `bench`.
 
 ## Build
 
