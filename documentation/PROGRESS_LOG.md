@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s10
+P03-01 done: the product firmware project `firmware/init/` builds with PlatformIO (`[SUCCESS]`, platform and 5 libraries pinned, `secrets.h` gitignored); skeleton not flashed. P04-D5 done: UI-GATE mechanism (Playwright screenshot vs approved image) built test-first, fails on a changed number, colour or width; 23/23 tests. P04-D4: 8 Tabler template screenshots taken, awaiting owner approval. s08 cron check passed (`rollup-old-readings` ran `succeeded` 2026-10-31 18:30 UTC). Push asked at close.
+
 ## 2026-11-01 · s09
 Owner closed sign-ups and enforced SSL on both Supabase projects (S-4, S-5; read back with the read-only token) and reset the DB passwords (S-6; logins work). OLED design canvas done (P03-D1 to D3): 9 screens as Adafruit-GFX-style drawing code with the 5x7 font scaled 1 to 4, reference images approved by the owner, and an OLED-GATE test that compares the drawing with the images (red first, mutation-checked). D-025: screen always on (no button yet), sensor error screen approved, blue-only module. 18/18 tests. Nothing on the real OLED yet.
 
