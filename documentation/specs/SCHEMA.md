@@ -69,7 +69,7 @@ The `*_max_at` columns keep the **exact time** of each hour's highest value (own
 | `alert_heat_index_c` | 42 (PAGASA Danger) | 27 to 60 |
 | `alert_quiet_min` | 60 | 10 to 1440 |
 
-Allowed ranges are enforced by `CHECK` constraints in the database, so even the admin can't save a nonsense value. Public read (nothing secret; the device reads its interval and offsets from here). Updates: admin only, added in P05. Alert columns are used in P05 (F-10). They are listed now so the table is not changed twice.
+Allowed ranges are enforced by `CHECK` constraints in the database, so even the admin can't save a nonsense value. Public read (nothing secret). The device learns its interval from the reply to `ingest_reading` (P03-03), because it knows only its key, not its device id; the offsets are applied by the server. Updates: admin only, added in P05. Alert columns are used in P05 (F-10). They are listed now so the table is not changed twice.
 
 ## Ingest rules (P02-04): every rule rejects the whole call, nothing is saved
 | Check | Rule | Why |
@@ -84,7 +84,7 @@ Allowed ranges are enforced by `CHECK` constraints in the database, so even the 
 
 Each rule gets a test that sends a bad payload and expects a rejection (test-first: the test fails before the function exists).
 
-As built (P02-04): the device sends `POST /rest/v1/rpc/ingest_reading` with the public key and `{"device_key": "...", "readings": [{"recorded_at": "2026-11-03T08:00:00Z", "temp_c": 31.2, "rh_pct": 64.5}]}`. Answers: `200 {"saved": n, "duplicates": m}`; `403 bad_key`; `429 rate_limited`; `400` with the rule name (`bad_batch_size`, `bad_fields`, `bad_field_type`, `bad_recorded_at`, `recorded_at_out_of_range`, `temp_out_of_range`, `rh_out_of_range`). A repeated `recorded_at` is counted as a duplicate, not an error. The rate is measured from the last **accepted** call (`devices.last_seen_at`).
+As built (P02-04): the device sends `POST /rest/v1/rpc/ingest_reading` with the public key and `{"device_key": "...", "readings": [{"recorded_at": "2026-11-03T08:00:00Z", "temp_c": 31.2, "rh_pct": 64.5}]}`. Answers: `200 {"saved": n, "duplicates": m, "interval_s": s}` (`interval_s` added in P03-03; 300 when the device has no settings row; the device accepts only 60 to 3600); `403 bad_key`; `429 rate_limited`; `400` with the rule name (`bad_batch_size`, `bad_fields`, `bad_field_type`, `bad_recorded_at`, `recorded_at_out_of_range`, `temp_out_of_range`, `rh_out_of_range`). A repeated `recorded_at` is counted as a duplicate, not an error. The rate is measured from the last **accepted** call (`devices.last_seen_at`).
 
 ## Access rules (P02-02)
 Row-level security is ON for every table.

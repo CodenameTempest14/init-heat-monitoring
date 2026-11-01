@@ -28,7 +28,7 @@ test('a good reading is saved with the server-computed heat index and the device
     const sent = good();
     const res = await ingest(device.key, [sent]);
     assert.equal(res.status, 200, JSON.stringify(res.body));
-    assert.deepEqual(res.body, { saved: 1, duplicates: 0 });
+    assert.deepEqual(res.body, { saved: 1, duplicates: 0, interval_s: 300 });
 
     const [row] = await device.readings();
     assert.equal(row.temp_c, 31.2);
@@ -39,6 +39,22 @@ test('a good reading is saved with the server-computed heat index and the device
 
     const dev = (await service(`devices?id=eq.${device.id}&select=last_seen_at`)).body[0];
     assert.ok(Date.now() - new Date(dev.last_seen_at) < 60_000, 'last_seen_at is updated');
+  });
+});
+
+test('the reply carries the upload interval from settings (P03-03)', async () => {
+  await withDevice({ settings: { interval_s: 120 } }, async (device) => {
+    const res = await ingest(device.key, [good()]);
+    assert.equal(res.status, 200, JSON.stringify(res.body));
+    assert.equal(res.body.interval_s, 120);
+  });
+});
+
+test('a device with no settings row gets the default interval of 300 s', async () => {
+  await withDevice({}, async (device) => {
+    await service(`settings?device_id=eq.${device.id}`, { method: 'DELETE' });
+    const res = await ingest(device.key, [good()]);
+    assert.equal(res.body.interval_s, 300);
   });
 });
 
@@ -69,7 +85,7 @@ test('a batch from the offline buffer is saved in one call', async () => {
   await withDevice({}, async (device) => {
     const batch = Array.from({ length: 50 }, (_, i) => good({ recorded_at: minutesFromNow(-5 * (i + 1)) }));
     const res = await ingest(device.key, batch);
-    assert.deepEqual(res.body, { saved: 50, duplicates: 0 });
+    assert.deepEqual(res.body, { saved: 50, duplicates: 0, interval_s: 300 });
     assert.equal((await device.readings()).length, 50);
   });
 });
@@ -78,7 +94,7 @@ test('the same reading sent twice is stored once', async () => {
   await withDevice({}, async (device) => {
     const r = good();
     const res = await ingest(device.key, [r, r]);
-    assert.deepEqual(res.body, { saved: 1, duplicates: 1 });
+    assert.deepEqual(res.body, { saved: 1, duplicates: 1, interval_s: 300 });
     assert.equal((await device.readings()).length, 1);
   });
 });

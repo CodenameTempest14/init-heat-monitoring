@@ -1,6 +1,7 @@
-// Init room monitor. P03-02: join the hotspot, get the time, send one reading over HTTPS every minute.
+// Init room monitor. P03-03: join the hotspot, get the time, send one reading over HTTPS every interval_s seconds
+// (the server tells us in its reply; 60 s until the first reply).
 // The server certificate is checked against root_ca.h (S-11): no setInsecure().
-// Still to come: interval from settings (P03-03), OLED screens (P03-04), setup page (P03-05), offline buffer (P03-06).
+// Still to come: OLED screens (P03-04), setup page (P03-05), offline buffer (P03-06).
 #include <Arduino.h>
 #include <Wire.h>
 #include <WiFi.h>
@@ -13,11 +14,12 @@
 #include "config.h"
 #include "secrets.h"
 #include "root_ca.h"
+#include "interval.h"
 
 DHT dht(PIN_DHT, DHT22);
 Adafruit_SSD1306 oled(128, 64, &Wire, -1);
 
-constexpr uint32_t UPLOAD_EVERY_MS = 60000;  // fixed for now; the server refuses more than one call per 30 s
+uint32_t intervalS = INTERVAL_MIN_S;  // until the server says otherwise; it refuses more than one call per 30 s
 
 void status(const char* line) {
   Serial.println(line);
@@ -43,6 +45,7 @@ bool clockSet() {
 }
 
 // Returns the HTTP status, or a negative HTTPClient error (-1 = connection or TLS handshake failed).
+// On 200 it also updates intervalS from the reply.
 int upload(float t, float h) {
   char when[25];
   time_t now = time(nullptr);
@@ -61,8 +64,13 @@ int upload(float t, float h) {
   http.addHeader("Content-Type", "application/json");
   int code = http.POST(body);
   // Print the reading and the server's answer, never the key.
-  Serial.printf("upload %s T=%.1f H=%.1f -> %d %s\n", when, t, h, code,
-                code > 0 ? http.getString().c_str() : http.errorToString(code).c_str());
+  String reply = code > 0 ? http.getString() : http.errorToString(code);
+  Serial.printf("upload %s T=%.1f H=%.1f -> %d %s\n", when, t, h, code, reply.c_str());
+  if (code == 200) {
+    uint32_t next = intervalFromReply(reply.c_str(), intervalS);  // a bad or missing value keeps the old one
+    if (next != intervalS) Serial.printf("  interval %lu s -> %lu s\n", (unsigned long)intervalS, (unsigned long)next);
+    intervalS = next;
+  }
   if (code < 0) {
     char err[100];
     tls.lastError(err, sizeof err);
@@ -90,7 +98,7 @@ uint32_t lastUpload = 0;
 bool first = true;
 
 void loop() {
-  if (!first && millis() - lastUpload < UPLOAD_EVERY_MS) {
+  if (!first && !intervalDue(millis(), lastUpload, intervalS * 1000UL)) {
     delay(200);
     return;
   }

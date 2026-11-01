@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s12
+Reflashed the normal build. P03-03 done: the upload reply carries `interval_s`, the board follows it (90 s then 60 s). On the ROMOSS bank 90 s made the bank switch off, 60 s ran 10 minutes without a gap, so the bank limits the interval to the server's 60 s floor (D-027). Untracked PlatformIO files handled.
+
 ## 2026-11-02 · s11
 P04-D4 done: owner approved the 8 Tabler screenshots; 4 pages Approved in the registry. P03-01 skeleton flashed and run on the board (after one upload of the bench project by mistake, now documented). P03-02 done: the board joins the hotspot, sets the clock and uploads over HTTPS with the certificate checked (GTS R1, R4, GlobalSign; no `setInsecure()`); rows confirmed on init-test, and a wrong-root build is refused with X509 -9984 while the server receives nothing. S-11 closed. D-026. Board left on the wrong-root test build: reflash first next session. Push asked at close.
 
