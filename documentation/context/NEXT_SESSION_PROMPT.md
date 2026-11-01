@@ -34,7 +34,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 1. Ask the phase-builder question (last answer: owner only).
 2. **P03-06** offline buffer (F-11): keep readings while the hotspot is down, send them later, show `N to send` on the offline screen (OLED-04; `screens::reading` already takes `queued`). Test-first the buffer logic on the PC. `loop()` still blocks up to 20 s in `joinWifi()`: restructure so the display and sensor keep running while offline.
 3. Then **P03-05** (setup page, Opus 5.5), then P03-07 (24 h on the bank).
-4. Open: the OLED strip says `Room 1` from `config.h`. Ask the owner whether the server should send the room name in the upload reply (like `interval_s`). The sensor-error and offline screens were only checked in the screens build.
+4. **D-028 (owner said yes, s13):** the upload reply carries the room name for the OLED strip. Write the backend test first (init-test), add a migration, then have the firmware read it (fallback `Room 1`). Not built yet. The sensor-error and offline screens were only checked in the screens build.
 5. Open: the Tabler dashboard is about 832 px wide at a 390 px viewport (cause not diagnosed); our home page must not scroll sideways.
 6. Before every commit run `node tools/secret-scan.mjs` (exits 1 on a hit). `tools/db.mjs` now quotes arguments, so inline SQL works: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`.
 
