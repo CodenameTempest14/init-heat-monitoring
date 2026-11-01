@@ -17,3 +17,6 @@ node_modules/
 dist/
 .pio/
 .pio-build.log
+
+# PlatformIO extension output (machine-specific paths, regenerated)
+firmware/init/.vscode/
