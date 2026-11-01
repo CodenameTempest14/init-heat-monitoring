@@ -16,7 +16,7 @@ The live `init` project has no tables yet. Every migration result here is from `
 | S-8 | One bad hourly row stops the retention job every night | low | accepted, check in P05/P07 |
 | S-9 | The free project may pause when idle | operational | check in P07 |
 | S-10 | Everything in `readings`, `settings` and `device_status` is public | by design | rule for room names |
-| S-11 | The device must check the server's TLS certificate | P03 | carried to P03 |
+| S-11 | The device must check the server's TLS certificate | P03 | **closed 2026-11-02** (P03-02) |
 
 ## Findings
 
@@ -40,7 +40,7 @@ The live `init` project has no tables yet. Every migration result here is from `
 
 **S-10. Public data.** By design (F-07), anyone with the link can read every reading, the settings (interval, offsets, alert threshold) and the device name and room. None of it is personal. **Rule for P05:** device names and room names must not contain people's names (teachers or students). Say so next to the admin input.
 
-**S-11. Device TLS (for P03).** The device must check Supabase's certificate (root CA in the firmware), not `setInsecure()`. Otherwise someone on the same hotspot can read the device key. Carried into P03 as a check.
+**S-11. Device TLS (for P03).** The device must check Supabase's certificate (root CA in the firmware), not `setInsecure()`. Otherwise someone on the same hotspot can read the device key. Carried into P03 as a check. **Closed 2026-11-02 (P03-02):** `firmware/init` calls `setCACert(ROOT_CA)` with GTS Root R1, R4 and GlobalSign Root CA (D-026), no `setInsecure()`. On the real board, the normal build uploaded (HTTP 200, rows in init-test); the `esp32dev_wrongca` build (trusts only ISRG Root X1) failed with mbedTLS -9984 "X509 - Certificate verification failed" and the server received nothing (no row, `last_seen_at` unchanged).
 
 ## Checked and found as intended
 | Check | Result |
