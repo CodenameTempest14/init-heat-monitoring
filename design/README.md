@@ -12,6 +12,8 @@ Everything visual that web pages are checked against (D-016, lightweight version
 | `templates/` | Reference screenshots of the chosen Tabler pages at phone and desktop width (P04-D4), made by `capture.mjs` |
 | `ui-gate.mjs` | UI-GATE helpers: Playwright screenshot and image comparison (P04-D5), tested in `tests/ui-gate.test.js` |
 
+`device-setup/` holds the ESP32 Wi-Fi setup page (D-011), approved 2026-11-02. `brand/` holds the logo and full-name proposals (not approved yet).
+
 `oled/` holds the OLED screen canvas (D-022): screen list, grid and fonts now, reference images next. See `oled/README.md`.
 
 Rules: no page is built without an Approved template; templates must be open source (D-010); colour is never the only signal; no real personal data in any image. The UI-GATE mechanism exists (P04-D5); it is pointed at app pages when they are built.

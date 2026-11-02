@@ -67,7 +67,7 @@
       "template": "None: hand-written minimal HTML and CSS, because the ESP32 serves it from flash and Tabler is far too large. Visual language copied from the tokens only.",
       "source": "Own code",
       "license": "Own (same open licence as the repo)",
-      "status": "Proposed"
+      "status": "Approved"
     }
   ],
   "direction": "Light-first, calm, high-contrast, with dark mode. Neutral surfaces; the heat category colour is the only strong colour. Large numerals, system font, phone-first, category always shown with a text label (decided by agent 2026-10-31, owner delegated).",
