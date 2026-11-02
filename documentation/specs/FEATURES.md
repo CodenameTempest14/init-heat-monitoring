@@ -47,6 +47,28 @@ Effort: S = about a session, M = a few sessions, L = a phase of its own.
 |---|---|---|---|---|
 | F-21 | Device room assignment | The app shows which room the device is in ("Room 204"). The admin can change it when the device is moved. Old readings keep the room they were taken in. | Still one device and one room at a time (D-003). History: the room is saved on each reading (owner's choice). Data part in P02 (before the live database is created), admin screen in P05 with F-09, room name on the public page in P04. | S |
 
+## Added 2026-11-02 (s22), owner's request: PROPOSAL, not approved yet
+
+| ID | Feature | What the user sees | Notes / risk | Effort |
+|---|---|---|---|---|
+| F-22 | Admin guide | A plain "How to set this up" page for the admins, who are **high-school students**. Each admin setting gets: what it does, when to change it, and numbered steps with a worked example. The admin page gets a small **How? ›** link under each group (Room, Device, Heat alerts) that opens the guide at that part. | Text only, no new data or server change. Wording must not read as official health advice (same rule as F-15); the heat-level part quotes PAGASA's names and numbers only. Part of P05 (with F-09). | S |
+
+**Proposed shape (needs your yes):**
+- **Where:** `#guide` on the same address. It can be read without signing in, because nothing in it is secret, and students can read it before they get the password. The only links to it are on the admin page, not on the public page.
+- **Reading level:** short sentences, one idea each, numbered steps, a real example with numbers, no jargon (or jargon explained once). About Grade 8 level.
+- **Sections, in the order of the admin page:**
+  1. **Before you start:** who the admin is, what changes when you press Save, and that the device picks up a new setting within about a minute.
+  2. **Room:** when to change it (the device was moved), how to type it ("Room 204"), and why no names of people.
+  3. **Reporting interval:** what it means (how often the device sends a reading), why to keep 60 s on the power bank, and when a longer value is fine (only on a wall charger).
+  4. **Temperature and humidity offsets (calibration):** what an offset is, with an example. "The device says 31.0 °C, a trusted thermometer next to it says 30.2 °C, so the offset is 30.2 − 31.0 = −0.8." Steps: put a trusted thermometer next to the device, out of the sun; wait 30 minutes; write down both numbers 3 times, 5 minutes apart; take the average difference; type it and Save. Offsets change new readings only.
+  5. **Heat alerts:** the PAGASA levels table (Caution 27-32, Extreme caution 33-41, Danger 42-51, Extreme danger 52 and up), what "Alert at heat index" means (42 = alert at Danger), and what the quiet period is (no repeated alert for that many minutes). A note that alerts arrive in a later step (P05-03).
+  6. **If something looks wrong:** "Not saved", "Not an admin", and the device showing Offline, each with what to do.
+- **How? links:** one under each group label on the admin page, jumping to that section. The approved admin images change by these links only (redrawn after approval).
+
+**Questions for you:**
+- Language: English only, or English with Tagalog (or Taglish) lines? A full language toggle is F-18 (Tier 3, later).
+- Should a teacher read the heat-alert section before it goes live?
+
 ## Needs your decision (not a feature, a design choice)
 
 **Changing Wi-Fi from the web app (D-003).** If the device can only reach the internet through the hotspot, a wrong Wi-Fi name sent from the app would cut it off for good. Two options:
