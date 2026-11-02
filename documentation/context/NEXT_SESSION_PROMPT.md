@@ -28,7 +28,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | **Whole project** | 48 / 71 | ███████░░░ | **68%** |
 
 ### Recommended model for this session
-**Sonnet 5.5**: P04-07 build, the 24 h run evidence and P04-08. Opus 5.5 only for the admin sign-in in P05.
+**Sonnet 5.5**: the 24 h run evidence (P03-07), the offline check and P04-08. Opus 5.5 only for the admin sign-in in P05.
 
 ### Next concrete step
 1. Ask the phase-builder question (last answer: owner only).
