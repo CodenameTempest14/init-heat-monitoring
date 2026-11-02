@@ -17,6 +17,7 @@ Software only. Needs no data or hardware, so it may be done before P04 opens; it
 
 ## Build
 - [ ] P04-01 App skeleton built and deployed on free hosting
+  - **UNVERIFIED, not ticked (s15, 2026-11-02): built, not deployed.** `web/` (Vite 8.3.5 + React 19.3.1, `@tabler/core` 1.7.3, all pinned). Test first: `tests/web-lib.test.js` red (module missing), then 5/5; two mutations made 2 tests fail. `npm test` 43/43, `npm run build` OK (CSS 692 kB / 86 kB gzip: all of Tabler, to trim later; JS 70 kB gzip). Looked at in Chromium at 390 px with the headers from `web/vercel.json` in force (scratch static server): light and dark both showed the newest init-test row (31.3 °C, 58 %, heat index 35, room `Unassigned`, updated just now), no console messages, no CSP block, scroll width 390 = viewport 390. **Still to do:** Vercel account + deploy (owner), open the hosted address logged out and on the phone, re-run the anonymous-write check (not re-run: the backend tests wipe init-test, which holds the 24 h evidence).
 - [ ] P04-02 Live cards for temperature, humidity, heat index and PAGASA category, with the room name (F-01, F-02, F-21)
 - [ ] P04-03 Online/offline badge (F-03)
 - [ ] P04-04 24-hour and 7-day charts (F-04)

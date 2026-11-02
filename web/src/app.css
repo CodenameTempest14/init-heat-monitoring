@@ -1,0 +1,6 @@
+/* Our own small styles (no inline styles: the Content-Security-Policy forbids them). */
+body { background: var(--init-bg); color: var(--init-text); font-family: system-ui, sans-serif; }
+.app-wrap { max-width: 520px; margin: 0 auto; padding: 24px 16px; }
+.app-title { font-size: 28px; margin: 0 0 4px; }
+.app-label { font-weight: 600; margin: 0 0 8px; }
+.app-list { list-style: none; margin: 0 0 16px; padding: 0; line-height: 1.8; }

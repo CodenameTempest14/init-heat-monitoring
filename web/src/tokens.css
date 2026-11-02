@@ -1,0 +1,31 @@
+/* Made by web/build-tokens.mjs from design/tokens.json. Do not edit by hand. */
+:root {
+  --heat-caution-fill: #fff3a3;
+  --heat-caution-text: #3d3300;
+  --heat-extreme-caution-fill: #ffc53d;
+  --heat-extreme-caution-text: #3d2a00;
+  --heat-danger-fill: #c2410c;
+  --heat-danger-text: #ffffff;
+  --heat-extreme-danger-fill: #a61e1e;
+  --heat-extreme-danger-text: #ffffff;
+  --heat-below-range-fill: #e9ecef;
+  --heat-below-range-text: #212529;
+  --init-bg: #f6f7f9;
+  --init-text: #1b2430;
+  --heat-caution-border: #8a7400;
+  --heat-extreme-caution-border: #8a5a00;
+  --heat-danger-border: #b34100;
+  --heat-extreme-danger-border: #a61e1e;
+  --heat-below-range-border: #6b7480;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --init-bg: #10161d;
+    --init-text: #e8edf3;
+    --heat-caution-border: #e0c84a;
+    --heat-extreme-caution-border: #ffc53d;
+    --heat-danger-border: #ff8a4c;
+    --heat-extreme-danger-border: #ff6b6b;
+    --heat-below-range-border: #8b95a1;
+  }
+}
