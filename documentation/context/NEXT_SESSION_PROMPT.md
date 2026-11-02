@@ -11,7 +11,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 6. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run `node tools/continuation-prompt.mjs` and **show the generated prompt and the progress table in the final message**.
 
 ## Where we are
-[P03 · Device firmware · 7/10 done · 0 blocked · unverified 0]
+[P03 · Device firmware · 8/10 done · 0 blocked · unverified 0]
 
 ### Phase Progress (end of the previous session)
 | Phase | Done / Total | Progress | % |
@@ -19,22 +19,22 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | P00 Kickoff and decisions | 13 / 13 | ██████████ | 100% |
 | P01 Heat index core and bench bring-up | 7 / 7 | ██████████ | 100% |
 | P02 Backend and secure upload | 7 / 7 | ██████████ | 100% |
-| P03 Device firmware | 7 / 10 | ███████░░░ | 70% |
+| P03 Device firmware | 8 / 10 | ████████░░ | 80% |
 | P04 Web app core | 5 / 13 | ████░░░░░░ | 38% |
 | P05 Admin, alerts and device health | 0 / 6 | ░░░░░░░░░░ | 0% |
 | P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 39 / 71 | ██████░░░░ | **55%** |
+| **Whole project** | 40 / 71 | ██████░░░░ | **56%** |
 
 ### Recommended model for this session
-**Sonnet 5.5** for P03-06 and P03-07. **Opus 5.5** for P03-05 (setup page: it takes Wi-Fi passwords from a phone).
+**Opus 5.5** for P03-05 (setup page: it takes Wi-Fi passwords from a phone). **Sonnet 5.5** for P03-07.
 
 ### Next concrete step
 1. Ask the phase-builder question (last answer: owner only).
-2. **P03-06** offline buffer (F-11): keep readings while the hotspot is down, send them later, show `N to send` on the offline screen (OLED-04; `screens::reading` already takes `queued`). Test-first the buffer logic on the PC. `loop()` still blocks up to 20 s in `joinWifi()`: restructure so the display and sensor keep running while offline.
-3. Then **P03-05** (setup page, Opus 5.5), then P03-07 (24 h on the bank).
-4. **D-028 (owner said yes, s13):** the upload reply carries the room name for the OLED strip. Write the backend test first (init-test), add a migration, then have the firmware read it (fallback `Room 1`). Not built yet. The sensor-error and offline screens were only checked in the screens build.
+2. **P03-05** setup page (D-011, Opus 5.5): the OLED-05 screen exists (`screens::setupMode`); needs an access point `Init-Setup`, a page at 192.168.4.1 that saves Wi-Fi to flash (replacing the temporary `secrets.h` Wi-Fi, D-026), and a way to open it when Wi-Fi fails. Test-first any parsing/validation on the PC.
+3. Then P03-07 (24 h on the power bank, record the measured drop). P03-06 is done: the queue is RAM only, a restart loses it; not tried on the board: queue over 50, a full queue, the 400 drop.
+4. **D-028 done (s13):** the upload reply carries `room`, the OLED strip shows it (fallback `Room 1`); the 7th migration is on init-test only: apply it to live `init` before the board moves to live. The sensor-error and offline screens were only checked in the screens build.
 5. Open: the Tabler dashboard is about 832 px wide at a 390 px viewport (cause not diagnosed); our home page must not scroll sideways.
 6. Before every commit run `node tools/secret-scan.mjs` (exits 1 on a hit). `tools/db.mjs` now quotes arguments, so inline SQL works: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`.
 

@@ -4,6 +4,7 @@ Tests that run on the PC, not on the board. They cover the parts of the firmware
 
 - `interval_test.cpp` — `include/interval.h` (P03-03): reading `interval_s` from the server's reply, the 60 to 3600 s limits, and the wait that must survive `millis()` wrapping.
 
+- `readings_test.cpp` — `include/readings.h` (P03-06): the offline buffer (oldest first, drops the oldest when full, wrap-around) and the upload body for 1 to 50 readings.
 - `room_test.cpp` — `include/room.h` (D-028): the room name from the reply is plain printable ASCII, cut to 12 characters, and anything odd keeps the old label.
 - `heat_index_test.cpp` — `include/heat_index.h` (P03-04): the device's heat index and PAGASA band. It has no answers of its own: `tests/firmware-heat-index.test.js` (repo root, run by `npm test`) builds it and feeds it points made by `src/heat-index.js`.
 
