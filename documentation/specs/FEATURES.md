@@ -37,7 +37,7 @@ Effort: S = about a session, M = a few sessions, L = a phase of its own.
 |---|---|---|---|
 | F-16 | CSV export of history | Useful for a report to the school. | S |
 | F-17 | Device health page | Wi-Fi signal, last reboot reason, firmware version (admin only). | S |
-| F-18 | Tagalog / English toggle | Fits the brand. | M |
+| F-18 | ~~Tagalog / English toggle~~ **Withdrawn** (owner s22, D-034): the app is English only. | Fits the brand. | M |
 | F-19 | Over-the-air firmware updates | Convenient but a security risk (a bad update bricks the device). Not before F-06 is solid. | L |
 | F-20 | Data housekeeping | Keep raw readings 90 days, then store hourly averages, to stay inside the free tier. | S |
 
@@ -47,13 +47,13 @@ Effort: S = about a session, M = a few sessions, L = a phase of its own.
 |---|---|---|---|---|
 | F-21 | Device room assignment | The app shows which room the device is in ("Room 204"). The admin can change it when the device is moved. Old readings keep the room they were taken in. | Still one device and one room at a time (D-003). History: the room is saved on each reading (owner's choice). Data part in P02 (before the live database is created), admin screen in P05 with F-09, room name on the public page in P04. | S |
 
-## Added 2026-11-02 (s22), owner's request: PROPOSAL, not approved yet
+## Added 2026-11-02 (s22), owner's request: APPROVED by the owner (D-034), not built yet
 
 | ID | Feature | What the user sees | Notes / risk | Effort |
 |---|---|---|---|---|
 | F-22 | Admin guide | A plain "How to set this up" page for the admins, who are **high-school students**. Each admin setting gets: what it does, when to change it, and numbered steps with a worked example. The admin page gets a small **How? ›** link under each group (Room, Device, Heat alerts) that opens the guide at that part. | Text only, no new data or server change. Wording must not read as official health advice (same rule as F-15); the heat-level part quotes PAGASA's names and numbers only. Part of P05 (with F-09). | S |
 
-**Proposed shape (needs your yes):**
+**Shape (approved as written, s22):**
 - **Where:** `#guide` on the same address. It can be read without signing in, because nothing in it is secret, and students can read it before they get the password. The only links to it are on the admin page, not on the public page.
 - **Reading level:** short sentences, one idea each, numbered steps, a real example with numbers, no jargon (or jargon explained once). About Grade 8 level.
 - **Sections, in the order of the admin page:**
@@ -65,9 +65,7 @@ Effort: S = about a session, M = a few sessions, L = a phase of its own.
   6. **If something looks wrong:** "Not saved", "Not an admin", and the device showing Offline, each with what to do.
 - **How? links:** one under each group label on the admin page, jumping to that section. The approved admin images change by these links only (redrawn after approval).
 
-**Questions for you:**
-- Language: English only, or English with Tagalog (or Taglish) lines? A full language toggle is F-18 (Tier 3, later).
-- Should a teacher read the heat-alert section before it goes live?
+**Owner answers (s22):** English only, and that applies to the whole app (F-18 withdrawn, D-034). A teacher reads the guide before it goes live, and the same rule applies to every other user-facing wording (D-034).
 
 ## Needs your decision (not a feature, a design choice)
 
