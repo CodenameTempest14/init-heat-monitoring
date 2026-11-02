@@ -36,6 +36,8 @@
 .viz-now { display: flex; align-items: center; gap: 6px; font-size: 14px; margin: 0; color: var(--viz-ink); }
 .viz-caption { font-size: 12px; margin: 4px 0 0; color: var(--viz-ink-2); }
 .viz-svg { touch-action: pan-y; display: block; width: 100%; height: auto; }
+/* A tap or click focuses the chart too, but the outline is for keyboard users only (set in History.jsx). */
+.viz-svg[data-touched] { outline: none; }
 .viz-grid { stroke: var(--viz-grid); stroke-width: 1; }
 .viz-tick { fill: var(--viz-ink-2); font-size: 11px; }
 .viz-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }

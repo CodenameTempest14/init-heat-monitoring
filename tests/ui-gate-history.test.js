@@ -123,3 +123,23 @@ test('table twin: one row per bucket, newest first, a dash only for a missing he
   assert.deepEqual(rows[0], ['14:00', '40', '32.2', '68']);
   assert.ok(rows.some((r) => r[1] === '—' && r[2] !== '—'), 'a bucket below the heat index range shows a dash only for the heat index');
 });
+
+// Follow-up from the phone (s17): a tap left a white focus outline on the chart. Only keyboard users should see one.
+test('a tap on a chart shows no focus outline, keyboard focus does', async () => {
+  let tapped, keyboard;
+  await shootPage({ theme: 'dark', act: async (page) => {
+    const outline = () => page.evaluate(() => { const s = getComputedStyle(document.activeElement); return { cls: document.activeElement.getAttribute('class'), style: s.outlineStyle, width: s.outlineWidth }; });
+    const svg = page.locator('.viz-svg').first();
+    await svg.scrollIntoViewIfNeeded();
+    const box = await svg.boundingBox();
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    tapped = await outline();
+    await page.evaluate(() => document.activeElement.blur());
+    await page.keyboard.press('Tab');
+    while (!(await page.evaluate(() => document.activeElement.classList.contains('viz-svg')))) await page.keyboard.press('Tab');
+    keyboard = await outline();
+  } });
+  assert.equal(tapped.cls, 'viz-svg', 'the tap should have focused the chart');
+  assert.ok(tapped.style === 'none' || tapped.width === '0px', `outline after a tap: ${JSON.stringify(tapped)}`);
+  assert.ok(keyboard.style !== 'none' && keyboard.width !== '0px', `outline from the keyboard: ${JSON.stringify(keyboard)}`);
+});

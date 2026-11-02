@@ -72,7 +72,8 @@ function Chart({ series, spec, W, hover, onHover }) {
         </div>
         <svg className="viz-svg" viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" tabIndex={0}
           aria-label={`${spec.title}, ${RANGES[range].words}; arrow keys move through the times; the table below has every value`}
-          onPointerMove={pointer} onPointerDown={pointer} onKeyDown={key}
+          onPointerMove={pointer} onPointerDown={(e) => { e.currentTarget.dataset.touched = '1'; pointer(e); }} onKeyDown={(e) => { delete e.currentTarget.dataset.touched; key(e); }}
+          onBlur={(e) => { delete e.currentTarget.dataset.touched; }}
           onPointerLeave={(e) => { if (e.pointerType === 'mouse') onHover(null); }}>
           {ticks.map((v) => (
             <g key={v}>
