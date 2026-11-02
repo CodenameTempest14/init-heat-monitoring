@@ -2,7 +2,7 @@
 
 The product firmware for the Init room monitor (P03). Arduino framework on PlatformIO (D-002).
 
-Status: P03-01 to P03-04 and P03-06 done, P03-05 built (board test pending). At start-up it reads the hotspot
+Status: P03-01 to P03-06 done (P03-05 tried on the board s14). At start-up it reads the hotspot
 saved in flash and joins it; with nothing saved, or when that fails for 20 s, it opens its own network
 `Init-Setup` with the setup page at 192.168.4.1 (D-011). Then: time from NTP (UTC), a reading every `interval_s`
 (from the server's reply), queued in RAM while offline (F-11) and sent over HTTPS with the server certificate
