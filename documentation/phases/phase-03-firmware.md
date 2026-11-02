@@ -34,4 +34,4 @@ Same method as the web canvas (D-016). Must be finished and approved before P03-
 - [ ] P03-07 24-hour run on the power bank; measured battery drop recorded
 
 ## Unverified (s15, 2026-11-02)
-- **UNVERIFIED** Logo on the setup page (owner approved; titles `INIT SETUP` and `SAVED`). Built: `design/device-setup/*.html` replaced, `ref/` re-captured, `wifi_setup.h` changed until `tests/firmware-setup-page.test.js` passed (red first), `npm test` 38/38, `pio run` SUCCESS (flash 77.0 %). Not yet flashed or seen on the phone.
+- **UNVERIFIED** Logo on the setup page (owner approved the icon; titles stay `Init setup` and `Saved`, the owner found all capitals ugly). Built: `design/device-setup/*.html` replaced, `ref/` re-captured, `wifi_setup.h` changed until `tests/firmware-setup-page.test.js` passed (red first), `npm test` 38/38, `pio run` SUCCESS (flash 77.0 %). Not yet seen on the phone with this title wording (the board was flashed with the capitals version first, so it needs one more flash).
