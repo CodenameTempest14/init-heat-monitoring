@@ -89,9 +89,9 @@ struct Page {
 constexpr const char* HEAD =
     "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>Init setup</title><style>\n"
     ":root{--bg:#f6f7f9;--text:#1b2430;--muted:#4a5562;--line:#6b7480;--field:#fff;--err:#b34100}\n"
-    "@media (prefers-color-scheme:dark){:root{--bg:#10161d;--text:#e8edf3;--muted:#aab4bf;--line:#8b95a1;--field:#1a222b;--err:#ff8a4c}}\n"
+    "@media (prefers-color-scheme:dark){:root{--bg:#10161d;--text:#e8edf3;--muted:#aab4bf;--line:#8b95a1;--field:#1a222b;--err:#ff8a4c}.logo .bg{stroke:var(--line);stroke-width:4}}\n"
     "*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,sans-serif}\n"
-    "main{max-width:420px;margin:0 auto;padding:24px 16px}header{text-align:center;margin-bottom:24px}header p{margin:0}h1{font-size:28px;margin:0 0 4px}p{margin:0 0 16px}\n"
+    "main{max-width:420px;margin:0 auto;padding:24px 16px}header{text-align:center;margin-bottom:24px}header p{margin:0}.logo{display:block;width:56px;height:56px;margin:0 auto 12px}h1{font-size:28px;margin:0 0 4px}p{margin:0 0 16px}\n"
     ".muted{color:var(--muted)}.err{color:var(--err);border-left:4px solid var(--err);padding-left:12px;font-weight:600}\n"
     "label{display:block;font-weight:600;margin:16px 0 4px}input[type=text],input[type=password]{width:100%;font:inherit;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--text)}\n"
     ".show{display:flex;gap:8px;align-items:center;font-weight:400;margin-top:8px}button{width:100%;margin-top:24px;padding:12px;font:inherit;font-weight:600;border:0;border-radius:8px;background:var(--text);color:var(--bg)}\n"
@@ -105,7 +105,7 @@ inline bool renderSetupPage(char* out, size_t outSize, const char* saved, const 
                             const char* prefill, const char* error) {
   setup_page_detail::Page pg(out, outSize);
   pg.add(setup_page_detail::HEAD);
-  pg.add("<header><h1>Init setup</h1><p class=\"muted\">Room monitor Wi-Fi</p></header>\n<p>Saved network: <b>");
+  pg.add("<header><svg class=\"logo\" viewBox=\"0 0 96 96\" aria-hidden=\"true\"><rect class=\"bg\" width=\"96\" height=\"96\" rx=\"22\" fill=\"#1b2430\"/><circle cx=\"48\" cy=\"20\" r=\"8\" fill=\"#ffc53d\"/><rect x=\"39\" y=\"34\" width=\"18\" height=\"40\" rx=\"9\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/><rect x=\"45\" y=\"48\" width=\"6\" height=\"22\" rx=\"3\" fill=\"#c2410c\"/><circle cx=\"48\" cy=\"72\" r=\"12\" fill=\"#c2410c\" stroke=\"#fff\" stroke-width=\"5\"/></svg><h1>INIT SETUP</h1><p class=\"muted\">Room monitor Wi-Fi</p></header>\n<p>Saved network: <b>");
   if (saved && *saved) pg.addEscaped(saved); else pg.add("none");
   pg.add("</b></p>\n");
   if (error && *error) { pg.add("<p class=\"err\">"); pg.addEscaped(error); pg.add("</p>\n"); }
@@ -131,7 +131,7 @@ inline bool renderSetupPage(char* out, size_t outSize, const char* saved, const 
 inline bool renderSavedPage(char* out, size_t outSize, const char* ssid) {
   setup_page_detail::Page pg(out, outSize);
   pg.add(setup_page_detail::HEAD);
-  pg.add("<header><h1>Saved</h1></header>\n<p>Init restarts now and joins <b>");
+  pg.add("<header><svg class=\"logo\" viewBox=\"0 0 96 96\" aria-hidden=\"true\"><rect class=\"bg\" width=\"96\" height=\"96\" rx=\"22\" fill=\"#1b2430\"/><circle cx=\"48\" cy=\"20\" r=\"8\" fill=\"#ffc53d\"/><rect x=\"39\" y=\"34\" width=\"18\" height=\"40\" rx=\"9\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/><rect x=\"45\" y=\"48\" width=\"6\" height=\"22\" rx=\"3\" fill=\"#c2410c\"/><circle cx=\"48\" cy=\"72\" r=\"12\" fill=\"#c2410c\" stroke=\"#fff\" stroke-width=\"5\"/></svg><h1>SAVED</h1></header>\n<p>Init restarts now and joins <b>");
   pg.addEscaped(ssid);
   pg.add("</b>.</p>\n<p class=\"muted\">You can close this page and leave the Init-Setup network. "
          "If Init cannot join, the setup network comes back after about 20 seconds.</p>\n</main></body></html>\n");
