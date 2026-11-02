@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Init: mock school-weekend</title>
+<link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
+<link rel="stylesheet" href="../../web/src/tokens.css">
+<link rel="stylesheet" href="../../web/src/app.css">
+<link rel="stylesheet" href="../../web/src/charts.css">
+<link rel="stylesheet" href="../../web/src/school.css">
+</head>
+<body>
+<main class="app-wrap">
+  <header class="app-head"><picture class="app-logo"><source media="(prefers-color-scheme: dark)" srcset="../../web/public/logo-dark.svg"><img src="../../web/public/logo-light.svg" width="110" height="40" alt=""></picture><h1 class="app-fullname">Init: Indoor Heat Index Tracker</h1><p class="text-secondary app-room">Room: Room 204</p>
+    <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>
+  <a class="school-back" href="#">‹ Live readings</a><section class="viz-wrap" aria-label="School day"><h2 class="viz-section">School day</h2><p class="viz-note">No school on weekends. Showing the last school day.<br><strong>Fri 30 Oct</strong> · 6:00 AM to 7:15 PM</p><div class="school-nav" role="group" aria-label="Choose a school day">
+      <button type="button" class="btn viz-range">‹ Thu 29 Oct</button>
+      <button type="button" class="btn viz-range" disabled>Next ›</button></div>
+    <div class="card viz-card"><div class="card-body">
+      <dl class="school-stats"><div class="school-stat"><dt>Highest</dt><dd>43 °C<small>at 1:20 PM</small></dd></div><div class="school-stat"><dt>Hottest hour</dt><dd>42 °C average<small>1:00 to 2:00 PM</small></dd></div><div class="school-stat"><dt>Lowest</dt><dd>27 °C<small>at 6:20 AM</small></dd></div><div class="school-stat"><dt>Average</dt><dd>37 °C</dd></div></dl>
+      <p class="viz-caption">Heat index. Moments below its calculation range (about 27 °C) are left out of these four.</p>
+    </div></div>
+    <div class="card viz-card"><div class="card-body">
+      <h3 class="viz-title">Time in each level</h3>
+      <svg class="school-bar" viewBox="0 0 326 24" role="img" aria-label="Time in each level, as a bar: Danger 3 h 20 min, Extreme caution 6 h 20 min, Caution 2 h 30 min, Below heat-index range 20 min, No reading 45 min"><rect class="sb-below-range" x="0.0" y="1" width="8.2" height="22" rx="3"/><rect class="sb-caution" x="8.2" y="1" width="61.5" height="22" rx="3"/><rect class="sb-extreme-caution" x="69.7" y="1" width="155.8" height="22" rx="3"/><rect class="sb-danger" x="225.5" y="1" width="82.0" height="22" rx="3"/><rect class="sb-none" x="307.5" y="1" width="18.5" height="22" rx="3"/></svg>
+      <ul class="school-bands"><li><span class="school-chip sc-extreme-danger"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2h8l6 6v8l-6 6H8l-6-6V8z"/></svg></span><span>Extreme danger</span><strong>0 min</strong></li><li><span class="school-chip sc-danger"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 22 12 12 22 2 12z"/></svg></span><span>Danger</span><strong>3 h 20 min</strong></li><li><span class="school-chip sc-extreme-caution"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 21H2z"/></svg></span><span>Extreme caution</span><strong>6 h 20 min</strong></li><li><span class="school-chip sc-caution"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg></span><span>Caution</span><strong>2 h 30 min</strong></li><li><span class="school-chip sc-below-range"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"/></svg></span><span>Below heat-index range</span><strong>20 min</strong></li><li><span class="school-chip sc-none"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12h8" stroke-dasharray="2 3"/></svg></span><span>No reading</span><strong>45 min</strong></li></ul>
+    </div></div></section>
+</main>
+</body>
+</html>
