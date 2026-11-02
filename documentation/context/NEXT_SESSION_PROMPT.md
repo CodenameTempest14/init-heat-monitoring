@@ -20,30 +20,31 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | P01 Heat index core and bench bring-up | 7 / 7 | ██████████ | 100% |
 | P02 Backend and secure upload | 7 / 7 | ██████████ | 100% |
 | P03 Device firmware | 9 / 10 | █████████░ | 90% |
-| P04 Web app core | 9 / 13 | ███████░░░ | 69% |
+| P04 Web app core | 11 / 13 | █████████░ | 85% |
 | P05 Admin, alerts and device health | 0 / 6 | ░░░░░░░░░░ | 0% |
 | P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 45 / 71 | ██████░░░░ | **63%** |
+| **Whole project** | 47 / 71 | ███████░░░ | **66%** |
 
 ### Recommended model for this session
-**Sonnet 5.5**: P04-05 PWA design and build, and the 24 h run evidence. Opus 5.5 only for the admin sign-in in P05.
+**Sonnet 5.5**: P04-07 build, the 24 h run evidence and P04-08. Opus 5.5 only for the admin sign-in in P05.
 
 ### Next concrete step
 1. Ask the phase-builder question (last answer: owner only).
-2. Ask the owner to approve a push of the s17 close commits to `codenametempest14` and `main`, naming both targets.
+2. Ask the owner to approve a push of the s18 commits after `6c0f41e` (`53afa9b`, `c3f9fcc`, `aa3db15`, `cab3145`, `42ac211` and the s18 close commit) to `codenametempest14` and `main`, naming both targets.
 3. **P03-07 is RUNNING** (owner started it 2026-11-02 18:03 local = 10:03Z, bank 100 %, board on the bank only; it ends 2026-11-03 10:03Z = 18:03 local). At the end: ask the owner for the bank level; count `init-test` rows (device "Room 1") with `received_at` between those two times (about 1 440 expected; the first row on the bank came at 10:03:55Z) and list gaps over 90 s with their cause; the drop is the result; then tick P03-07. Do not run the backend tests until then (they wipe init-test). **Do not unplug the board during the run.**
 4. **The 2 min offline rule is still unseen on the hosted page** (the one unverified change). Best moment: when the run ends and the owner unplugs the board, ask for screenshots at about 2 and 3 min.
-5. P04-04 follow-ups (small, test first, UI gate): the white focus outline that shows on the charts after a tap (use `:focus-visible`); check the 24 h temperature line's sharp drop near 04:00 against the raw rows (real data or a bug?); table twin, light mode and iPhone on a phone.
-6. Next P04 item: **P04-05 installable PWA** (manifest, service worker, **favicon, home-screen icons and the header logo: the owner chose to add them here**), needs a **design mock approved first** (D-016); then P04-06 to P04-08.
-7. Not done: sensor accuracy check against a reference thermometer next to the board; the anonymous-write recheck; desktop layout is gated only for the 24 h charts page; iPhone; light mode of the setup page and of the badge on the phone. Open: page loads took 2.7 to 4.2 s (Supabase cold start?); the stylesheet is 694 kB (all of Tabler, trim later).
+5. **Build P04-07 school-day view (F-12, D-033, all approved)**, test first. Mocks: `design/school-day/` (README lists the rules). (a) Migration `school_day(day, for_device)` in the database: Monday to Friday 6:00 AM to 7:15 PM Asia/Manila, highest and lowest heat index with the time, hottest clock hour (highest average, with that average), average (readings below the heat index range have no heat index and are left out), minutes in each PAGASA level on the heat index rounded to whole °C plus No reading; a reading counts until the next one, at most 120 s; the minutes add up to the length of the window (to now for today). Write `tests/backend/school-day.backend.js` first, **but the backend tests wipe init-test: run them only after P03-07 ends** (until then check the function with read-only queries against real rows, and the owner applies the migration to init-test and live like `history()`). (b) The web view `#school` (new `web/src/School.jsx` and `school.js`; only `web/src/school.css` exists so far), the link row on the home page under `updated ...`, a day picker (previous and next school day, weekends skipped, up to 90 days back), the four states of the mocks. (c) After the link row is in: redraw `design/{home-cards,offline-badge,history-charts}` mocks and images (their builders, then `capture.mjs`), then a new `tests/ui-gate-school.test.js`, and run the gates one at a time.
+6. After P04-07: **P04-08** (a real browser and a real phone, screenshots free of personal data), then P05. Not done from P04-05: Lighthouse or Chrome's install check, an iPhone add-to-home-screen, the light-mode header and the offline page on a phone.
+7. Not done: sensor accuracy check against a reference thermometer next to the board; why the sensor read 23.1 °C at 20:14Z on 2026-11-01 (real row, then a 52 min gap: ask the owner); the probe has never caught a real hole; desktop layout is gated only for the 24 h charts page; light mode of the setup page and of the badge on the phone. Open: page loads took 2.7 to 4.2 s (Supabase cold start?); the stylesheet is 694 kB (all of Tabler, trim later).
 8. Not tried for P03-05: the 10-minute setup timeout, an iPhone. Not tried for P03-06: queue over 50, a full queue, the 400 drop. Flash is 77.0 % full (matters for P08 OTA).
 9. Before every commit run `node tools/secret-scan.mjs` (exits 1 on a hit; it also guards the hotspot name). Inline SQL works: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"` (read-only queries on `live` work too).
 
 ### Waiting on the owner
 - At 18:03 local on 2026-11-03: the power bank's level (P03-07), then unplug the board for the offline check (screenshots at about 2 and 3 min).
-- Approve a push of the s17 close commits to `codenametempest14` and `main`.
+- Approve a push of the s18 commits after `6c0f41e` to `codenametempest14` and `main`.
+- Optional: why the sensor read 23.1 °C at 04:14 local on 2026-11-02 (was the board moved?). Optional: try add-to-home-screen on the iPhone.
 - Write `SECRET_SETUP_PASS` on a sticker for the case.
 - Later: dummy load or another bank (D-027).
 - A push button for the OLED wake (D-025: until then the screen stays on; button part of F-08 deferred).

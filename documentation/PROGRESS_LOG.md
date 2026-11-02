@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s18
+Pushed the s17 close commits (already on both branches). P04-04 follow-ups: the white focus outline after a tap is fixed (test first; a tap counts as keyboard focus in Chromium, so a `data-touched` mark hides it) and the 04:00 temperature drop is real data (a 23.1 °C row at 20:14Z, then a 52 min gap). P04-05 installable PWA designed (header logo, icons, installed look; the owner changed the header twice), built test-first (manifest, icons, a service worker that never keeps readings), UI gates redrawn and 0 px, deployed and seen on the owner's Chrome install, Brave shortcut and iPhone: ticked. P04-06: new `tools/anon-probe.mjs`, 17/17 on init-test and live: ticked. P04-07 school-day view designed and approved (D-033), not built. README check now skips `dist`. One mistake: I ran `npm test` once; the auto-mode classifier blocked it before it wiped init-test (the P03-07 data), so nothing was lost. P03-07 is still running (ends 2026-11-03 18:03 local).
+
 ## 2026-11-02 · s17
 Owner changed the offline limit to 2 min (test first). History charts (P04-04) designed with the dataviz skill, approved, and built test-first: three charts (heat index, temperature, humidity) for 24 h and 7 d, fed by a new database function `history()` that averages in the database (at most 97 / 169 rows), with a readout, table twin and PAGASA lines; the built page matches the approved images with 0 differing pixels (needed `cssMinify: false`). Verified on the hosted page and the owner's phone; P04-04 ticked. Owner applied the 7th and 8th migrations to live (read back). P03-07 started by the owner at 18:03 local with the bank at 100 %, running. 2 min offline rule still unseen offline. Pushed to `codenametempest14` and `main` up to `3740104`.
 
