@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { readingView, deviceStatus } from './lib.js';
 import { CATEGORY_LABEL } from './category.js';
+import History from './History.jsx';
 
 const REFRESH_MS = 30000;
 
@@ -17,7 +18,7 @@ const SHAPES = {
 };
 
 async function latestReading() {
-  const url = `${SUPABASE_URL}/rest/v1/readings?select=recorded_at,received_at,temp_c,rh_pct,heat_index_c,room&order=recorded_at.desc&limit=1`;
+  const url = `${SUPABASE_URL}/rest/v1/readings?select=device_id,recorded_at,received_at,temp_c,rh_pct,heat_index_c,room&order=recorded_at.desc&limit=1`;
   const res = await fetch(url, { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const rows = await res.json();
@@ -47,6 +48,7 @@ export default function App() {
   const [view, setView] = useState({ ...readingView(undefined, Date.now()), updated: 'loading…' });
   const [status, setStatus] = useState(null); // null until the first answer, so no badge flashes before we know
   const [failed, setFailed] = useState(false);
+  const [deviceId, setDeviceId] = useState(null); // the device of the newest reading: the history charts show this one
 
   useEffect(() => {
     let alive = true;
@@ -54,7 +56,7 @@ export default function App() {
       try {
         const row = await latestReading();
         const now = Date.now();
-        if (alive) { setView(readingView(row, now)); setStatus(deviceStatus(row, now)); setFailed(false); }
+        if (alive) { setView(readingView(row, now)); setStatus(deviceStatus(row, now)); setDeviceId(row ? row.device_id : null); setFailed(false); }
       } catch {
         if (alive) setFailed(true);
       }
@@ -69,7 +71,7 @@ export default function App() {
     <main className="app-wrap">
       <header className="app-head">
         <h1 className="app-title">Init</h1>
-        <p className="text-secondary">Room: {view.room}</p>
+        <p className="text-secondary">{`Room: ${view.room}`}</p>
         {status && (
           <p className={`status status-${status.kind}`} role="status">
             <svg viewBox="0 0 24 24" aria-hidden="true">{STATUS_ICON[status.kind]}</svg>{status.text}
@@ -92,6 +94,7 @@ export default function App() {
         <section className="card" aria-label="Humidity"><div className="card-body"><p className="app-label">Humidity</p><p className="stat">{view.rh}</p></div></section>
       </div>
       <p className="text-secondary app-updated">{failed ? 'Could not load the readings. Will try again.' : view.updated}</p>
+      {deviceId && <History deviceId={deviceId} />}
     </main>
   );
 }

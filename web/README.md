@@ -7,6 +7,7 @@ Status: P04-01 skeleton. One page that reads the newest reading as a logged-out 
 | Path | What it is |
 |---|---|
 | `src/App.jsx` | The page: fetches the newest row from the Supabase REST address every 30 s and shows it |
+| `src/history.js`, `src/History.jsx`, `src/charts.css` | The 24 h / 7 d charts (P04-04): maths (tested by `tests/web-history.test.js`), the page part, and its styles. Data from `rpc/history`, checked against `design/history-charts/ref/` by `tests/ui-gate-history.test.js` |
 | `src/lib.js` | Plain text helpers (`ageText`, `readingView`). Tested by `tests/web-lib.test.js` (run by `npm test` from the project root) |
 | `src/config.js` | Supabase address and the **public** key. Made by `npm run config`. Meant to be public (row-level rules, SCHEMA.md) |
 | `src/tokens.css` | Colours from `design/tokens.json`. Made by `npm run tokens`, never edited by hand |

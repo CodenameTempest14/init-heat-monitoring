@@ -1,4 +1,4 @@
-/* P04-04 mock styles for the history charts. At build time these move into web/src/app.css (no inline styles: the CSP forbids them).
+/* P04-04 history charts (F-04). No inline styles: the CSP forbids them.
    Series colours are slots 1 to 3 of the dataviz default palette, checked with its validator (see README.md). */
 :root {
   --series-hi: #2a78d6;    /* slot 1 blue */
@@ -35,7 +35,7 @@
 .viz-unit { font-weight: 400; color: var(--viz-ink-2); }
 .viz-now { display: flex; align-items: center; gap: 6px; font-size: 14px; margin: 0; color: var(--viz-ink); }
 .viz-caption { font-size: 12px; margin: 4px 0 0; color: var(--viz-ink-2); }
-.viz-svg { display: block; width: 100%; height: auto; }
+.viz-svg { touch-action: pan-y; display: block; width: 100%; height: auto; }
 .viz-grid { stroke: var(--viz-grid); stroke-width: 1; }
 .viz-tick { fill: var(--viz-ink-2); font-size: 11px; }
 .viz-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
@@ -63,3 +63,4 @@
 .viz-tablebox summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
 .viz-tablescroll { max-height: 280px; overflow-y: auto; }
 .viz-table { font-size: 14px; font-variant-numeric: tabular-nums; }
+.viz-loading { opacity: .6; }
