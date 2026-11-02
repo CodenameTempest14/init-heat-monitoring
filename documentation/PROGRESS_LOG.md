@@ -2,6 +2,10 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s17
+Owner changed the offline limit to 2 min (test first). History charts (P04-04) designed with the dataviz skill, approved, and built test-first: three charts (heat index, temperature, humidity) for 24 h and 7 d, fed by a new database function `history()` that averages in the database (at most 97 / 169 rows), with a readout, table twin and PAGASA lines; the built page matches the approved images with 0 differing pixels (needed `cssMinify: false`). Verified on the hosted page and the owner's phone; P04-04 ticked. Owner applied the 7th and 8th migrations to live (read back). P03-07 started by the owner at 18:03 local with the bank at 100 %, running. 2 min offline rule still unseen offline. Pushed to `codenametempest14` and `main` up to `3740104`.
+
+
 ## 2026-11-02 · s16
 P04-02 verified on the hosted page and the owner's phone (ticked). P04-03 offline badge: design approved by the owner, built test-first (age rule, status colours in tokens, UI gate against the approved images), deployed, and verified with the real board: unplugged 17:06, page showed Offline 3, 4 and 5 min, replugged, Online at 17:13; server gap 435 s. Rule: offline after 180 s by `received_at`. Pushed `29e3f50` to `codenametempest14` and `main`. P03-07 not started (bank not confirmed full). P04 now 8/13.
 

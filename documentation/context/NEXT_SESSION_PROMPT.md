@@ -20,32 +20,32 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | P01 Heat index core and bench bring-up | 7 / 7 | ██████████ | 100% |
 | P02 Backend and secure upload | 7 / 7 | ██████████ | 100% |
 | P03 Device firmware | 9 / 10 | █████████░ | 90% |
-| P04 Web app core | 8 / 13 | ██████░░░░ | 62% |
+| P04 Web app core | 9 / 13 | ███████░░░ | 69% |
 | P05 Admin, alerts and device health | 0 / 6 | ░░░░░░░░░░ | 0% |
 | P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 44 / 71 | ██████░░░░ | **62%** |
+| **Whole project** | 45 / 71 | ██████░░░░ | **63%** |
 
 ### Recommended model for this session
-**Sonnet 5.5**: 24 h run evidence, the P04-04 chart design and build. Opus 5.5 only for the admin sign-in in P05.
+**Sonnet 5.5**: P04-05 PWA design and build, and the 24 h run evidence. Opus 5.5 only for the admin sign-in in P05.
 
 ### Next concrete step
 1. Ask the phase-builder question (last answer: owner only).
-2. Ask the owner to approve a push of the s16 close commits to `codenametempest14` and `main`, naming both targets.
-3. **P03-07** 24-hour run on the ROMOSS bank, **when the owner says it is full** (not confirmed full at s16 close). Owner notes the bank level and start time, unplugs USB, runs the board on the bank. Evidence from the server: one row a minute for 24 h (init-test, device "Room 1"; the room shows `Unassigned`, which is fine), gaps listed with their cause; bank level at the end = the measured drop. Interval stays 60 s (D-027). Old init-test rows stay (owner told to leave them; count with a time window; the s16 unplug test left one 435 s gap, 09:05:45Z to 09:13:00Z, before the run). Do not run the backend tests during the run (they wipe init-test).
-4. Next P04 items, each needs a **design mock approved first** (D-016): P04-04 24 h and 7 d charts (F-04; read the `dataviz` skill first), then P04-05 PWA (manifest, service worker, **favicon, home-screen icons and the header logo: the owner chose to add them here**), P04-06 to P04-08. Also confirm with the owner that 3 min is the wanted offline limit (a short Wi-Fi drop can show Offline for a few minutes).
-5. Not done: sensor accuracy check against a reference thermometer next to the board; the anonymous-write recheck; desktop layout is in the mocks only; iPhone; light mode of the setup page and of the badge on the phone. Open: page loads took 2.7 to 4.2 s (Supabase cold start?); the stylesheet is 692 kB (all of Tabler, trim later).
-6. Not tried for P03-05: the 10-minute setup timeout, an iPhone. Not tried for P03-06: queue over 50, a full queue, the 400 drop. Flash is 77.0 % full (matters for P08 OTA).
-7. Before the board moves to live: apply the 7th migration to live `init` (owner).
-8. Before every commit run `node tools/secret-scan.mjs` (exits 1 on a hit; it also guards the hotspot name). Inline SQL works: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`.
+2. Ask the owner to approve a push of the s17 close commits to `codenametempest14` and `main`, naming both targets.
+3. **P03-07 is RUNNING** (owner started it 2026-11-02 18:03 local = 10:03Z, bank 100 %, board on the bank only; it ends 2026-11-03 10:03Z = 18:03 local). At the end: ask the owner for the bank level; count `init-test` rows (device "Room 1") with `received_at` between those two times (about 1 440 expected; the first row on the bank came at 10:03:55Z) and list gaps over 90 s with their cause; the drop is the result; then tick P03-07. Do not run the backend tests until then (they wipe init-test). **Do not unplug the board during the run.**
+4. **The 2 min offline rule is still unseen on the hosted page** (the one unverified change). Best moment: when the run ends and the owner unplugs the board, ask for screenshots at about 2 and 3 min.
+5. P04-04 follow-ups (small, test first, UI gate): the white focus outline that shows on the charts after a tap (use `:focus-visible`); check the 24 h temperature line's sharp drop near 04:00 against the raw rows (real data or a bug?); table twin, light mode and iPhone on a phone.
+6. Next P04 item: **P04-05 installable PWA** (manifest, service worker, **favicon, home-screen icons and the header logo: the owner chose to add them here**), needs a **design mock approved first** (D-016); then P04-06 to P04-08.
+7. Not done: sensor accuracy check against a reference thermometer next to the board; the anonymous-write recheck; desktop layout is gated only for the 24 h charts page; iPhone; light mode of the setup page and of the badge on the phone. Open: page loads took 2.7 to 4.2 s (Supabase cold start?); the stylesheet is 694 kB (all of Tabler, trim later).
+8. Not tried for P03-05: the 10-minute setup timeout, an iPhone. Not tried for P03-06: queue over 50, a full queue, the 400 drop. Flash is 77.0 % full (matters for P08 OTA).
+9. Before every commit run `node tools/secret-scan.mjs` (exits 1 on a hit; it also guards the hotspot name). Inline SQL works: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"` (read-only queries on `live` work too).
 
 ### Waiting on the owner
-- Say when the power bank is full, the start time and the bank's level (P03-07).
-- Approve a push of the s16 close commits to `codenametempest14` and `main`.
-- Say if 3 min is the wanted offline limit.
+- At 18:03 local on 2026-11-03: the power bank's level (P03-07), then unplug the board for the offline check (screenshots at about 2 and 3 min).
+- Approve a push of the s17 close commits to `codenametempest14` and `main`.
 - Write `SECRET_SETUP_PASS` on a sticker for the case.
-- Apply the 7th migration to live `init` before the board moves to live (D-028). Later: dummy load or another bank (D-027).
+- Later: dummy load or another bank (D-027).
 - A push button for the OLED wake (D-025: until then the screen stays on; button part of F-08 deferred).
 - Optional: confirm the S-6 passwords are the generated, longer ones.
 - Optional: a reference thermometer and hygrometer for the sensor check. Later (P07): a USB inline meter for the awake current.
