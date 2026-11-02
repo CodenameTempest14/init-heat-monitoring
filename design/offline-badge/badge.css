@@ -1,0 +1,12 @@
+/* PROPOSED styles for the online/offline badge (P04-03). Mock only: on approval they move into web/src/app.css and the
+   colours into design/tokens.json (then contrast.mjs checks them). Nothing here is used by the live page yet. */
+:root { --badge-online: #1a7f37; --badge-offline: #b42318; --badge-wait: #5b6672; }
+@media (prefers-color-scheme: dark) { :root { --badge-online: #4ade80; --badge-offline: #ff8a80; --badge-wait: #aab3bd; } }
+[data-bs-theme="dark"] { --badge-online: #4ade80; --badge-offline: #ff8a80; --badge-wait: #aab3bd; }
+[data-bs-theme="light"] { --badge-online: #1a7f37; --badge-offline: #b42318; --badge-wait: #5b6672; }
+.status { display: inline-flex; align-items: center; gap: 8px; margin: 8px 0 0; padding: 4px 12px 4px 8px; border: 2px solid currentColor; border-radius: 999px; font-size: 14px; font-weight: 700; }
+.status svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.status-online { color: var(--badge-online); }
+.status-offline { color: var(--badge-offline); }
+.status-wait { color: var(--badge-wait); }
+.status-online svg circle.dot { fill: currentColor; }

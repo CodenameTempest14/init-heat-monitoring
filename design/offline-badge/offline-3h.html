@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Init: mock offline-3h</title>
+<link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
+<link rel="stylesheet" href="../../web/src/tokens.css">
+<link rel="stylesheet" href="../../web/src/app.css">
+<link rel="stylesheet" href="badge.css">
+</head>
+<body>
+<main class="app-wrap">
+  <header class="app-head"><h1 class="app-title">Init</h1><p class="text-secondary">Room: Room 204</p>
+    <p class="status status-offline" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 8l8 8M16 8l-8 8"/></svg>Offline: no reading for 3 h</p></header>
+  <section class="card heat heat-caution" aria-label="Heat index"><div class="card-body">
+    <p class="app-label">Last heat index</p>
+    <p class="heat-num">29<span class="heat-unit">°C</span></p>
+    <p class="heat-cat"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>Caution</p>
+  </div></section>
+  <div class="app-pair">
+    <section class="card" aria-label="Temperature"><div class="card-body"><p class="app-label">Temperature</p><p class="stat">28.1 °C</p></div></section>
+    <section class="card" aria-label="Humidity"><div class="card-body"><p class="app-label">Humidity</p><p class="stat">62 %</p></div></section>
+  </div>
+  <p class="text-secondary app-updated">last reading 3 h ago</p>
+</main>
+</body>
+</html>
