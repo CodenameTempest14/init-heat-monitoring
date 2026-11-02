@@ -13,7 +13,8 @@ Status: P04-01 skeleton. One page that reads the newest reading as a logged-out 
 | `src/tokens.css` | Colours from `design/tokens.json`. Made by `npm run tokens`, never edited by hand |
 | `src/app.css` | Our own small styles (no inline styles: the Content-Security-Policy forbids them) |
 | `vercel.json` | Build settings and security headers (Content-Security-Policy, nosniff, no referrer). The CSP names the Supabase host: change it together with `config.js` when the app moves to the live project |
-| `build-config.mjs`, `build-tokens.mjs` | The two generators above |
+| `public/` | Manifest, service worker, icons and logos (P04-05); see its README |
+| `build-config.mjs`, `build-tokens.mjs`, `build-icons.mjs` | The generators: Supabase config, colours, icons (`npm run icons`) |
 
 ## Use
 ```

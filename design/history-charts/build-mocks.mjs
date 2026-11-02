@@ -1,6 +1,7 @@
 // P04-04 design: mock pages of the 24 h / 7 d history charts (F-04), made-up readings for a made-up room.
 // Three charts, one series each (heat index, temperature, humidity): never two scales on one plot.
 // Usage: node design/history-charts/build-mocks.mjs   (writes <state>.html next to this file)
+import { HEADER_TOP } from '../pwa/header.mjs';
 import { writeFileSync } from 'node:fs';
 import { heatCategory } from '../../src/heat-index.js';
 
@@ -107,7 +108,7 @@ for (const s of STATES) {
 </head>
 <body>
 <main class="app-wrap">
-  <header class="app-head"><h1 class="app-title">Init</h1><p class="text-secondary">Room: Room 204</p>
+  <header class="app-head">${HEADER_TOP}<p class="text-secondary app-room">Room: Room 204</p>
     <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>
   <section class="card heat heat-${top.cat}" aria-label="Heat index"><div class="card-body">
     <p class="app-label">Heat index</p>

@@ -70,8 +70,12 @@ export default function App() {
   return (
     <main className="app-wrap">
       <header className="app-head">
-        <h1 className="app-title">Init</h1>
-        <p className="text-secondary">{`Room: ${view.room}`}</p>
+        <picture className="app-logo">
+          <source media="(prefers-color-scheme: dark)" srcSet="/logo-dark.svg" />
+          <img src="/logo-light.svg" width="110" height="40" alt="" />
+        </picture>
+        <h1 className="app-fullname">Init: Indoor Heat Index Tracker</h1>
+        <p className="text-secondary app-room">{`Room: ${view.room}`}</p>
         {status && (
           <p className={`status status-${status.kind}`} role="status">
             <svg viewBox="0 0 24 24" aria-hidden="true">{STATUS_ICON[status.kind]}</svg>{status.text}

@@ -1,6 +1,7 @@
 // P04-02 design: mock pages of the live cards (F-01, F-02, F-21), one per heat category, made-up readings.
 // They use the real stylesheet (web/src/app.css + tokens.css + Tabler), so an approved image can be matched by the built page.
 // Usage: node design/home-cards/build-mocks.mjs   (writes <state>.html next to this file)
+import { HEADER_TOP } from '../pwa/header.mjs';
 import { writeFileSync } from 'node:fs';
 
 const SHAPES = {
@@ -31,7 +32,7 @@ for (const s of STATES) {
 </head>
 <body>
 <main class="app-wrap">
-  <header class="app-head"><h1 class="app-title">Init</h1><p class="text-secondary">Room: Room 204</p>
+  <header class="app-head">${HEADER_TOP}<p class="text-secondary app-room">Room: Room 204</p>
     <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>
   <section class="card heat heat-${s.id}" aria-label="Heat index"><div class="card-body">
     <p class="app-label">Heat index</p>

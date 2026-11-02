@@ -2,8 +2,11 @@
 body { background: var(--init-bg); color: var(--init-text); font-family: system-ui, sans-serif; }
 .app-wrap { max-width: 520px; margin: 0 auto; padding: 24px 16px; }
 .app-head { margin-bottom: 16px; }
-.app-title { font-size: 28px; margin: 0 0 4px; }
+.app-logo { display: flex; justify-content: center; margin: 0 0 8px; }
+.app-logo img { display: block; height: 40px; width: auto; }
+.app-fullname { font-size: 16px; font-weight: 600; margin: 0 0 12px; text-align: center; }
 .app-head p { margin: 0; }
+.app-head .app-room { margin-bottom: 12px; }
 .app-label { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
 .app-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .app-pair .card { margin: 0; }
