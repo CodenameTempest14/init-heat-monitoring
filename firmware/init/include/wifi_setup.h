@@ -105,7 +105,7 @@ inline bool renderSetupPage(char* out, size_t outSize, const char* saved, const 
                             const char* prefill, const char* error) {
   setup_page_detail::Page pg(out, outSize);
   pg.add(setup_page_detail::HEAD);
-  pg.add("<header><svg class=\"logo\" viewBox=\"0 0 96 96\" aria-hidden=\"true\"><rect class=\"bg\" width=\"96\" height=\"96\" rx=\"22\" fill=\"#1b2430\"/><circle cx=\"48\" cy=\"20\" r=\"8\" fill=\"#ffc53d\"/><rect x=\"39\" y=\"34\" width=\"18\" height=\"40\" rx=\"9\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/><rect x=\"45\" y=\"48\" width=\"6\" height=\"22\" rx=\"3\" fill=\"#c2410c\"/><circle cx=\"48\" cy=\"72\" r=\"12\" fill=\"#c2410c\" stroke=\"#fff\" stroke-width=\"5\"/></svg><h1>Init setup</h1><p class=\"muted\">Room monitor Wi-Fi</p></header>\n<p>Saved network: <b>");
+  pg.add("<header><svg class=\"logo\" viewBox=\"0 0 96 96\" aria-hidden=\"true\"><rect class=\"bg\" width=\"96\" height=\"96\" rx=\"22\" fill=\"#1b2430\"/><circle cx=\"48\" cy=\"20\" r=\"8\" fill=\"#ffc53d\"/><rect x=\"39\" y=\"34\" width=\"18\" height=\"40\" rx=\"9\" fill=\"none\" stroke=\"#fff\" stroke-width=\"5\"/><rect x=\"45\" y=\"48\" width=\"6\" height=\"22\" rx=\"3\" fill=\"#c2410c\"/><circle cx=\"48\" cy=\"72\" r=\"12\" fill=\"#c2410c\" stroke=\"#fff\" stroke-width=\"5\"/></svg><h1>Init Setup</h1><p class=\"muted\">Room monitor Wi-Fi</p></header>\n<p>Saved network: <b>");
   if (saved && *saved) pg.addEscaped(saved); else pg.add("none");
   pg.add("</b></p>\n");
   if (error && *error) { pg.add("<p class=\"err\">"); pg.addEscaped(error); pg.add("</p>\n"); }
