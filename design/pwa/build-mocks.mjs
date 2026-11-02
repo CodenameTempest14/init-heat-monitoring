@@ -34,7 +34,7 @@ const head = (title) => `<!doctype html>
 </head>`;
 
 const logo = `<span class="app-logo" role="img" aria-label="Init"><span class="logo-for-light">${logoLight}</span><span class="logo-for-dark">${logoDark}</span></span>`;
-const header = `<header class="app-head">${logo}<h1 class="visually-hidden">Init</h1><p class="text-secondary">Room: Room 204</p>
+const header = `<header class="app-head">${logo}<h1 class="app-fullname">Init: Indoor Heat Index Tracker</h1><p class="text-secondary app-room">Room: Room 204</p>
     <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>`;
 const cards = `<section class="card heat heat-extreme-caution" aria-label="Heat index"><div class="card-body">
     <p class="app-label">Heat index</p>

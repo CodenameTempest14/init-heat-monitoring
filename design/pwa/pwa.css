@@ -1,6 +1,10 @@
 /* Mock-only styles for design/pwa/ (the real app gets .app-logo from web/src/app.css once approved). */
-.app-logo { display: block; margin: 0 0 8px; }
+.app-head { text-align: center; }
+.app-logo { display: flex; justify-content: center; margin: 0 0 8px; }
 .app-logo svg { display: block; height: 40px; width: auto; }
+.app-fullname { font-size: 16px; font-weight: 600; margin: 0 0 12px; }
+.app-room { margin-bottom: 12px !important; }
+.app-head .status { display: inline-flex; }
 .logo-for-dark { display: none; }
 [data-bs-theme="dark"] .logo-for-light { display: none; }
 [data-bs-theme="dark"] .logo-for-dark { display: inline; }

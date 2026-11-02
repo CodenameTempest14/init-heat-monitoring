@@ -1,11 +1,11 @@
-// Fails if any folder (outside .git and node_modules) has no README.md (hard rule: every folder has a README).
+// Fails if any folder (outside .git, node_modules and build output (dist)) has no README.md (hard rule: every folder has a README).
 // Usage: node tools/check-readmes.mjs
 import { readdir, access } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const skip = new Set(['node_modules']); // dot-folders (.git, .claude, .qodo) belong to tools, not to the project
+const skip = new Set(['node_modules', 'dist']); // dist = build output (web/dist), made by `npm run build`; // dot-folders (.git, .claude, .qodo) belong to tools, not to the project
 const missing = [];
 
 async function walk(dir) {
