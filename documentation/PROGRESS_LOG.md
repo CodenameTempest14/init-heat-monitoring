@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s20
+Pushed the s19 close commits. Read the owner's phone screenshots of the hosted page. Found and fixed one real chart bug (P04-04): a bucket with no neighbour is a one-point path and drew nothing, so the 06:26 reading was on the school-day view but not on the 24 h chart. `loneBuckets()` (test first, seen failing), dots in `History.jsx`, mock builder and the two 7d reference images updated; history gate 13/13, unit 14/14. My first guess, an axis that cuts off the 23.1 C reading, was wrong: the 15-minute average hides it. Fix pushed to `codenametempest14` and `main`; unverified on the hosted page until the owner reloads on the phone. P03-07 run healthy at the check (163 rows, largest gap 64 s).
+
 ## 2026-11-02 · s19
 Pushed the s18 commits. Built P04-07, the school-day view (F-12, D-033): migration `school_day()` (applied by the owner to init-test and live), backend test 6/6, `school.js` 12/12, new UI gate 14/14, the link row on the home page and the three mock sets redrawn (all gates pass). Found in the browser: a crash the build had missed and an invisible bar part; fixed. Owner feedback: more space above the link row (20 px). Hosted page checked and P04-07 ticked. P03-07 still running; the 2 min offline rule still unseen. Seven commits pushed to both branches.
 
