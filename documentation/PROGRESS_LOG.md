@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s14
+P03-05 done: the device keeps the hotspot in flash and, when none is saved or it cannot join at start-up, opens its own WPA2 network `Init-Setup` with the approved setup page (Android opened it by itself). Tried on the board with the owner's phone: save, power cut, refused short password, setup again with the hotspot off; server rows confirm every step. Validation, escaping and the pages are tested on the PC (the firmware page equals the approved HTML byte for byte). S-12 closed. D-029: Init logo (thermometer-i icon + wordmark) and full name "Init: Indoor Heat Index Tracker, An IoT-Based Classroom Heat Index Monitoring System". Proposal waiting: the icon on the setup page with the title `INIT SETUP`.
+
 ## 2026-11-02 · s13
 P03-04 done: the OLED shows the live reading and heat index on the real board. Heat index ported to C++ and tested against the JS and the shared reference table on about 20 000 points. All 9 approved screens were drawn on the real OLED and the frame buffer read back over serial equals the approved images pixel for pixel; the owner's photos agree. The owner read the real screen (29.5 °C, 71 %, big 34) and it matches the server row. New `tools/secret-scan.mjs` (exits 1 on a hit). Fixed `tools/db.mjs` splitting quoted SQL. Live setup done by the owner (6 migrations, Init 1 interval 60, read back). D-028: the upload reply carries the room, the OLED shows it (init-test only). P03-06 done: offline buffer of 300 readings, non-blocking Wi-Fi; on the real board 5 readings taken with the hotspot off arrived in one batch with their real times.
 

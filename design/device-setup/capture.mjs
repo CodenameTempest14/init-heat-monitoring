@@ -1,11 +1,12 @@
 // Screenshots of the device setup page states at phone width, light and dark (D-011, D-016).
-// Usage: node design/device-setup/capture.mjs   (writes ref/<state>-<theme>.png next to this file; no network)
+// Usage: node design/device-setup/capture.mjs [folder]   (writes <folder>/ref/<state>-<theme>.png; default: this
+// folder; a proposal folder such as proposal-logo gets its own ref/; no network)
 import { chromium } from 'playwright';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { mkdirSync } from 'node:fs';
 
-const here = dirname(fileURLToPath(import.meta.url));
+const here = process.argv[2] ? resolve(process.argv[2]) : dirname(fileURLToPath(import.meta.url));
 const states = ['form', 'form-error', 'saved'];
 const themes = ['light', 'dark'];
 mkdirSync(join(here, 'ref'), { recursive: true });
