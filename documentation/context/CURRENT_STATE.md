@@ -20,7 +20,7 @@
 ## Next concrete step
 1. Ask the phase-builder question (last answer: owner only).
 2. Ask the owner to approve a push of the s16 close commits to `codenametempest14` and `main`, naming both targets.
-3. **P03-07** 24-hour run on the ROMOSS bank, **when the owner says it is full** (not confirmed full at s16 close). Owner notes the bank level and start time, unplugs USB, runs the board on the bank. Evidence from the server: one row a minute for 24 h (init-test, device "Room 1"; the room shows `Unassigned`, which is fine), gaps listed with their cause; bank level at the end = the measured drop. Interval stays 60 s (D-027). Old init-test rows stay (owner told to leave them; count with a time window; the s16 unplug test left one 435 s gap, 09:05:45Z to 09:13:00Z, before the run). Do not run the backend tests during the run (they wipe init-test).
+3. **P03-07 STARTED (owner, 2026-11-02 18:03 local = 10:03Z, bank 100 %, board on the bank only). Ends 2026-11-03 10:03Z; read the bank level then.** Count init-test rows (device "Room 1") with `received_at` between those times; do not run the backend tests. Original plan: 24-hour run on the ROMOSS bank, **when the owner says it is full** (not confirmed full at s16 close). Owner notes the bank level and start time, unplugs USB, runs the board on the bank. Evidence from the server: one row a minute for 24 h (init-test, device "Room 1"; the room shows `Unassigned`, which is fine), gaps listed with their cause; bank level at the end = the measured drop. Interval stays 60 s (D-027). Old init-test rows stay (owner told to leave them; count with a time window; the s16 unplug test left one 435 s gap, 09:05:45Z to 09:13:00Z, before the run). Do not run the backend tests during the run (they wipe init-test).
 4. Next P04 items, each needs a **design mock approved first** (D-016): P04-04 24 h and 7 d charts (F-04; read the `dataviz` skill first), then P04-05 PWA (manifest, service worker, **favicon, home-screen icons and the header logo: the owner chose to add them here**), P04-06 to P04-08. The offline limit is now 2 min (owner, s17; built and tested, UNVERIFIED on the hosted page: not pushed yet).
 5. Not done: sensor accuracy check against a reference thermometer next to the board; the anonymous-write recheck; desktop layout is in the mocks only; iPhone; light mode of the setup page and of the badge on the phone. Open: page loads took 2.7 to 4.2 s (Supabase cold start?); the stylesheet is 692 kB (all of Tabler, trim later).
 6. Not tried for P03-05: the 10-minute setup timeout, an iPhone. Not tried for P03-06: queue over 50, a full queue, the 400 drop. Flash is 77.0 % full (matters for P08 OTA).
@@ -28,10 +28,10 @@
 8. Before every commit run `node tools/secret-scan.mjs` (exits 1 on a hit; it also guards the hotspot name). Inline SQL works: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`.
 
 ## Waiting on the owner
-- Say when the power bank is full, the start time and the bank's level (P03-07).
+- At the end of the 24 h run (2026-11-03 18:03 local): the bank's level (P03-07). Phone check of the history charts (touch, 7 d, table) and a 3 min offline screenshot.
 - Approve a push of the s16 close commits to `codenametempest14` and `main`.
 - Write `SECRET_SETUP_PASS` on a sticker for the case.
-- Apply the 7th migration to live `init` before the board moves to live (D-028). Later: dummy load or another bank (D-027).
+- Live `init` has the 7th and 8th migrations (owner applied, read back s17). Later: dummy load or another bank (D-027).
 - A push button for the OLED wake (D-025: until then the screen stays on; button part of F-08 deferred).
 - Optional: confirm the S-6 passwords are the generated, longer ones.
 - Optional: a reference thermometer and hygrometer for the sensor check. Later (P07): a USB inline meter for the awake current.
