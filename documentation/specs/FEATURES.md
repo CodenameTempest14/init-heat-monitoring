@@ -37,7 +37,7 @@ Effort: S = about a session, M = a few sessions, L = a phase of its own.
 |---|---|---|---|
 | F-16 | CSV export of history | Useful for a report to the school. | S |
 | F-17 | Device health page | Wi-Fi signal, last reboot reason, firmware version (admin only). | S |
-| F-18 | ~~Tagalog / English toggle~~ **Withdrawn** (owner s22, D-034): the app is English only. | Fits the brand. | M |
+| F-18 | Tagalog / English toggle (kept, owner s22, D-034: still Tier 3, later) | Fits the brand. | M |
 | F-19 | Over-the-air firmware updates | Convenient but a security risk (a bad update bricks the device). Not before F-06 is solid. | L |
 | F-20 | Data housekeeping | Keep raw readings 90 days, then store hourly averages, to stay inside the free tier. | S |
 
@@ -65,7 +65,7 @@ Effort: S = about a session, M = a few sessions, L = a phase of its own.
   6. **If something looks wrong:** "Not saved", "Not an admin", and the device showing Offline, each with what to do.
 - **How? links:** one under each group label on the admin page, jumping to that section. The approved admin images change by these links only (redrawn after approval).
 
-**Owner answers (s22):** English only, and that applies to the whole app (F-18 withdrawn, D-034). A teacher reads the guide before it goes live, and the same rule applies to every other user-facing wording (D-034).
+**Owner answers (s22):** The guide is written in English; the rest of the app stays English for now, and the Tagalog / English toggle (F-18) is **kept** for later (owner corrected s22, D-034). A teacher reads the guide before it goes live, and the same rule applies to every other user-facing wording (D-034).
 
 ## Needs your decision (not a feature, a design choice)
 
