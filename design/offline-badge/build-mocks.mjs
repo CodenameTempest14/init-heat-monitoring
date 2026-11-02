@@ -11,7 +11,7 @@ const STATES = [
   { id: 'online', kind: 'online', text: 'Online', hiLabel: 'Heat index', upd: 'updated just now', hi: '40', cat: 'extreme-caution', catLabel: 'Extreme caution', temp: '32.5 °C', rh: '66 %' },
   { id: 'offline-12min', kind: 'offline', text: 'Offline: no reading for 12 min', hiLabel: 'Last heat index', upd: 'last reading 12 min ago', hi: '40', cat: 'extreme-caution', catLabel: 'Extreme caution', temp: '32.5 °C', rh: '66 %' },
   { id: 'offline-3h', kind: 'offline', text: 'Offline: no reading for 3 h', hiLabel: 'Last heat index', upd: 'last reading 3 h ago', hi: '29', cat: 'caution', catLabel: 'Caution', temp: '28.1 °C', rh: '62 %' },
-  { id: 'no-readings', kind: 'wait', text: 'Waiting for the first reading', hiLabel: 'Heat index', upd: 'no readings yet', hi: '—', cat: null, temp: '—', rh: '—' },
+  { id: 'no-readings', room: '—', kind: 'wait', text: 'Waiting for the first reading', hiLabel: 'Heat index', upd: 'no readings yet', hi: '—', cat: null, temp: '—', rh: '—' },
 ];
 const SHAPES = { 'caution': '<circle cx="12" cy="12" r="9"/>', 'extreme-caution': '<path d="M12 3 22 21H2z"/>' };
 
@@ -25,11 +25,10 @@ for (const s of STATES) {
 <link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
 <link rel="stylesheet" href="../../web/src/tokens.css">
 <link rel="stylesheet" href="../../web/src/app.css">
-<link rel="stylesheet" href="badge.css">
 </head>
 <body>
 <main class="app-wrap">
-  <header class="app-head"><h1 class="app-title">Init</h1><p class="text-secondary">Room: Room 204</p>
+  <header class="app-head"><h1 class="app-title">Init</h1><p class="text-secondary">Room: ${s.room ?? 'Room 204'}</p>
     <p class="status status-${s.kind}" role="status"><svg viewBox="0 0 24 24" aria-hidden="true">${ICON[s.kind]}</svg>${s.text}</p></header>
   <section class="card heat${s.cat ? ` heat-${s.cat}` : ''}" aria-label="Heat index"><div class="card-body">
     <p class="app-label">${s.hiLabel}</p>

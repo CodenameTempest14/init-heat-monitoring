@@ -29,3 +29,9 @@ test('checkTokens reports failures with names', () => {
   assert.ok(failures.some((f) => f.includes('heat x text on fill')));
   assert.ok(failures.some((f) => f.includes('heat x border on light')));
 });
+
+test('checkTokens checks the status (online/offline/waiting) text colours on the page background', () => {
+  const t = { themes: { light: { bg: '#ffffff', text: '#000000' } }, heat: {}, status: { online: { light: '#eeeeee' } } };
+  assert.ok(checkTokens(t).some((f) => f.includes('status online on light bg')));
+  assert.deepEqual(checkTokens({ ...t, status: { online: { light: '#000000' } } }), []);
+});

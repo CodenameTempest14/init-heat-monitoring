@@ -2,7 +2,7 @@
 // Markup and classes match design/home-cards/*.html (the approved design).
 import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { readingView } from './lib.js';
+import { readingView, deviceStatus } from './lib.js';
 import { CATEGORY_LABEL } from './category.js';
 
 const REFRESH_MS = 30000;
@@ -17,12 +17,19 @@ const SHAPES = {
 };
 
 async function latestReading() {
-  const url = `${SUPABASE_URL}/rest/v1/readings?select=recorded_at,temp_c,rh_pct,heat_index_c,room&order=recorded_at.desc&limit=1`;
+  const url = `${SUPABASE_URL}/rest/v1/readings?select=recorded_at,received_at,temp_c,rh_pct,heat_index_c,room&order=recorded_at.desc&limit=1`;
   const res = await fetch(url, { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const rows = await res.json();
   return rows[0] || null;
 }
+
+// F-03 badge icons: filled dot (online), ring with a cross (offline), clock (waiting). Same as the approved design.
+const STATUS_ICON = {
+  online: <circle className="dot" cx="12" cy="12" r="6" />,
+  offline: <><circle cx="12" cy="12" r="9" /><path d="M8 8l8 8M16 8l-8 8" /></>,
+  wait: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+};
 
 // Follow the phone's light or dark setting (Tabler switches colours on this attribute).
 function useColorScheme() {
@@ -38,14 +45,16 @@ function useColorScheme() {
 export default function App() {
   useColorScheme();
   const [view, setView] = useState({ ...readingView(undefined, Date.now()), updated: 'loading…' });
+  const [status, setStatus] = useState(null); // null until the first answer, so no badge flashes before we know
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     let alive = true;
     const refresh = async () => {
       try {
-        const v = readingView(await latestReading(), Date.now());
-        if (alive) { setView(v); setFailed(false); }
+        const row = await latestReading();
+        const now = Date.now();
+        if (alive) { setView(readingView(row, now)); setStatus(deviceStatus(row, now)); setFailed(false); }
       } catch {
         if (alive) setFailed(true);
       }
@@ -61,10 +70,15 @@ export default function App() {
       <header className="app-head">
         <h1 className="app-title">Init</h1>
         <p className="text-secondary">Room: {view.room}</p>
+        {status && (
+          <p className={`status status-${status.kind}`} role="status">
+            <svg viewBox="0 0 24 24" aria-hidden="true">{STATUS_ICON[status.kind]}</svg>{status.text}
+          </p>
+        )}
       </header>
       <section className={`card heat${cat ? ` heat-${cat}` : ''}`} aria-label="Heat index">
         <div className="card-body">
-          <p className="app-label">Heat index</p>
+          <p className="app-label">{view.label}</p>
           <p className="heat-num">{view.heatIndex}{view.heatIndex !== '—' && <span className="heat-unit">°C</span>}</p>
           {cat && (
             <p className="heat-cat">

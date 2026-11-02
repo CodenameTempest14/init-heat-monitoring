@@ -15,5 +15,5 @@ The mocks load the **real** stylesheet (`web/src/app.css`, `web/src/tokens.css`,
 Design notes:
 - The heat index is the large card, filled with the category colour, with the category **in words and a shape** (circle, triangle, diamond, octagon, dash). Colour is never the only cue.
 - Temperature and humidity are two smaller plain cards under it. "updated N min ago" sits below.
-- The room name is under the title. The offline badge (F-03) is P04-03 and not drawn here.
+- The room name is under the title. The online badge (F-03, P04-03) sits under the room name; the offline states are in `design/offline-badge/`.
 - Contrast of every fill/text/border pair is checked by `node design/contrast.mjs` (tokens unchanged).

@@ -5,6 +5,7 @@ const t = JSON.parse(readFileSync(new URL('../design/tokens.json', import.meta.u
 const vars = (theme) => {
   const lines = [`  --init-bg: ${t.themes[theme].bg};`, `  --init-text: ${t.themes[theme].text};`];
   for (const [name, h] of Object.entries(t.heat)) lines.push(`  --heat-${name}-border: ${h.border[theme]};`);
+  for (const [name, c] of Object.entries(t.status)) lines.push(`  --status-${name}: ${c[theme]};`);
   return lines.join('\n');
 };
 const fixed = Object.entries(t.heat).map(([n, h]) => `  --heat-${n}-fill: ${h.fill};\n  --heat-${n}-text: ${h.text};`).join('\n');

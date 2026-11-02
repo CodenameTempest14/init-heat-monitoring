@@ -41,6 +41,11 @@ export function checkTokens(tokens) {
       if (h.border?.[name]) need(`heat ${cat} border on ${name} bg`, h.border[name], th.bg, NON_TEXT);
     }
   }
+  for (const [name, colours] of Object.entries(tokens.status ?? {})) {
+    for (const [theme, hex] of Object.entries(colours)) {
+      need(`status ${name} on ${theme} bg`, hex, tokens.themes[theme].bg, TEXT);
+    }
+  }
   return failures;
 }
 

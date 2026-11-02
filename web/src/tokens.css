@@ -17,6 +17,9 @@
   --heat-danger-border: #b34100;
   --heat-extreme-danger-border: #a61e1e;
   --heat-below-range-border: #6b7480;
+  --status-online: #1a7f37;
+  --status-offline: #b42318;
+  --status-wait: #5b6672;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -27,5 +30,8 @@
     --heat-danger-border: #ff8a4c;
     --heat-extreme-danger-border: #ff6b6b;
     --heat-below-range-border: #8b95a1;
+    --status-online: #4ade80;
+    --status-offline: #ff8a80;
+    --status-wait: #aab3bd;
   }
 }

@@ -22,3 +22,11 @@ body { background: var(--init-bg); color: var(--init-text); font-family: system-
 .heat-danger { background: var(--heat-danger-fill); color: var(--heat-danger-text); border-color: var(--heat-danger-border); }
 .heat-extreme-danger { background: var(--heat-extreme-danger-fill); color: var(--heat-extreme-danger-text); border-color: var(--heat-extreme-danger-border); }
 .heat-below-range { background: var(--heat-below-range-fill); color: var(--heat-below-range-text); border-color: var(--heat-below-range-border); }
+
+/* Online/offline badge (F-03): a pill with a shape and words, so colour is never the only cue. Colours from tokens.css. */
+.status { display: inline-flex; align-items: center; gap: 8px; margin: 8px 0 0; padding: 4px 12px 4px 8px; border: 2px solid currentColor; border-radius: 999px; font-size: 14px; font-weight: 700; }
+.status svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.status-online { color: var(--status-online); }
+.status-offline { color: var(--status-offline); }
+.status-wait { color: var(--status-wait); }
+.status-online svg circle.dot { fill: currentColor; }

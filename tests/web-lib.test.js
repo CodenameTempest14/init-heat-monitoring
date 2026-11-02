@@ -27,7 +27,7 @@ test('ageText: a time slightly in the future (clock skew) is "just now"; junk is
 
 test('readingView: units, one decimal for temperature, whole degrees for the heat index (D-019)', () => {
   const v = readingView({ temp_c: '29.5', rh_pct: '71.0', heat_index_c: '34.1', recorded_at: ago(120), room: 'Room 1' }, T);
-  assert.deepEqual(v, { room: 'Room 1', temp: '29.5 °C', rh: '71 %', heatIndex: '34', category: 'extreme-caution', updated: 'updated 2 min ago' });
+  assert.deepEqual(v, { room: 'Room 1', temp: '29.5 °C', rh: '71 %', heatIndex: '34', category: 'extreme-caution', label: 'Heat index', updated: 'updated 2 min ago' });
 });
 
 test('readingView: numbers may arrive as numbers; rounds half up like the OLED', () => {
@@ -54,4 +54,44 @@ test('readingView: no row yet gives a clear message, not a crash', () => {
   assert.equal(readingView(null, T).updated, 'no readings yet');
   assert.equal(readingView(undefined, T).temp, '—');
   assert.equal(readingView(null, T).category, null);
+});
+
+// P04-03: online/offline badge (F-03). Offline = newest reading more than 3 min old by the SERVER's clock (received_at).
+import { deviceStatus, durationText } from '../web/src/lib.js';
+const rowAt = (s, extra = {}) => ({ temp_c: 30, rh_pct: 60, heat_index_c: 40, recorded_at: ago(s), received_at: ago(s), room: 'R', ...extra });
+
+test('durationText: min, h, days with no "ago"', () => {
+  assert.equal(durationText(ago(12 * 60), T), '12 min');
+  assert.equal(durationText(ago(3 * 3600 + 600), T), '3 h');
+  assert.equal(durationText(ago(86400), T), '1 day');
+  assert.equal(durationText(ago(3 * 86400), T), '3 days');
+});
+
+test('deviceStatus: online up to and including 3 min, offline after', () => {
+  assert.deepEqual(deviceStatus(rowAt(0), T), { kind: 'online', text: 'Online' });
+  assert.equal(deviceStatus(rowAt(180), T).kind, 'online');
+  assert.deepEqual(deviceStatus(rowAt(181), T), { kind: 'offline', text: 'Offline: no reading for 3 min' });
+  assert.equal(deviceStatus(rowAt(12 * 60), T).text, 'Offline: no reading for 12 min');
+  assert.equal(deviceStatus(rowAt(3 * 3600), T).text, 'Offline: no reading for 3 h');
+});
+
+test('deviceStatus: uses received_at (server clock), not the device clock; falls back to recorded_at', () => {
+  assert.equal(deviceStatus(rowAt(0, { recorded_at: ago(86400) }), T).kind, 'online');
+  assert.equal(deviceStatus(rowAt(0, { received_at: ago(900) }), T).kind, 'offline');
+  const noReceived = rowAt(600); delete noReceived.received_at;
+  assert.equal(deviceStatus(noReceived, T).kind, 'offline');
+});
+
+test('deviceStatus: no row means waiting; an unreadable time never claims online', () => {
+  assert.deepEqual(deviceStatus(null, T), { kind: 'wait', text: 'Waiting for the first reading' });
+  assert.equal(deviceStatus(rowAt(0, { received_at: 'junk', recorded_at: 'junk' }), T).kind, 'offline');
+});
+
+test('readingView: offline changes the label and the line below; online keeps them', () => {
+  assert.equal(readingView(rowAt(60), T).label, 'Heat index');
+  assert.equal(readingView(rowAt(60), T).updated, 'updated 1 min ago');
+  const off = readingView(rowAt(12 * 60), T);
+  assert.equal(off.label, 'Last heat index');
+  assert.equal(off.updated, 'last reading 12 min ago');
+  assert.equal(readingView(null, T).label, 'Heat index');
 });

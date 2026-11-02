@@ -31,7 +31,8 @@ for (const s of STATES) {
 </head>
 <body>
 <main class="app-wrap">
-  <header class="app-head"><h1 class="app-title">Init</h1><p class="text-secondary">Room: Room 204</p></header>
+  <header class="app-head"><h1 class="app-title">Init</h1><p class="text-secondary">Room: Room 204</p>
+    <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>
   <section class="card heat heat-${s.id}" aria-label="Heat index"><div class="card-body">
     <p class="app-label">Heat index</p>
     <p class="heat-num">${s.hi}<span class="heat-unit">°C</span></p>

@@ -16,17 +16,38 @@ export function ageText(recordedAt, nowMs) {
   return d === 1 ? '1 day ago' : `${d} days ago`;
 }
 
+// Same age, without "ago" ("12 min"), for the offline badge.
+export function durationText(recordedAt, nowMs) {
+  return ageText(recordedAt, nowMs).replace(/ ago$/, '');
+}
+
+// F-03: the device counts as offline when its newest reading is more than 3 min old (3 missed 60 s uploads, owner approved
+// the badge s16). Age comes from received_at (the server's clock, so a wrong device clock cannot fake "online").
+export const OFFLINE_AFTER_S = 180;
+export function deviceStatus(row, nowMs) {
+  if (!row) return { kind: 'wait', text: 'Waiting for the first reading' };
+  const at = row.received_at || row.recorded_at;
+  const t = Date.parse(at);
+  if (Number.isNaN(t) || (nowMs - t) / 1000 > OFFLINE_AFTER_S) {
+    return { kind: 'offline', text: `Offline: no reading for ${durationText(at, nowMs)}` };
+  }
+  return { kind: 'online', text: 'Online' };
+}
+
 // One row of the readings table (as the REST API returns it) turned into the words shown on the page.
 // Numbers may arrive as strings (Postgres numeric). The heat index is shown in whole degrees (D-019); `heatIndex` is the
 // bare number because the card draws the unit next to it. `category` is null when there is no row or no usable number.
 export function readingView(row, nowMs) {
-  if (!row) return { room: '—', temp: '—', rh: '—', heatIndex: '—', category: null, updated: 'no readings yet' };
+  if (!row) return { room: '—', temp: '—', rh: '—', heatIndex: '—', category: null, label: 'Heat index', updated: 'no readings yet' };
+  const offline = deviceStatus(row, nowMs).kind === 'offline';
+  const at = row.received_at || row.recorded_at;
   return {
     room: row.room || '—',
     temp: `${Number(row.temp_c).toFixed(1)} °C`,
     rh: `${Math.round(Number(row.rh_pct))} %`,
     heatIndex: row.heat_index_c === null ? '—' : String(Math.round(Number(row.heat_index_c))),
     category: categoryOf(row.heat_index_c),
-    updated: `updated ${ageText(row.recorded_at, nowMs)}`,
+    label: offline ? 'Last heat index' : 'Heat index',
+    updated: offline ? `last reading ${ageText(at, nowMs)}` : `updated ${ageText(row.recorded_at, nowMs)}`,
   };
 }

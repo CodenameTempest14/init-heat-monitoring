@@ -1,12 +1,11 @@
 # design/offline-badge/
 
-**Proposal, waiting for the owner (s16, 2026-11-02).** The online/offline badge of the home page (P04-03, F-03).
-Made-up readings and a made-up room name (`Room 204`). Nothing here is built into the live page yet.
+**Approved by the owner 2026-11-02 (s16), built in P04-03.** The online/offline badge of the home page (P04-03, F-03).
+Made-up readings and a made-up room name (`Room 204`). The mocks load the real stylesheet (`web/src/app.css`, `tokens.css`), so the built page is checked against `ref/` by `tests/ui-gate-badge.test.js`.
 
 | File | What |
 |---|---|
 | `<state>.html` | One mock per state: `online`, `offline-12min`, `offline-3h`, `no-readings` |
-| `badge.css` | Proposed badge styles and colours (mock only; on approval they move into `web/src/app.css` and `design/tokens.json`) |
 | `build-mocks.mjs` | Writes the four mocks |
 | `capture.mjs` | `node design/offline-badge/capture.mjs` writes `ref/<state>-<phone\|desktop>-<light\|dark>.png` (phone 390 px for all, desktop 1280 px for `offline-12min`) |
 | `ref/` | The screenshots to approve |
