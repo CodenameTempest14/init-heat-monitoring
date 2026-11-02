@@ -39,6 +39,16 @@ const lockupB = (t) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330
   ${wordmark(ink[t], [ink[t], ink[t]], 122, 0)}
 </svg>`;
 
+// Chosen (D-029, owner 2026-11-02): B's icon next to A's wordmark. On dark the icon gets an edge in the border
+// colour (tokens below-range border, 3:1 on the dark background) so the ink square does not melt into the page.
+const edge = heat['below-range'].border.dark;
+const iconFinal = (t) => t === 'light' ? iconB() : iconB().replace('fill="' + ink.light + '"/>', `fill="${ink.light}" stroke="${edge}" stroke-width="3"/>`)
+  .replace('<rect width="96" height="96" rx="22"', '<rect x="1.5" y="1.5" width="93" height="93" rx="21"');
+const logoFinal = (t) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 330 120" role="img" aria-label="Init">
+  <g transform="translate(4 12)">${iconFinal(t).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g>
+  ${wordmark(ink[t], [accent[t], accent[t]], 122, 0)}
+</svg>`;
+
 // C: a heat index gauge in the four PAGASA band colours (D-019), needle in "danger", above the wordmark.
 function arc(cx, cy, r, a0, a1) {
   const p = (a) => [r1(cx + r * Math.cos((a * Math.PI) / 180)), r1(cy - r * Math.sin((a * Math.PI) / 180))];
@@ -64,6 +74,8 @@ const files = {
   'logo-a-light.svg': logoA('light'), 'logo-a-dark.svg': logoA('dark'),
   'icon-b.svg': iconB(), 'logo-b-light.svg': lockupB('light'), 'logo-b-dark.svg': lockupB('dark'),
   'logo-c-light.svg': logoC('light'), 'logo-c-dark.svg': logoC('dark'),
+  'init-logo-light.svg': logoFinal('light'), 'init-logo-dark.svg': logoFinal('dark'),
+  'init-icon-light.svg': iconFinal('light'), 'init-icon-dark.svg': iconFinal('dark'),
 };
 for (const [name, svg] of Object.entries(files)) writeFileSync(join(here, name), svg + '\n');
 
@@ -76,7 +88,10 @@ writeFileSync(join(here, 'preview.html'), `<!doctype html><meta charset="utf-8">
 <style>body{margin:0;padding:24px;font:16px system-ui,sans-serif;background:#fff;color:${ink.light}}h1{margin:0 0 16px;font-size:24px}
 h2{font-size:18px;margin:24px 0 8px}.pair{display:flex;gap:12px;align-items:stretch}.pair>div{padding:16px 20px;border-radius:12px;display:flex;align-items:center;gap:12px}
 .l{background:${tokens.themes.light.bg};border:1px solid #dde1e6}.d{background:${tokens.themes.dark.bg}}</style>
-<h1>Init logo proposals</h1>
+<h1>Init logo</h1>
+${row('Chosen (D-029): B icon + A wordmark', 'init-logo-light.svg', 'init-logo-dark.svg', 'init-icon-light.svg')}
+<section><div class="pair"><div class="d small">${img('init-icon-dark.svg', 96)} ${img('init-icon-dark.svg', 32)} ${img('init-icon-dark.svg', 16)}</div></div></section>
+<h1 style="margin-top:32px">Earlier proposals</h1>
 ${row('A: Heat dots wordmark', 'logo-a-light.svg', 'logo-a-dark.svg', 'logo-a-light.svg')}
 ${row('B: Thermometer-i icon + wordmark', 'logo-b-light.svg', 'logo-b-dark.svg', 'icon-b.svg')}
 ${row('C: Heat index gauge + wordmark', 'logo-c-light.svg', 'logo-c-dark.svg', 'logo-c-light.svg')}
