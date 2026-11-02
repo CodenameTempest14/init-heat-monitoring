@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Init: mock below-range</title>
+<link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
+<link rel="stylesheet" href="../../web/src/tokens.css">
+<link rel="stylesheet" href="../../web/src/app.css">
+</head>
+<body>
+<main class="app-wrap">
+  <header class="app-head"><h1 class="app-title">Init</h1><p class="text-secondary">Room: Room 204</p></header>
+  <section class="card heat heat-below-range" aria-label="Heat index"><div class="card-body">
+    <p class="app-label">Heat index</p>
+    <p class="heat-num">24<span class="heat-unit">°C</span></p>
+    <p class="heat-cat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16"/></svg>Below heat-index range</p>
+  </div></section>
+  <div class="app-pair">
+    <section class="card" aria-label="Temperature"><div class="card-body"><p class="app-label">Temperature</p><p class="stat">23.6 °C</p></div></section>
+    <section class="card" aria-label="Humidity"><div class="card-body"><p class="app-label">Humidity</p><p class="stat">55 %</p></div></section>
+  </div>
+  <p class="text-secondary app-updated">updated 1 min ago</p>
+</main>
+</body>
+</html>
