@@ -1,0 +1,18 @@
+/* P05 admin view (#admin): sign-in, room, settings. Tabler forms; no inline styles (the CSP forbids them). */
+.admin-title { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
+.admin-intro { margin: 0 0 16px; color: var(--viz-ink-2); }
+.admin-who { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 16px; color: var(--viz-ink-2); }
+.admin-who strong { color: var(--viz-ink); font-weight: 600; overflow-wrap: anywhere; }
+.admin-card { margin: 0 0 16px; }
+.admin-card .card-title { font-size: 16px; font-weight: 700; margin: 0 0 12px; }
+.admin-card .form-hint { color: var(--viz-ink-2); }
+.admin-field { margin-bottom: 16px; }
+.admin-warn { display: flex; gap: 8px; align-items: flex-start; margin-top: 6px; font-size: 14px; color: var(--viz-ink); }
+.admin-warn svg { width: 18px; height: 18px; flex: none; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.admin-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.admin-actions { display: flex; align-items: center; gap: 12px; }
+.admin-saved { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--status-online); }
+.admin-saved svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.admin-btn { min-height: 44px; }
+/* Tabler's alert text (orange, red) is too faint on its tint for WCAG: keep the tint and border, use our ink. */
+.admin-card .alert { color: var(--viz-ink); font-weight: 600; }
