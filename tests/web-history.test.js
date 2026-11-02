@@ -2,7 +2,7 @@
 // Dates are built with local-time constructors so the tests pass in any time zone.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { niceScale, buildSeries, linePath, xTicks, pointLabel, nearestIndex, latestWith } from '../web/src/history.js';
+import { niceScale, buildSeries, linePath, xTicks, pointLabel, nearestIndex, latestWith, loneBuckets } from '../web/src/history.js';
 
 const NOW = new Date(2026, 10, 2, 14, 0).getTime(); // Monday 2 Nov 2026, 14:00 local
 const iso = (ms) => new Date(ms).toISOString();
@@ -53,6 +53,12 @@ test('linePath: a bucket without a heat index breaks the heat index line only', 
   const s = buildSeries([row(30, 30, 60, 33), row(15, 25, 50, null), row(0, 32, 60, 35)], '24h', NOW);
   assert.equal(linePath(s.pts, 'hi', x10, id, s.stepMs), 'M235 33M240 35');
   assert.equal(linePath(s.pts, 'temp', x10, id, s.stepMs), 'M235 30L237.5 25L240 32');
+});
+
+test('loneBuckets: a bucket with no neighbour is returned so the page can draw a dot (a one-point path draws nothing)', () => {
+  const s = buildSeries([row(90, 30, 60, 33), row(60, 31, 60, 34), row(45, 32, 60, 35), row(0, 29, 60, null)], '24h', NOW);
+  assert.deepEqual(loneBuckets(s.pts, 'temp', s.stepMs).map((p) => p.temp), [30, 29]);
+  assert.deepEqual(loneBuckets(s.pts, 'hi', s.stepMs).map((p) => p.hi), [33]);
 });
 
 test('xTicks 24h: every 6 hours on the local clock', () => {

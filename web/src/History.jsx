@@ -2,7 +2,7 @@
 // Markup and classes match design/history-charts/*.html (the approved design). The maths is in history.js.
 import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { RANGES, niceScale, buildSeries, linePath, xTicks, pointLabel, nearestIndex, latestWith } from './history.js';
+import { RANGES, niceScale, buildSeries, linePath, xTicks, pointLabel, nearestIndex, latestWith, loneBuckets } from './history.js';
 
 const REFRESH_MS = 30000;
 const H = 156;
@@ -91,6 +91,7 @@ function Chart({ series, spec, W, hover, onHover }) {
             </g>
           ))}
           <path className={`viz-line ${spec.cls}`} d={linePath(pts, spec.key, x, y, stepMs)} />
+          {loneBuckets(pts, spec.key, stepMs).map((p) => <circle key={p.ms} className={`viz-dot ${spec.cls}`} cx={x(p.t)} cy={y(p[spec.key])} r="3" />)}
           {last && <circle className={`viz-dot ${spec.cls}`} cx={x(last.t)} cy={y(last[spec.key])} r="4" />}
           {hp && <line className="viz-cross" x1={x(hp.t)} x2={x(hp.t)} y1={M.t} y2={H - M.b} />}
           {hp && hp[spec.key] !== null && <circle className={`viz-dot ${spec.cls}`} cx={x(hp.t)} cy={y(hp[spec.key])} r="4" />}

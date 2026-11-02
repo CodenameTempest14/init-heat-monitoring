@@ -51,6 +51,13 @@ export function linePath(pts, key, x, y, stepMs) {
   return d;
 }
 
+/** Points of `key` with no joined neighbour. A path of one point draws nothing, so the page draws these as dots. */
+export function loneBuckets(pts, key, stepMs) {
+  const have = pts.filter((p) => p[key] !== null);
+  const near = (a, b) => Boolean(a && b) && b.ms - a.ms <= stepMs * 1.5;
+  return have.filter((p, i) => !near(have[i - 1], p) && !near(p, have[i + 1]));
+}
+
 /** Time labels along the bottom: every 6 h (24 h chart) or every local midnight (7 d chart), on the viewer's clock. */
 export function xTicks(range, nowMs) {
   const { hours } = RANGES[range];

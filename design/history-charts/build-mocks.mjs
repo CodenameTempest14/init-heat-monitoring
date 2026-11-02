@@ -37,6 +37,8 @@ function chart({ pts, key, W, range, cls, title, unit, fmt, hover, lines }) {
   let d = '', pen = false;
   for (const p of pts) { if (p[key] === null) { pen = false; continue; } d += `${pen ? 'L' : 'M'}${x(p.t).toFixed(1)} ${y(p[key]).toFixed(1)}`; pen = true; }
   out += `<path class="viz-line ${cls}" d="${d}"/>`;
+  // a bucket with no neighbour is a one-point path and draws nothing, so it gets a small dot (found on the real page, s20)
+  pts.forEach((p, i) => { if (p[key] !== null && !(pts[i - 1] && pts[i - 1][key] !== null) && !(pts[i + 1] && pts[i + 1][key] !== null)) out += `<circle class="viz-dot ${cls}" cx="${x(p.t)}" cy="${y(p[key])}" r="3"/>`; });
   // end label: the latest value, dot on the last point (selective direct label)
   const last = pts[pts.length - 1];
   out += `<circle class="viz-dot ${cls}" cx="${x(last.t)}" cy="${y(last[key])}" r="4"/>`;
