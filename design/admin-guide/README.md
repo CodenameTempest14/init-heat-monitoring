@@ -1,6 +1,6 @@
 # design/admin-guide/
 
-**PROPOSED, waiting for the owner's approval (F-22, D-034). Nothing is built yet.** Mocks of the admin guide `#guide` and of the one change to the admin page. Made-up room and numbers only. English only (D-034). **A teacher reviews the wording before it goes live.**
+**Mocks APPROVED by the owner on 2026-11-02 (s23); not built yet. The teacher still reviews the wording before it goes live (D-034).** Mocks of the admin guide `#guide` and of the one change to the admin page. Made-up room and numbers only. English only (D-034). **A teacher reviews the wording before it goes live.**
 
 | File | What |
 |---|---|
