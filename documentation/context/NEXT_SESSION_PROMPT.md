@@ -28,7 +28,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | **Whole project** | 44 / 71 | ██████░░░░ | **62%** |
 
 ### Recommended model for this session
-**Sonnet 5.5**: checking the deploy, waiting on the 24 h run, the P04-03 design. Opus 5.5 only for the admin sign-in in P05.
+**Sonnet 5.5**: 24 h run evidence, the P04-04 chart design and build. Opus 5.5 only for the admin sign-in in P05.
 
 ### Next concrete step
 1. Ask the phase-builder question (last answer: owner only).

@@ -15,7 +15,7 @@
 **Windows note:** commit messages containing `"` must go through `git commit -F <file>` (PowerShell 5.1 mangles them).
 
 ## Recommended model for the next session (MDL-1)
-**Sonnet 5.5**: checking the deploy, waiting on the 24 h run, the P04-03 design. Opus 5.5 only for the admin sign-in in P05.
+**Sonnet 5.5**: 24 h run evidence, the P04-04 chart design and build. Opus 5.5 only for the admin sign-in in P05.
 
 ## Next concrete step
 1. Ask the phase-builder question (last answer: owner only).
