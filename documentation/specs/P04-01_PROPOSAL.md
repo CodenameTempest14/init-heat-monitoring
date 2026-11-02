@@ -10,7 +10,7 @@ to prove the whole path works once: **GitHub, then hosting, then the browser, th
 
 ## Decisions I need from you
 
-### 1. Hosting (D-002 left this open: Cloudflare Pages or Vercel)
+### 1. Hosting (D-002 left this open: Cloudflare Pages or Vercel) — **DECIDED: Vercel (owner, 2026-11-02, D-030)**
 | Option | For | Against |
 |---|---|---|
 | **A. Cloudflare Pages (recommended)** | Free plan; deploys from the GitHub repo on every push; a `_headers` file lets us set security headers such as a Content-Security-Policy (matches "server side is authoritative"). | One more account to make. |
@@ -44,7 +44,7 @@ would only suggest it if you want to learn that.
 1. `web/` with a README: `index.html` (Tabler shell, one heading, one box that shows the latest reading and "updated N min ago"), `config.js` (address and anon key), `tokens.css` (generated), `vendor/` (Tabler CSS and licence).
 2. Test first: a PC test that the "updated N min ago" and the row-to-text code give the right answer for fixed inputs (red first).
 3. Deploy to the free host from the GitHub repo.
-4. Security check: `_headers` with a CSP that allows only our own files and the Supabase address; look at the console for blocked requests.
+4. Security check: headers in `vercel.json` (Vercel, D-030) with a CSP that allows only our own files and the Supabase address; look at the console for blocked requests.
 
 ## How P04-01 will be called done (evidence I will show)
 - The hosted address opened in a **logged-out** private browser window shows the newest init-test reading (screenshot, no personal data).
@@ -56,6 +56,6 @@ would only suggest it if you want to learn that.
 Cards and heat colours (P04-02), the offline badge (P04-03), charts (P04-04), manifest and service worker (P04-05), custom domain, admin.
 
 ## Your answers
-1. Hosting: A, B or C?
+1. Hosting: ~~A, B or C?~~ Vercel (D-030).
 2. Build style: no build step (recommended), or a framework?
 3. Read from `init-test` first, and anon key in the repo: OK?
