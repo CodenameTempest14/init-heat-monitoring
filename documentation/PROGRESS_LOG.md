@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s15
+Logo on the setup page done (icon above `Init Setup` / `Saved`; owner rejected all capitals), flashed and seen on the phone, rows resumed. P04-01 done: the web app skeleton (Vite + React, D-031) is live on Vercel (D-030, https://init-heat-monitoring.vercel.app), read-only from a logged-out browser, headers from `vercel.json` confirmed, phone view seen. P04-02 live cards: design approved (`design/home-cards/`), page built test-first with the PAGASA bands, UI-GATE matches the approved images pixel for pixel; checked locally with real data but not yet on the hosted page, so not ticked. P03-07 did not start: the power bank was still charging. A search for outdoor weather in Lapu-Lapu City gave no reliable reference for the sensor. Pushed to `codenametempest14` and `main` at the owner's request. Close report: `documentation/phase-reports/phase-03-firmware/sessions/2026-11-02_s15_CLOSE.md`.
+
 ## 2026-11-02 · s14
 P03-05 done: the device keeps the hotspot in flash and, when none is saved or it cannot join at start-up, opens its own WPA2 network `Init-Setup` with the approved setup page (Android opened it by itself). Tried on the board with the owner's phone: save, power cut, refused short password, setup again with the hotspot off; server rows confirm every step. Validation, escaping and the pages are tested on the PC (the firmware page equals the approved HTML byte for byte). S-12 closed. D-029: Init logo (thermometer-i icon + wordmark) and full name "Init: Indoor Heat Index Tracker, An IoT-Based Classroom Heat Index Monitoring System". Proposal waiting: the icon on the setup page with the title `INIT SETUP`.
 
