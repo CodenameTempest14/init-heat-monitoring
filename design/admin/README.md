@@ -11,6 +11,7 @@
 | `admin-room-saved.html` | Same, right after saving a new room. |
 | `build-mocks.mjs`, `capture.mjs` | Write the mocks; `node design/admin/capture.mjs` writes `ref/<state>-<phone\|desktop>-<light\|dark>.png` |
 | `ref/` | The screenshots to approve |
+| `proposal-b/` | Proposal B, a simpler alternative (owner asked for one, s22) |
 
 ## What is proposed
 - **Reached at `#admin`** on the same address, with no link from the public pages. Hiding it is not the protection; the database refuses non-admins (P05-05, tested).
