@@ -1,9 +1,9 @@
 /* P04-07 school-day view (F-12). No inline styles: the CSP forbids them (bar widths are SVG attributes).
    Heat colours come from tokens.css; the blue is the chart blue from charts.css. */
-.school-link { display: flex; align-items: center; justify-content: space-between; min-height: 44px; padding: 0 16px; margin: 0 0 16px; border: 2px solid var(--series-hi); border-radius: 8px; color: var(--viz-ink); font-weight: 600; text-decoration: none; }
-.school-link:hover { color: var(--viz-ink); }
+.school-link { display: flex; align-items: center; justify-content: space-between; min-height: 44px; padding: 0 16px; margin: 12px 0 16px; border: 2px solid var(--series-hi); border-radius: 8px; color: var(--viz-ink); font-weight: 600; text-decoration: none; }
+.school-link:hover, .school-link:focus { color: var(--viz-ink); text-decoration: none; }
 .school-back { display: inline-flex; align-items: center; min-height: 44px; margin: 0 0 8px; color: var(--viz-ink); font-weight: 600; text-decoration: none; }
-.school-back:hover { color: var(--viz-ink); }
+.school-back:hover, .school-back:focus { color: var(--viz-ink); text-decoration: none; }
 .school-nav { display: flex; gap: 8px; margin-bottom: 16px; }
 .school-nav .viz-range:disabled { opacity: 0.45; }
 .school-stats { margin: 0; }
