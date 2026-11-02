@@ -57,6 +57,7 @@ function useColorScheme() {
 
 export default function App() {
   useColorScheme();
+  const schoolRoute = useSchoolRoute();
   const [view, setView] = useState({ ...readingView(undefined, Date.now()), updated: 'loading…' });
   const [status, setStatus] = useState(null); // null until the first answer, so no badge flashes before we know
   const [failed, setFailed] = useState(false);
