@@ -60,3 +60,26 @@ Multiple rooms or schools (D-003), student accounts or any personal data, cellul
 ## What I'd approve first
 
 Tier 1 as phase one (the device sends, the app shows), then F-09, F-10, F-12 and F-13. That order is only my suggestion.
+
+## P05 details to confirm (APPROVED by the owner as written, P5-a to P5-j, 2026-11-02, s22; nothing built yet)
+
+F-09, F-10, F-17 and F-21 are already approved (Tiers 1 to 3 in full, 2026-10-31; F-21 by D-024). What follows is not new features. These are the choices inside them that the checklist leaves open. Mark each one OK or change it.
+
+| # | Item | Proposal | Why / risk |
+|---|---|---|---|
+| P5-a | Admin login (P05-01) | Supabase Auth, email + password, one account. Sign-ups stay off, so the account is created by hand. A one-row `admins` table lists the allowed user id; every policy checks that list, never just "signed in" (S-4, P05-05). | Server side decides. Optional: a second factor (an authenticator app), free in Supabase. |
+| P5-b | Where the admin lives | A `#admin` view in the same web app, no link on the public pages. | Hiding the link is not security; the policies are. |
+| P5-c | Settings (P05-02) | Reporting interval, alert threshold (default Danger = heat index 42 °C), quiet period (default 60 min), temperature offset and humidity offset. Each has a minimum and maximum checked by the database. | The device already gets `interval_s` in the reply (D-027). |
+| P5-d | Interval limit | Maximum 60 s while the device runs on the power bank, because the bank switches off with a low draw (D-027). The admin page says so. | Without the cap, one bad setting makes the device go dark. |
+| P5-e | Calibration offset | Applied on the server when the reading is stored, within ±5 °C and ±10 % RH. The raw value is kept next to it. The device stays unchanged. | The heat index is computed on the server (D-023), so the offset must go in before it. Needs the sensor check against a reference thermometer to set a real value. |
+| P5-f | Push alert (P05-03) | Web Push (free). A "Send me heat alerts" button on the installed app stores the phone's subscription. The database sends one alert when the heat index first reaches the threshold, then stays quiet for the quiet period. | Needs a sending service: a Supabase Edge Function and a key pair, with the private key in secrets only. iOS needs the app installed, and I have not seen the install on an iPhone yet. |
+| P5-g | Alert wording | Plain: "Heat index 43 °C (Danger) in <room>." No advice text until a teacher reviews it (F-15). | As in the Tier 2 note. |
+| P5-h | Who can subscribe | Anyone with the app, one subscription per phone, nothing but the push address is stored (no name, no email). A stranger can add or remove only their own. | A push address is not personal data here, but it is not for public reading: only the sender reads it. |
+| P5-i | Device health (P05-04) | The device adds Wi-Fi signal (RSSI), reset reason and firmware version to each upload. The server checks them. The admin page shows the latest. | Firmware change plus a migration. The public pages never show it. |
+| P5-j | Room edit (P05-06) | A text box on the admin page. New readings get the new room, old ones keep theirs. The box says not to use people's names (S-10). | Data part already built (D-024). |
+
+**Suggested order:** P05-01 and P05-05 together (login and the admin list, with the refusal tests), then P05-06 (small, proves the admin path), P05-02, P05-04, and P05-03 last because it needs the most new parts.
+
+**Tests first:** refused calls (anonymous and a signed-in non-admin) get written and seen failing before the policies exist. The offset and the alert's quiet period are correctness rules, so they get tests first too.
+
+**Model:** Opus 5.5 for P05-01 and P05-05 (login and policies). Sonnet 5.5 for the rest.
