@@ -12,7 +12,7 @@
 | `ref/` | The screenshots to approve |
 
 ## What is proposed
-- **Header (revised after the owner's note, s18):** centred. The approved logo (icon + `init` wordmark, 40 px high) on top, then the title line **Init: Indoor Heat Index Tracker** (the short form of the full name in D-029; the long form is too long for a phone line), then the room, then the Online badge, with a little more space between room and badge. Light and dark logo follow the phone setting. This changes the top of every page image, so the home, badge and history mocks and their reference images are redrawn after approval, then the gates run again.
+- **Header (revised after the owner's notes, s18):** the logo and the title line are centred; the room and the Online badge stay on the left, as today. The approved logo (icon + `init` wordmark, 40 px high) on top, then the title line **Init: Indoor Heat Index Tracker** (the short form of the full name in D-029; the long form is too long for a phone line), then the room, then the Online badge, with a little more space between room and badge. Light and dark logo follow the phone setting. This changes the top of every page image, so the home, badge and history mocks and their reference images are redrawn after approval, then the gates run again.
 - **Icons:** drawn from the approved icon only. Rounded one for the favicon and "any"; a full-square one with the thermometer at 85 % so Android's circle or squircle never cuts it; a full-square one for iPhone (it rounds the corners itself).
 - **Theme colours:** the status bar takes the page colour: `#f6f7f9` in light, `#10161d` in dark. The start-up screen background is `#10161d`.
 - **Installed app:** opens full screen with no browser bar, same page.
