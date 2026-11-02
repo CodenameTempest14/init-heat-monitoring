@@ -55,6 +55,12 @@ await refused('change a setting', `settings?device_id=eq.${NOTHING}`, { method: 
 await refused('insert a device', 'devices', { method: 'POST', body: { id: NOTHING, name: MARK } });
 await refused('change a device', `devices?id=eq.${NOTHING}`, { method: 'PATCH', body: { name: MARK } });
 await refused('delete a device', `devices?id=eq.${NOTHING}`, { method: 'DELETE' });
+// P05 (migration 20261105120000_admin.sql): the admin list and the admin functions are closed to strangers.
+// On a project without that migration these answer 404 and fail: apply the migration first.
+await refused('read the admin list', 'admins');
+await refused('add an admin', 'admins', { method: 'POST', body: { user_id: NOTHING } });
+await refused('call is_admin()', 'rpc/is_admin', { method: 'POST', body: {} });
+await refused('change the room (admin_set_room)', 'rpc/admin_set_room', { method: 'POST', body: { p_device: NOTHING, p_room: MARK } });
 
 // The one write door is ingest_reading, and it needs the device's own key: a wrong key must not save anything.
 const door = await call('rpc/ingest_reading', { method: 'POST', body: { device_key: 'not-a-real-key', readings: [{ recorded_at: new Date().toISOString(), temp_c: 30, rh_pct: 60 }] } });

@@ -61,6 +61,8 @@ Also: remove the admin row → the same admin token is refused on the very next 
 
 ## 6. Questions for the owner
 
+**Owner, s22 (2026-11-02): DECIDE 1 = (a) and DECIDE 2 = OK, both approved.** The range stays 60 to 3600 with a warning on the admin page about the power bank, and no raw column is added.
+
 - **DECIDE 1, interval limit (this changes P5-d).** SCHEMA.md allows `interval_s` 60 to 3600, and the firmware accepts only 60 to 3600. The bank needs an upload at least every 60 s (D-027). So a cap of 60 s on the bank leaves a range of exactly one value. Options: (a) keep 60 to 3600 and show a warning on the admin page, "on the power bank, anything above 60 s may switch it off"; (b) lower the database maximum to 60 and raise it again with a different power source. I suggest (a), because the warning is visible and nothing needs a firmware change.
 - **DECIDE 2, raw values.** P5-e said the raw value is kept. SCHEMA.md stores the corrected value and the offset that was applied, so raw = corrected − offset. Nothing is lost, so no new column. OK?
 - Which email should the admin account use? The password is made by you in the dashboard (long and generated), never typed to me or committed.
