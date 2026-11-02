@@ -21,9 +21,9 @@ export function durationText(recordedAt, nowMs) {
   return ageText(recordedAt, nowMs).replace(/ ago$/, '');
 }
 
-// F-03: the device counts as offline when its newest reading is more than 3 min old (3 missed 60 s uploads, owner approved
-// the badge s16). Age comes from received_at (the server's clock, so a wrong device clock cannot fake "online").
-export const OFFLINE_AFTER_S = 180;
+// F-03: the device counts as offline when its newest reading is more than 2 min old (2 missed 60 s uploads; owner chose
+// 2 min in s17, was 3 min). Age comes from received_at (the server's clock, so a wrong device clock cannot fake "online").
+export const OFFLINE_AFTER_S = 120;
 export function deviceStatus(row, nowMs) {
   if (!row) return { kind: 'wait', text: 'Waiting for the first reading' };
   const at = row.received_at || row.recorded_at;

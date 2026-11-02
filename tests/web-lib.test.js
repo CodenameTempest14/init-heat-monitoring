@@ -56,7 +56,7 @@ test('readingView: no row yet gives a clear message, not a crash', () => {
   assert.equal(readingView(null, T).category, null);
 });
 
-// P04-03: online/offline badge (F-03). Offline = newest reading more than 3 min old by the SERVER's clock (received_at).
+// P04-03: online/offline badge (F-03). Offline = newest reading more than 2 min old by the SERVER's clock (received_at).
 import { deviceStatus, durationText } from '../web/src/lib.js';
 const rowAt = (s, extra = {}) => ({ temp_c: 30, rh_pct: 60, heat_index_c: 40, recorded_at: ago(s), received_at: ago(s), room: 'R', ...extra });
 
@@ -67,10 +67,10 @@ test('durationText: min, h, days with no "ago"', () => {
   assert.equal(durationText(ago(3 * 86400), T), '3 days');
 });
 
-test('deviceStatus: online up to and including 3 min, offline after', () => {
+test('deviceStatus: online up to and including 2 min, offline after', () => {
   assert.deepEqual(deviceStatus(rowAt(0), T), { kind: 'online', text: 'Online' });
-  assert.equal(deviceStatus(rowAt(180), T).kind, 'online');
-  assert.deepEqual(deviceStatus(rowAt(181), T), { kind: 'offline', text: 'Offline: no reading for 3 min' });
+  assert.equal(deviceStatus(rowAt(120), T).kind, 'online');
+  assert.deepEqual(deviceStatus(rowAt(121), T), { kind: 'offline', text: 'Offline: no reading for 2 min' });
   assert.equal(deviceStatus(rowAt(12 * 60), T).text, 'Offline: no reading for 12 min');
   assert.equal(deviceStatus(rowAt(3 * 3600), T).text, 'Offline: no reading for 3 h');
 });

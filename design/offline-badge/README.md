@@ -16,5 +16,5 @@ Design notes:
 - Badge text contrast on the page background (WCAG): light online 4.74, offline 6.13, waiting 5.46; dark 10.44, 7.97, 8.57 (all need 4.5).
 - Not drawn: "could not load the readings" (the phone cannot reach the server). That is a page problem, not a device problem, and keeps today's line under the cards.
 
-Rule to approve (build decision, not drawn): the device is **offline** when the newest reading is more than **3 minutes** old
-(the board uploads every 60 s, so 3 missed uploads). The age uses the server's `received_at`, not the device clock; the page already refreshes every 30 s.
+Rule to approve (build decision, not drawn): the device is **offline** when the newest reading is more than **2 minutes** old
+(the board uploads every 60 s, so 2 missed uploads; owner changed it from 3 min to 2 min in s17). The age uses the server's `received_at`, not the device clock; the page already refreshes every 30 s.
