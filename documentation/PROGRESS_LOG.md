@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s22
+During the 24 h run (untouched, 226 rows at 13:50Z). P05 started early on the owner's call: P05 details approved, admin design, `admin.backend.js` red then 8/8 after the admin migration on init-test (policies read back, probe 21/21). Admin view `#admin` built from proposal B (owner's pick over A): `web-admin` 7/7 red first, UI gate 14/14, driven on the hosted page; owner signed in with the test admin `init-admin@init.com`. P05-01 ticked; P05-02/05/06 and P04-08 marked partly done. Not tried: a real save from the page, the phone, live. Pushed six commits to `codenametempest14` and `main` (owner approved).
+
 ## 2026-11-02 · s21
 Short session during the 24 h run (182 rows at 13:05Z, largest gap 64 s). Meta description added to `web/index.html` and seen in the served page. Owner phone screenshots (home, 24 h history, school day) reviewed: no defect; P04-08 still open (several-level day, offline page, iPhone, light mode). Owner: the 23.1 °C reading was the board being moved. Pushed `e972b6f` and the s20 close commits to `codenametempest14` and `main`.
 
