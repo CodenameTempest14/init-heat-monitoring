@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s24
+Short Q&A session during the 24 h run (329 rows at 15:32Z, largest gap 64 s; untouched). No code. Owner's light-mode phone screenshots (`#admin` sign-in, wrong password, signed in, guide, home with charts, finished school day) looked at: no defect, school-day numbers add up. Answered: admin is the same app (own sign-in per install, reads init-test), no new firmware needed for admin (interval and room come in the upload reply, offsets applied by the server), 77 % flash is harmless but matters for OTA, a saved room should reach the OLED at the next upload (not yet seen). Nothing ticked.
+
 ## 2026-11-02 · s23
 During the 24 h run (healthy at 14:09Z: 246 rows, no gap over 90 s; not touched). F-22 admin guide: mocks made and approved by the owner (`design/admin-guide/`), then built test-first as P05-07: `web/src/Guide.jsx`, `guide.css`, route `#guide` and `#guide/<part>`, three **How? ›** links on the admin page. The admin mocks were redrawn with the links (0 differing pixels against the approved images); `ui-gate-guide.test.js` 6/6 seen red first, admin gate 14/14, other gates and web unit tests green. Owner looked at `#admin` on their phone (dark, signed in, and the wrong-password message). Pushed to the branch and `main` (owner approved), live on the hosted page, seen on the owner's Android and iPhone; a teacher approved the guide wording (owner's word); P05-07 ticked. The app's other wording is not yet reviewed (D-034).
 
