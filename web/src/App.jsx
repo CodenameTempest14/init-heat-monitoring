@@ -5,6 +5,7 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { readingView, deviceStatus } from './lib.js';
 import { CATEGORY_LABEL } from './category.js';
 import History from './History.jsx';
+import School from './School.jsx';
 
 const REFRESH_MS = 30000;
 
@@ -31,6 +32,17 @@ const STATUS_ICON = {
   offline: <><circle cx="12" cy="12" r="9" /><path d="M8 8l8 8M16 8l-8 8" /></>,
   wait: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
 };
+
+// The school-day view lives at #school on the same address (F-12); no server change.
+function useSchoolRoute() {
+  const [on, setOn] = useState(() => window.location.hash === '#school');
+  useEffect(() => {
+    const apply = () => { setOn(window.location.hash === '#school'); window.scrollTo(0, 0); };
+    window.addEventListener('hashchange', apply);
+    return () => window.removeEventListener('hashchange', apply);
+  }, []);
+  return on;
+}
 
 // Follow the phone's light or dark setting (Tabler switches colours on this attribute).
 function useColorScheme() {
@@ -82,23 +94,28 @@ export default function App() {
           </p>
         )}
       </header>
-      <section className={`card heat${cat ? ` heat-${cat}` : ''}`} aria-label="Heat index">
-        <div className="card-body">
-          <p className="app-label">{view.label}</p>
-          <p className="heat-num">{view.heatIndex}{view.heatIndex !== '—' && <span className="heat-unit">°C</span>}</p>
-          {cat && (
-            <p className="heat-cat">
-              <svg viewBox="0 0 24 24" aria-hidden="true">{SHAPES[cat]}</svg>{CATEGORY_LABEL[cat]}
-            </p>
-          )}
+      {schoolRoute && deviceId ? <School deviceId={deviceId} /> : (
+        <>
+        <section className={`card heat${cat ? ` heat-${cat}` : ''}`} aria-label="Heat index">
+          <div className="card-body">
+            <p className="app-label">{view.label}</p>
+            <p className="heat-num">{view.heatIndex}{view.heatIndex !== '—' && <span className="heat-unit">°C</span>}</p>
+            {cat && (
+              <p className="heat-cat">
+                <svg viewBox="0 0 24 24" aria-hidden="true">{SHAPES[cat]}</svg>{CATEGORY_LABEL[cat]}
+              </p>
+            )}
+          </div>
+        </section>
+        <div className="app-pair">
+          <section className="card" aria-label="Temperature"><div className="card-body"><p className="app-label">Temperature</p><p className="stat">{view.temp}</p></div></section>
+          <section className="card" aria-label="Humidity"><div className="card-body"><p className="app-label">Humidity</p><p className="stat">{view.rh}</p></div></section>
         </div>
-      </section>
-      <div className="app-pair">
-        <section className="card" aria-label="Temperature"><div className="card-body"><p className="app-label">Temperature</p><p className="stat">{view.temp}</p></div></section>
-        <section className="card" aria-label="Humidity"><div className="card-body"><p className="app-label">Humidity</p><p className="stat">{view.rh}</p></div></section>
-      </div>
-      <p className="text-secondary app-updated">{failed ? 'Could not load the readings. Will try again.' : view.updated}</p>
-      {deviceId && <History deviceId={deviceId} />}
+        <p className="text-secondary app-updated">{failed ? 'Could not load the readings. Will try again.' : view.updated}</p>
+        {deviceId && <a className="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>}
+        {deviceId && <History deviceId={deviceId} />}
+        </>
+      )}
     </main>
   );
 }
