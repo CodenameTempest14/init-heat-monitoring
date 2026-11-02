@@ -14,4 +14,6 @@ Never edit a file that has been pushed; add a new one.
 - `20261103120000_history.sql` — `history(range_hours, for_device)`: 15 minute (24 h) or hourly (168 h) averages for the charts, at most 97 / 169 rows (P04-04, F-04).
 - `20261104120000_school_day.sql` — `school_day(day, for_device)`: one school day (Mon-Fri 6:00 AM-7:15 PM Manila) as extremes, hottest hour, average and seconds per level (P04-07, F-12, D-033).
 
+- `20261105120000_admin.sql` — `admins` list, `is_admin()`, admin-only update of the five `settings` values, `admin_set_room()` (P05-01, P05-05, P05-06; **written s22, not applied anywhere yet**).
+
 (The CLI prints "Skipping migration README.md": harmless, this file is not SQL.)
