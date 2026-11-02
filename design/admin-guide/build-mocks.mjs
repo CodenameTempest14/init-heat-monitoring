@@ -1,0 +1,122 @@
+// F-22 admin guide mocks (D-034): the #guide page and the admin page with its three "How? >" links. Made-up room and numbers only.
+// Usage: node design/admin-guide/build-mocks.mjs   (writes guide.html and admin-how.html next to this file)
+import { writeFileSync, readFileSync } from 'node:fs';
+
+const HEADER = '<picture class="app-logo"><source media="(prefers-color-scheme: dark)" srcset="../../web/public/logo-dark.svg"><img src="../../web/public/logo-light.svg" width="110" height="40" alt=""></picture><h1 class="app-fullname">Init: Indoor Heat Index Tracker</h1>';
+const WARN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 21H2z"/><path d="M12 10v4M12 17.5v.01"/></svg>';
+const HELP = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01"/></svg>';
+
+const page = (title, body, back) => `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Init: mock ${title}</title>
+<link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
+<link rel="stylesheet" href="../../web/src/tokens.css">
+<link rel="stylesheet" href="../../web/src/app.css">
+<link rel="stylesheet" href="../../web/src/charts.css">
+<link rel="stylesheet" href="../../web/src/school.css">
+<link rel="stylesheet" href="../../web/src/admin.css">
+<link rel="stylesheet" href="guide.css">
+</head>
+<body>
+<main class="app-wrap">
+  <header class="app-head">${HEADER}</header>
+  <a class="school-back" href="#">${back}</a>
+  ${body}
+</main>
+</body>
+</html>
+`;
+
+const sec = (n, id, title, inner) => `<section class="gd-sec" id="${id}"><h2><span class="gd-num">${n}</span>${title}</h2>${inner}</section>`;
+
+const guide = `<h2 class="visually-hidden">Admin guide</h2>
+  <p class="gd-intro">How to set up the device. Read it before you change anything.</p>
+  <nav class="gd-toc" aria-label="Sections"><p>In this guide</p><ol>
+    <li><a href="#start">Before you start</a></li>
+    <li><a href="#room">Room</a></li>
+    <li><a href="#interval">Reporting interval</a></li>
+    <li><a href="#offsets">Temperature and humidity offsets</a></li>
+    <li><a href="#alerts">Heat alerts</a></li>
+    <li><a href="#wrong">If something looks wrong</a></li>
+  </ol></nav>
+
+  ${sec(1, 'start', 'Before you start', `
+    <p>An admin is a person who can change how the device works. Only a few people have the password.</p>
+    <p>When you press <strong>Save changes</strong>, the new settings are stored. The device picks them up within about a minute. You do not need to touch the device.</p>
+    <p>Everyone can look at the readings. Only admins can change the settings.</p>`)}
+
+  ${sec(2, 'room', 'Room', `
+    <h3>What it does</h3>
+    <p>It tells people which room the device is in right now.</p>
+    <h3>When to change it</h3>
+    <p>Only when you move the device to another room.</p>
+    <h3>Steps</h3>
+    <ol><li>Sign in on the Admin page.</li><li>Under <strong>Room</strong>, type the new name, for example <strong>Room 204</strong>.</li><li>Press <strong>Save changes</strong>.</li></ol>
+    <div class="gd-note">${WARN}<span>Type a room name only. Never type a person's name. Old readings keep their old room.</span></div>`)}
+
+  ${sec(3, 'interval', 'Reporting interval', `
+    <h3>What it does</h3>
+    <p>It is how often the device sends a reading. 60 means one reading every 60 seconds.</p>
+    <h3>When to change it</h3>
+    <p>Keep it at <strong>60</strong> when the device runs on a power bank. A power bank can switch itself off if the device uses very little power for too long. A longer time is fine only on a wall charger.</p>
+    <h3>Steps</h3>
+    <ol><li>Under <strong>Device</strong>, find <strong>Reporting interval</strong>.</li><li>Type a number of seconds between 60 and 3600.</li><li>Press <strong>Save changes</strong>.</li></ol>
+    <div class="gd-example"><span class="gd-label">Example</span>Wall charger, and you only need a reading every 5 minutes: 5 × 60 = <strong>300</strong>.</div>`)}
+
+  ${sec(4, 'offsets', 'Temperature and humidity offsets', `
+    <h3>What it does</h3>
+    <p>An offset fixes a sensor that reads a little too high or too low. It is added to every new reading.</p>
+    <h3>When to change it</h3>
+    <p>Only after you compare the device with a thermometer you trust. If you have not done that, leave both at 0.0.</p>
+    <h3>Steps</h3>
+    <ol><li>Put the trusted thermometer next to the device, out of the sun.</li><li>Wait 30 minutes.</li><li>Write down both numbers. Do this 3 times, 5 minutes apart.</li><li>For each pair, subtract: trusted number minus device number.</li><li>Take the average of the 3 answers.</li><li>Type it in <strong>Temperature offset</strong> and press <strong>Save changes</strong>.</li></ol>
+    <div class="gd-example"><span class="gd-label">Example</span>The device says 31.0 °C. The trusted thermometer says 30.2 °C. The offset is 30.2 − 31.0 = <strong>−0.8</strong>.</div>
+    <p>Humidity works the same way, with the trusted humidity number.</p>
+    <div class="gd-note">${WARN}<span>An offset changes new readings only. Old readings stay as they were.</span></div>`)}
+
+  ${sec(5, 'alerts', 'Heat alerts', `
+    <div class="gd-note">${WARN}<span>Alerts are coming in a later step. These settings are saved now but nothing is sent yet.</span></div>
+    <h3>The levels</h3>
+    <p>These names and numbers are from PAGASA. They use the heat index in °C.</p>
+    <table class="gd-table"><thead><tr><th>Level</th><th>Heat index</th></tr></thead><tbody>
+      <tr><td>Caution</td><td>27 to 32</td></tr>
+      <tr><td>Extreme caution</td><td>33 to 41</td></tr>
+      <tr><td>Danger</td><td>42 to 51</td></tr>
+      <tr><td>Extreme danger</td><td>52 and up</td></tr></tbody></table>
+    <h3>Alert at heat index</h3>
+    <p>The heat index where an alert is sent. <strong>42</strong> means an alert when the room reaches Danger.</p>
+    <h3>Quiet period</h3>
+    <p>After an alert, no new alert is sent for this many minutes. With 60, you get at most one alert an hour.</p>
+    <h3>Steps</h3>
+    <ol><li>Under <strong>Heat alerts</strong>, type the heat index for <strong>Alert at heat index</strong>.</li><li>Type the minutes for <strong>Quiet period</strong>.</li><li>Press <strong>Save changes</strong>.</li></ol>`)}
+
+  ${sec(6, 'wrong', 'If something looks wrong', `
+    <dl class="gd-qa">
+      <dt>It says "Not saved"</dt><dd>A number is outside its range. The range is under each name. Fix the number and press Save again.</dd>
+      <dt>It says "Not an admin"</dt><dd>You signed in with an account that is not an admin. Sign out and use the admin account. Ask the person who set it up.</dd>
+      <dt>The page says Offline</dt><dd>No reading came in for 2 minutes. Check that the device has power and the Wi-Fi hotspot is on. It comes back by itself within a minute or two.</dd>
+    </dl>`)}`;
+
+// The admin page: the approved view with one "How?" link under each group's box (the rest is unchanged).
+const how = (id) => `<a class="ab-how" href="#guide/${id}">${HELP}How? ›</a>`;
+const adminHow = (() => {
+  const html = readFileSync(new URL('../admin/proposal-b/b-settings.html', import.meta.url), 'utf8');
+  let b = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
+  const marks = ['<p class="ab-group-label">Device', '<p class="ab-group-label">Heat alerts', '<div class="ab-save">'];
+  const ids = ['room', 'interval', 'alerts'];
+  marks.forEach((m, i) => { if (!b.includes(m)) throw new Error(`mark not found: ${m}`); b = b.replace(m, `${how(ids[i])}\n\n    ${m}`); });
+  const head = html.slice(html.indexOf('<html'), html.indexOf('<main'))
+    .replace('mock B b-settings', 'mock admin with How links')
+    .replace('href="admin-b.css"', 'href="../../web/src/admin.css"')
+    .replace(/\.\.\/\.\.\/\.\.\//g, '../../')
+    .replace('</head>', '<link rel="stylesheet" href="guide.css">\n</head>');
+  b = b.replace(/\.\.\/\.\.\/\.\.\//g, '../../');
+  return `<!doctype html>\n${head}${b}</main>\n</body>\n</html>\n`;
+})();
+
+writeFileSync(new URL('./guide.html', import.meta.url), page('guide', guide, '‹ Admin'));
+writeFileSync(new URL('./admin-how.html', import.meta.url), adminHow);
+console.log('guide.html\nadmin-how.html');

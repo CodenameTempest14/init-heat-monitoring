@@ -1,0 +1,26 @@
+/* F-22 admin guide mocks (D-034). Colours only from tokens.css / charts.css. Styles for the guide page and the "How? >" links. */
+.gd-intro { margin: 0 0 16px; color: var(--viz-ink-2); }
+.gd-toc { margin: 0 0 20px; padding: 12px 16px; border-radius: 14px; border: 1px solid var(--viz-grid); background: var(--viz-surface); }
+.gd-toc p { margin: 0 0 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--viz-ink-2); }
+.gd-toc ol { margin: 0; padding-left: 22px; }
+.gd-toc a { display: inline-block; min-height: 32px; line-height: 32px; color: var(--viz-ink); font-weight: 600; }
+.gd-sec { margin: 0 0 16px; border-radius: 14px; border: 1px solid var(--viz-grid); background: var(--viz-surface); padding: 16px; }
+.gd-sec h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; font-size: 18px; font-weight: 700; color: var(--viz-ink); }
+.gd-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--series-hi); color: #fff; font-size: 14px; font-weight: 700; }
+.gd-sec h3 { margin: 14px 0 4px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--viz-ink-2); }
+.gd-sec p, .gd-sec li { margin: 0 0 8px; color: var(--viz-ink); }
+.gd-sec ol, .gd-sec ul { margin: 0 0 8px; padding-left: 22px; }
+.gd-example { margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; border: 2px solid var(--series-hi); color: var(--viz-ink); }
+.gd-example .gd-label { display: block; margin-bottom: 2px; font-weight: 700; }
+.gd-note { display: flex; gap: 8px; align-items: flex-start; margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--viz-grid); font-size: 14px; color: var(--viz-ink); }
+.gd-note svg { width: 18px; height: 18px; flex: none; margin-top: 1px; fill: none; stroke: var(--heat-extreme-caution-border); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.gd-table { width: 100%; margin: 6px 0 8px; border-collapse: collapse; font-size: 15px; }
+.gd-table th, .gd-table td { padding: 8px 6px; border-top: 1px solid var(--viz-grid); text-align: left; color: var(--viz-ink); }
+.gd-table th { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--viz-ink-2); border-top: 0; }
+.gd-table td:last-child, .gd-table th:last-child { text-align: right; white-space: nowrap; }
+.gd-qa dt { margin: 10px 0 2px; font-weight: 700; color: var(--viz-ink); }
+.gd-qa dd { margin: 0 0 6px; color: var(--viz-ink); }
+
+/* The link under each admin group */
+.ab-how { display: flex; align-items: center; min-height: 44px; margin: -12px 0 12px 4px; font-weight: 600; color: var(--viz-ink); }
+.ab-how svg { width: 18px; height: 18px; margin-right: 6px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
