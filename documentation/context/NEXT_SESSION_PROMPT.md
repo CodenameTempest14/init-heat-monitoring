@@ -43,7 +43,8 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 
 ### Waiting on the owner
 - At 18:03 local on 2026-11-03: the power bank's level (P03-07), then unplug the board for the offline check (screenshots at about 2 and 3 min).
-- Approve a push of the s19 close commit to `codenametempest14` and `main`.
+- Approve a push of the s20 close commit to `codenametempest14` and `main`.
+- Optional: approve adding a one-line meta description to `web/index.html` (Lighthouse SEO 91 to 100).
 - Optional: why the sensor read 23.1 °C at 04:14 local on 2026-11-02 (was the board moved?). Optional: try add-to-home-screen on the iPhone.
 - Write `SECRET_SETUP_PASS` on a sticker for the case.
 - Later: dummy load or another bank (D-027).
