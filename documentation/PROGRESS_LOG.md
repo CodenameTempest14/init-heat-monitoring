@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s16
+P04-02 verified on the hosted page and the owner's phone (ticked). P04-03 offline badge: design approved by the owner, built test-first (age rule, status colours in tokens, UI gate against the approved images), deployed, and verified with the real board: unplugged 17:06, page showed Offline 3, 4 and 5 min, replugged, Online at 17:13; server gap 435 s. Rule: offline after 180 s by `received_at`. Pushed `29e3f50` to `codenametempest14` and `main`. P03-07 not started (bank not confirmed full). P04 now 8/13.
+
 ## 2026-11-02 · s15
 Logo on the setup page done (icon above `Init Setup` / `Saved`; owner rejected all capitals), flashed and seen on the phone, rows resumed. P04-01 done: the web app skeleton (Vite + React, D-031) is live on Vercel (D-030, https://init-heat-monitoring.vercel.app), read-only from a logged-out browser, headers from `vercel.json` confirmed, phone view seen. P04-02 live cards: design approved (`design/home-cards/`), page built test-first with the PAGASA bands, UI-GATE matches the approved images pixel for pixel; checked locally with real data but not yet on the hosted page, so not ticked. P03-07 did not start: the power bank was still charging. A search for outdoor weather in Lapu-Lapu City gave no reliable reference for the sensor. Pushed to `codenametempest14` and `main` at the owner's request. Close report: `documentation/phase-reports/phase-03-firmware/sessions/2026-11-02_s15_CLOSE.md`.
 
