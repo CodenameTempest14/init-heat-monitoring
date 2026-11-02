@@ -1,10 +1,9 @@
-// F-22 admin guide mocks (D-034): the #guide page and the admin page with its three "How? >" links. Made-up room and numbers only.
-// Usage: node design/admin-guide/build-mocks.mjs   (writes guide.html and admin-how.html next to this file)
-import { writeFileSync, readFileSync } from 'node:fs';
+// F-22 admin guide mocks (D-034): the #guide page (the admin page's "How? >" links are drawn by design/admin/proposal-b/). Made-up room and numbers only.
+// Usage: node design/admin-guide/build-mocks.mjs   (writes guide.html next to this file)
+import { writeFileSync } from 'node:fs';
 
 const HEADER = '<picture class="app-logo"><source media="(prefers-color-scheme: dark)" srcset="../../web/public/logo-dark.svg"><img src="../../web/public/logo-light.svg" width="110" height="40" alt=""></picture><h1 class="app-fullname">Init: Indoor Heat Index Tracker</h1>';
 const WARN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 21H2z"/><path d="M12 10v4M12 17.5v.01"/></svg>';
-const HELP = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01"/></svg>';
 
 const page = (title, body, back) => `<!doctype html>
 <html lang="en">
@@ -100,23 +99,5 @@ const guide = `<h2 class="visually-hidden">Admin guide</h2>
       <dt>The page says Offline</dt><dd>No reading came in for 2 minutes. Check that the device has power and the Wi-Fi hotspot is on. It comes back by itself within a minute or two.</dd>
     </dl>`)}`;
 
-// The admin page: the approved view with one "How?" link under each group's box (the rest is unchanged).
-const how = (id) => `<a class="ab-how" href="#guide/${id}">${HELP}How? ›</a>`;
-const adminHow = (() => {
-  const html = readFileSync(new URL('../admin/proposal-b/b-settings.html', import.meta.url), 'utf8');
-  let b = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
-  const marks = ['<p class="ab-group-label">Device', '<p class="ab-group-label">Heat alerts', '<div class="ab-save">'];
-  const ids = ['room', 'interval', 'alerts'];
-  marks.forEach((m, i) => { if (!b.includes(m)) throw new Error(`mark not found: ${m}`); b = b.replace(m, `${how(ids[i])}\n\n    ${m}`); });
-  const head = html.slice(html.indexOf('<html'), html.indexOf('<main'))
-    .replace('mock B b-settings', 'mock admin with How links')
-    .replace('href="admin-b.css"', 'href="../../web/src/admin.css"')
-    .replace(/\.\.\/\.\.\/\.\.\//g, '../../')
-    .replace('</head>', '<link rel="stylesheet" href="guide.css">\n</head>');
-  b = b.replace(/\.\.\/\.\.\/\.\.\//g, '../../');
-  return `<!doctype html>\n${head}${b}</main>\n</body>\n</html>\n`;
-})();
-
 writeFileSync(new URL('./guide.html', import.meta.url), page('guide', guide, '‹ Admin'));
-writeFileSync(new URL('./admin-how.html', import.meta.url), adminHow);
-console.log('guide.html\nadmin-how.html');
+console.log('guide.html');

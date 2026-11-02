@@ -45,3 +45,7 @@
 .ab-empty .ab-badge { color: var(--status-wait); border-color: var(--status-wait); }
 .ab-err, .ab-row-text small.ab-err { display: block; font-size: 13px; font-weight: 600; color: var(--status-offline); }
 .ab-group .form-control[aria-invalid="true"] { border: 2px solid var(--status-offline); }
+
+/* F-22: the link under each group box that opens the admin guide */
+.ab-how { display: flex; align-items: center; min-height: 44px; margin: -12px 0 12px 4px; font-weight: 600; color: var(--viz-ink); }
+.ab-how svg { width: 18px; height: 18px; margin-right: 6px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }

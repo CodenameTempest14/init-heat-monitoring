@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-02 · s23
+During the 24 h run (healthy at 14:09Z: 246 rows, no gap over 90 s; not touched). F-22 admin guide: mocks made and approved by the owner (`design/admin-guide/`), then built test-first as P05-07: `web/src/Guide.jsx`, `guide.css`, route `#guide` and `#guide/<part>`, three **How? ›** links on the admin page. The admin mocks were redrawn with the links (0 differing pixels against the approved images); `ui-gate-guide.test.js` 6/6 seen red first, admin gate 14/14, other gates and web unit tests green. Owner looked at `#admin` on their phone (dark, signed in, and the wrong-password message). Teacher review of the wording still to do; the guide is not pushed or live.
+
 ## 2026-11-02 · s22
 During the 24 h run (untouched, 226 rows at 13:50Z). P05 started early on the owner's call: P05 details approved, admin design, `admin.backend.js` red then 8/8 after the admin migration on init-test (policies read back, probe 21/21). Admin view `#admin` built from proposal B (owner's pick over A): `web-admin` 7/7 red first, UI gate 14/14, driven on the hosted page; owner signed in with the test admin `init-admin@init.com`. P05-01 ticked; P05-02/05/06 and P04-08 marked partly done. Not tried: a real save from the page, the phone, live. Pushed six commits to `codenametempest14` and `main` (owner approved).
 

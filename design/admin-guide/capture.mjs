@@ -9,7 +9,7 @@ mkdirSync(join(here, 'ref'), { recursive: true });
 const browser = await chromium.launch();
 for (const theme of ['light', 'dark']) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 640 }, colorScheme: theme, reducedMotion: 'reduce', deviceScaleFactor: 1 });
-  for (const s of ['guide', 'admin-how']) {
+  for (const s of ['guide']) {
     const page = await ctx.newPage();
     await page.goto(pathToFileURL(join(here, `${s}.html`)).href, { waitUntil: 'load' });
     await page.evaluate((t) => document.documentElement.setAttribute('data-bs-theme', t), theme);

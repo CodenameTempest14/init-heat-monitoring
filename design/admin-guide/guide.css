@@ -20,7 +20,3 @@
 .gd-table td:last-child, .gd-table th:last-child { text-align: right; white-space: nowrap; }
 .gd-qa dt { margin: 10px 0 2px; font-weight: 700; color: var(--viz-ink); }
 .gd-qa dd { margin: 0 0 6px; color: var(--viz-ink); }
-
-/* The link under each admin group */
-.ab-how { display: flex; align-items: center; min-height: 44px; margin: -12px 0 12px 4px; font-weight: 600; color: var(--viz-ink); }
-.ab-how svg { width: 18px; height: 18px; margin-right: 6px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }

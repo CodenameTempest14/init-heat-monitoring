@@ -5,7 +5,7 @@
 | File | What |
 |---|---|
 | `guide.html` | The guide: a short contents list, then six sections in the order of the admin page: Before you start, Room, Reporting interval, Temperature and humidity offsets (with the worked example 30.2 − 31.0 = −0.8), Heat alerts (PAGASA levels table), If something looks wrong |
-| `admin-how.html` | The approved admin page (proposal B, signed in) with one **How? ›** link under each group box: Room, Device, Heat alerts. Nothing else on the page changes |
+| *(admin page)* | The three **How? ›** links (one under each group box: Room, Device, Heat alerts) are drawn in `design/admin/proposal-b/` (`b-settings`, `b-saved`, redrawn s23; pixel-identical to the `admin-how` images the owner approved, 0 differing pixels). Nothing else on the page changes |
 | `guide.css` | Styles for both (only tokens from `web/src/tokens.css` and `charts.css`) |
 | `build-mocks.mjs`, `capture.mjs` | `node design/admin-guide/build-mocks.mjs`, then `capture.mjs` writes `ref/<state>-phone-<light\|dark>.png` |
 

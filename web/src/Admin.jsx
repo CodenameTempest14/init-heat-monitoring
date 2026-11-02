@@ -18,8 +18,11 @@ const ICON = {
   alert: <><circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16v.01" /></>,
   warn: <><path d="M12 3 22 21H2z" /><path d="M12 10v4M12 17.5v.01" /></>,
   tick: <path d="M5 12l5 5L20 7" />,
+  help: <><circle cx="12" cy="12" r="9" /><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01" /></>,
   shield: <><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" /><path d="m9.5 9.5 5 5M14.5 9.5l-5 5" /></>,
 };
+// F-22: the link under each group box that opens the admin guide at that part.
+const How = ({ part }) => <a className="ab-how" href={`#guide/${part}`}><Svg k="help" />How? ›</a>;
 const Svg = ({ k }) => <svg viewBox="0 0 24 24" aria-hidden="true">{ICON[k]}</svg>;
 
 function load() { try { return JSON.parse(sessionStorage.getItem(STORE)); } catch { return null; } }
@@ -173,6 +176,7 @@ function Settings({ session, call, deviceId, onSignOut }) {
           <input className="form-control" id="room" maxLength={60} value={room} onChange={(e) => { setRoom(e.target.value); setMessage(null); }} aria-invalid={Boolean(errors.room)} />
           {errors.room && <small className="ab-err">{errors.room}</small>}
           <small className="d-block mt-1 text-secondary">A room name only, never a person's name. Old readings keep their room.</small></div></div>
+        <How part="room" />
 
         <p className="ab-group-label">Device</p>
         <div className="ab-group">
@@ -181,11 +185,13 @@ function Settings({ session, call, deviceId, onSignOut }) {
           <div className="ab-note"><Svg k="warn" /><span>On the power bank keep it at 60 s, or the bank may switch off.</span></div>
           {ROWS.slice(1).map(([id, label, hint, unit]) => <Row key={id} id={id} label={label} hint={hint} unit={unit} value={form[id] ?? ''} error={errors[id]} onChange={change} disabled={noSettings} />)}
         </div>
+        <How part="interval" />
 
         <p className="ab-group-label">Heat alerts (coming later)</p>
         <div className="ab-group">
           {ALERT_ROWS.map(([id, label, hint, unit]) => <Row key={id} id={id} label={label} hint={hint} unit={unit} value={form[id] ?? ''} error={errors[id]} onChange={change} disabled={noSettings} />)}
         </div>
+        <How part="alerts" />
 
         <div className="ab-save"><button type="submit" className="btn btn-primary ab-btn" disabled={busy}>{busy ? 'Saving…' : 'Save changes'}</button>
           {message?.kind === 'saved' && <span className="ab-saved" role="status"><Svg k="tick" />Saved</span>}</div>

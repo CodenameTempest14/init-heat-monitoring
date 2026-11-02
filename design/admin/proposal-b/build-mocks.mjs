@@ -13,9 +13,13 @@ const I = {
   alert: '<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v.01"/>',
   warn: '<path d="M12 3 22 21H2z"/><path d="M12 10v4M12 17.5v.01"/>',
   tick: '<path d="M5 12l5 5L20 7"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01"/>',
   shield: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9.5 9.5 5 5M14.5 9.5l-5 5"/>',
 };
 const svg = (k, cls = '') => `<svg${cls ? ` class="${cls}"` : ''} viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`;
+
+// F-22: one "How? >" link under each group box, opening the admin guide at that part (design/admin-guide/).
+const how = (id) => `<a class="ab-how" href="#guide/${id}">${svg('help')}How? ›</a>`;
 
 const page = (title, body, { back = true } = {}) => `<!doctype html>
 <html lang="en">
@@ -79,6 +83,7 @@ function settings({ saved } = {}) {
     <div class="ab-group"><div class="ab-row ab-row-wide"><label class="fw-semibold" for="room">Where the device is now</label>
       <input class="form-control" id="room" maxlength="60" value="${saved ? 'Room 305' : 'Room 204'}">
       <small class="d-block mt-1 text-secondary">A room name only, never a person's name. Old readings keep their room.</small></div></div>
+    ${how('room')}
 
     <p class="ab-group-label">Device</p>
     <div class="ab-group">
@@ -87,12 +92,14 @@ function settings({ saved } = {}) {
       ${row('to', 'Temperature offset', '−5.0 to +5.0', '0.0', '°C', 'min="-5" max="5" step="0.1"')}
       ${row('ho', 'Humidity offset', '−10.0 to +10.0', '0.0', '%', 'min="-10" max="10" step="0.1"')}
     </div>
+    ${how('interval')}
 
     <p class="ab-group-label">Heat alerts (coming later)</p>
     <div class="ab-group">
       ${row('al', 'Alert at heat index', '42 = Danger', 42, '°C', 'min="27" max="60" step="1"')}
       ${row('qp', 'Quiet period', '10 to 1440', 60, 'min', 'min="10" max="1440" step="1"')}
     </div>
+    ${how('alerts')}
 
     <div class="ab-save"><button type="submit" class="btn btn-primary ab-btn">Save changes</button>
       ${saved ? `<span class="ab-saved" role="status">${svg('tick')}Saved</span>` : ''}</div>
