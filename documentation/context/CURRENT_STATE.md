@@ -4,7 +4,8 @@
 
 **Project:** Init: Indoor Heat Index Tracker, An IoT-Based Classroom Heat Index Monitoring System (D-029).
 **Current phase:** P03 Device firmware (9/10: only P03-07 left, **the 24 h run is in progress**). P04 web app is built in parallel (P04-01 to P04-07 done, 12/13; only P04-08 left). Checklists: [P03](../phases/phase-03-firmware.md), [P04](../phases/phase-04-web-app.md).
-**Last session:** 2026-11-02 s22 — [close report](../phase-reports/phase-03-firmware/sessions/2026-11-02_s22_CLOSE.md). Docs only: the P05 details (P5-a to P5-j) in FEATURES.md were approved by the owner. The run was untouched.
+**Last session:** 2026-11-02 s22 — [close report](../phase-reports/phase-03-firmware/sessions/2026-11-02_s22_CLOSE.md) (written early in s22; P05 work came after it, see below). The run was untouched.
+**P05 started early (owner's call, s22, during the run):** P05 details P5-a to P5-j approved (FEATURES.md); design `documentation/specs/P05-01_05_DESIGN.md` (DECIDE 1 = keep 60-3600 with a power-bank warning, DECIDE 2 = no raw column, both owner-approved). Migration `20261105120000_admin.sql` (`admins`, `is_admin()`, admin-only update of the five settings values, `admin_set_room()`) is **on init-test only** (owner applied it); `tests/backend/admin.backend.js` 8/8 (seen red first; throwaway devices and users, safe during the run), read back from the database, `anon-probe` 21/21 on init-test. Admin view `#admin` built from **proposal B** (`design/admin/proposal-b/`, owner's pick; proposal A not chosen): `web/src/Admin.jsx`, `admin.js` (`tests/web-admin.test.js` 7/7, red first), `admin.css`. Driven in Chromium against init-test at 390 px light and dark: wrong password message, sign-in, values load, out-of-range refused by the page, an unchanged save writes nothing, reload keeps the session, sign out, a non-admin sees "Not an admin". **Not yet seen on the hosted page or a phone; a real save (room or a setting) not tried in the UI** (the only device is the run's "Room 1"). No UI gate for the admin view yet. Test admin on init-test: `init-admin@init.com`, password chosen by the owner, in `.env` as `ADMIN_TEST_PASSWORD` (`tools/make-test-admin.mjs`); weak and shared in chat, so **test project only, never live**. Unchecked P05 items: none ticked.
 **Branches:** owner = `codenametempest14`. Remote `origin` = https://github.com/CodenameTempest14/init-heat-monitoring.git. At the start of s22 `codenametempest14` was level with `origin/codenametempest14` (the s21 close commit was already pushed). The s22 commit is local until the owner approves a push (check `git status -sb`). `main` was not checked in s22.
 **Status line:** run `node tools/phase-report.mjs` · progress table: `node tools/phase-report.mjs --md`
 **Phase builder:** owner only (answered s19). Ask again at the start of every session.
@@ -31,7 +32,8 @@
 
 ## Waiting on the owner
 - At 18:03 local on 2026-11-03: the power bank's level (P03-07), then unplug the board for the offline check (screenshots at about 2 and 3 min).
-- Approve a push of the s21 close commit to `codenametempest14` and `main`.
+- Try `#admin` on the hosted page and on the phone with the test admin (after the run ends, a real room save on "Room 1" is fine).
+- For live: an admin email you own and a long generated password, created in the dashboard; then the admin migration on live (`node --env-file=.env tools/db.mjs live db push`, owner runs it) and `anon-probe` against live.
 - Optional: try add-to-home-screen on the iPhone; send a phone screenshot of a school day with several levels (e.g. an earlier day) and of the light mode.
 - Write `SECRET_SETUP_PASS` on a sticker for the case.
 - Later: dummy load or another bank (D-027).

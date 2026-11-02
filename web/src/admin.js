@@ -1,0 +1,50 @@
+// P05 admin view: the pure parts (form checks, session timing). No browser or network code, so tests/web-admin.test.js
+// can run them. The ranges equal the database CHECKs; the database stays the one that decides.
+
+// [min, max, step]; the step is also the number of decimals the column keeps (whole numbers or one decimal).
+export const SETTING_RANGES = {
+  interval_s: [60, 3600, 1],
+  temp_offset_c: [-5, 5, 0.1],
+  rh_offset_pct: [-10, 10, 0.1],
+  alert_heat_index_c: [27, 60, 0.1],
+  alert_quiet_min: [10, 1440, 1],
+};
+
+const show = (n) => String(n).replace('-', '−');
+
+export function checkRoom(text) {
+  const value = String(text ?? '').trim();
+  if (value.length < 1) return { ok: false, error: 'Type a room name.' };
+  if (value.length > 60) return { ok: false, error: 'At most 60 characters.' };
+  return { ok: true, value };
+}
+
+export function checkSettings(form) {
+  const values = {};
+  const errors = {};
+  for (const [key, [min, max, step]] of Object.entries(SETTING_RANGES)) {
+    const raw = String(form[key] ?? '').trim().replace('−', '-'); // a typed minus sign (U+2212) counts
+    const pattern = step === 1 ? /^-?\d+$/ : /^-?\d+(\.\d)?$/;
+    const n = Number(raw);
+    if (!pattern.test(raw) || n < min || n > max) {
+      errors[key] = `Use ${show(min)} to ${show(max)}${step === 1 ? ', whole numbers' : ', one decimal at most'}.`;
+    } else {
+      values[key] = n;
+    }
+  }
+  const ok = Object.keys(errors).length === 0;
+  return { ok, values: ok ? values : {}, errors };
+}
+
+// What the sign-in answer (POST /auth/v1/token) gives, cut down to what the page keeps.
+export function sessionFrom(json, nowMs) {
+  if (!json || !json.access_token || !json.refresh_token) return null;
+  return { token: json.access_token, refresh: json.refresh_token, email: json.user?.email || '', expiresAt: nowMs + json.expires_in * 1000 };
+}
+
+// Refresh in the last minute before the token ends (or after it ended).
+export function needsRefresh(session, nowMs) {
+  return Boolean(session) && nowMs >= session.expiresAt - 60_000;
+}
+
+export const initialOf = (email) => (email ? email[0].toUpperCase() : '?');

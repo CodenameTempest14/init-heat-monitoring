@@ -1,18 +1,47 @@
-/* P05 admin view (#admin): sign-in, room, settings. Tabler forms; no inline styles (the CSP forbids them). */
-.admin-title { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
-.admin-intro { margin: 0 0 16px; color: var(--viz-ink-2); }
-.admin-who { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 16px; color: var(--viz-ink-2); }
-.admin-who strong { color: var(--viz-ink); font-weight: 600; overflow-wrap: anywhere; }
-.admin-card { margin: 0 0 16px; }
-.admin-card .card-title { font-size: 16px; font-weight: 700; margin: 0 0 12px; }
-.admin-card .form-hint { color: var(--viz-ink-2); }
-.admin-field { margin-bottom: 16px; }
-.admin-warn { display: flex; gap: 8px; align-items: flex-start; margin-top: 6px; font-size: 14px; color: var(--viz-ink); }
-.admin-warn svg { width: 18px; height: 18px; flex: none; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-.admin-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.admin-actions { display: flex; align-items: center; gap: 12px; }
-.admin-saved { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--status-online); }
-.admin-saved svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-.admin-btn { min-height: 44px; }
-/* Tabler's alert text (orange, red) is too faint on its tint for WCAG: keep the tint and border, use our ink. */
-.admin-card .alert { color: var(--viz-ink); font-weight: 600; }
+/* P05 admin view (#admin), proposal B (owner chose it, s22; mocks in design/admin/proposal-b/). Fewer words, grouped rows,
+   one Save. Colours only from tokens.css / charts.css. No inline styles: the CSP forbids them. */
+.ab-center { max-width: 380px; margin: 24px auto 0; }
+.ab-card { margin: 0 0 16px; border-radius: 16px; border: 1px solid var(--viz-grid); box-shadow: 0 6px 24px rgb(16 22 29 / 0.08); }
+.ab-card > .card-body { padding: 28px 24px; }
+.ab-badge { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; margin: 0 auto 12px; border-radius: 50%; color: var(--series-hi); border: 2px solid var(--series-hi); }
+.ab-badge svg, .ab-ico { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ab-title { font-size: 22px; font-weight: 700; text-align: center; margin: 0 0 4px; color: var(--viz-ink); }
+.ab-sub { text-align: center; margin: 0 0 20px; color: var(--viz-ink-2); }
+.ab-field { margin-bottom: 14px; }
+.ab-field .form-control { min-height: 46px; border-radius: 10px; }
+.ab-field .input-icon-addon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ab-eye { position: absolute; right: 4px; top: 4px; width: 38px; height: 38px; border: 0; background: transparent; color: var(--viz-ink-2); }
+.ab-eye svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ab-btn { min-height: 48px; border-radius: 10px; font-weight: 700; font-size: 16px; }
+.ab-foot { text-align: center; font-size: 14px; color: var(--viz-ink-2); margin: 0; }
+.ab-alert { display: flex; gap: 10px; align-items: center; padding: 10px 12px; margin-bottom: 16px; border-radius: 10px; border: 2px solid var(--status-offline); color: var(--viz-ink); font-weight: 600; }
+.ab-alert svg { width: 20px; height: 20px; flex: none; fill: none; stroke: var(--status-offline); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Signed in */
+.ab-who { display: flex; align-items: center; gap: 12px; margin: 4px 0 20px; }
+.ab-avatar { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; flex: none; border-radius: 50%; background: var(--series-hi); color: #fff; font-weight: 700; }
+.ab-who-text { flex: 1; min-width: 0; line-height: 1.25; }
+.ab-who-text strong { display: block; color: var(--viz-ink); overflow-wrap: anywhere; }
+.ab-who-text span { font-size: 13px; color: var(--viz-ink-2); }
+.ab-link { min-height: 40px; padding: 0 14px; border: 2px solid var(--series-hi); border-radius: 999px; background: transparent; color: var(--viz-ink); font-weight: 600; }
+.ab-group-label { margin: 0 0 6px 4px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--viz-ink-2); }
+.ab-group { margin: 0 0 20px; border-radius: 14px; border: 1px solid var(--viz-grid); background: var(--viz-surface); overflow: hidden; }
+.ab-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--viz-grid); }
+.ab-row:first-child { border-top: 0; }
+.ab-row-text { flex: 1; min-width: 0; }
+.ab-row-text label { display: block; margin: 0; font-weight: 600; color: var(--viz-ink); }
+.ab-row-text small { display: block; font-size: 13px; color: var(--viz-ink-2); }
+.ab-row .input-group { width: 128px; flex: none; }
+.ab-row .input-group .form-control { min-height: 44px; text-align: right; }
+.ab-row-wide { display: block; }
+.ab-row-wide .form-control { min-height: 44px; margin-top: 8px; }
+.ab-note { display: flex; gap: 8px; align-items: flex-start; padding: 10px 16px; border-top: 1px solid var(--viz-grid); font-size: 14px; color: var(--viz-ink); }
+.ab-note svg { width: 18px; height: 18px; flex: none; margin-top: 1px; fill: none; stroke: var(--heat-extreme-caution-border); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.ab-save { display: flex; align-items: center; gap: 12px; padding: 4px 0 16px; }
+.ab-save .ab-btn { flex: 1; }
+.ab-saved { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; color: var(--status-online); }
+.ab-saved svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.ab-empty { text-align: center; }
+.ab-empty .ab-badge { color: var(--status-wait); border-color: var(--status-wait); }
+.ab-err, .ab-row-text small.ab-err { display: block; font-size: 13px; font-weight: 600; color: var(--status-offline); }
+.ab-group .form-control[aria-invalid="true"] { border: 2px solid var(--status-offline); }

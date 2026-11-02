@@ -1,6 +1,7 @@
 // Makes the dummy admin account on init-test (P05): a confirmed user plus its row in `admins`.
-// The password is random and goes into .env (gitignored) as ADMIN_TEST_EMAIL / ADMIN_TEST_PASSWORD; it is never printed.
-// Running it again keeps the same account and sets a new password.
+// Email and password come from .env (ADMIN_TEST_EMAIL / ADMIN_TEST_PASSWORD) when both are set (the owner chose them in
+// s22); otherwise a random password is made for the dummy address and written there. The password is never printed.
+// Running it again keeps the same account and sets the password again. Test project only: never for live.
 // Usage: node --env-file=.env tools/make-test-admin.mjs
 import { randomBytes } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -8,8 +9,9 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const url = process.env.SUPABASE_TEST_URL;
 const serviceKey = process.env.SUPABASE_TEST_SERVICE_KEY;
 if (!url || !serviceKey) throw new Error('SUPABASE_TEST_URL / SUPABASE_TEST_SERVICE_KEY missing in .env');
-const email = 'init-admin@example.com'; // dummy address, test project only
-const password = randomBytes(18).toString('base64url');
+const chosen = process.env.ADMIN_TEST_EMAIL && process.env.ADMIN_TEST_PASSWORD;
+const email = chosen ? process.env.ADMIN_TEST_EMAIL : 'init-admin@example.com'; // dummy address, test project only
+const password = chosen ? process.env.ADMIN_TEST_PASSWORD : randomBytes(18).toString('base64url');
 const headers = { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, 'Content-Type': 'application/json' };
 
 const list = await (await fetch(`${url}/auth/v1/admin/users?per_page=1000`, { headers })).json();

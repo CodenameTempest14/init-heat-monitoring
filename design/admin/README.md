@@ -1,6 +1,6 @@
 # design/admin/
 
-**PROPOSED (s22), waiting for the owner's approval.** Mocks of the admin view `#admin` (P05-01 sign-in, P05-06 room, P05-02 settings). Template: Tabler `sign-in.html` and `settings.html` (`pages.json` entry `admin`, Approved, MIT). Made-up account `admin@example.com` and room `Room 204`.
+**NOT CHOSEN: the owner picked proposal B (s22, see `proposal-b/`).** Kept for the record. Its styles were replaced in `web/src/admin.css`, so these mocks no longer render as they did. Mocks of the admin view `#admin` (P05-01 sign-in, P05-06 room, P05-02 settings). Template: Tabler `sign-in.html` and `settings.html` (`pages.json` entry `admin`, Approved, MIT). Made-up account `admin@example.com` and room `Room 204`.
 
 | File | What |
 |---|---|

@@ -6,6 +6,7 @@ import { readingView, deviceStatus } from './lib.js';
 import { CATEGORY_LABEL } from './category.js';
 import History from './History.jsx';
 import School from './School.jsx';
+import Admin from './Admin.jsx';
 
 const REFRESH_MS = 30000;
 
@@ -33,15 +34,15 @@ const STATUS_ICON = {
   wait: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
 };
 
-// The school-day view lives at #school on the same address (F-12); no server change.
-function useSchoolRoute() {
-  const [on, setOn] = useState(() => window.location.hash === '#school');
+// The school-day view lives at #school and the admin view at #admin, on the same address (F-12, P05); no server change.
+function useRoute() {
+  const [hash, setHash] = useState(() => window.location.hash);
   useEffect(() => {
-    const apply = () => { setOn(window.location.hash === '#school'); window.scrollTo(0, 0); };
+    const apply = () => { setHash(window.location.hash); window.scrollTo(0, 0); };
     window.addEventListener('hashchange', apply);
     return () => window.removeEventListener('hashchange', apply);
   }, []);
-  return on;
+  return hash;
 }
 
 // Follow the phone's light or dark setting (Tabler switches colours on this attribute).
@@ -57,7 +58,9 @@ function useColorScheme() {
 
 export default function App() {
   useColorScheme();
-  const schoolRoute = useSchoolRoute();
+  const route = useRoute();
+  const schoolRoute = route === '#school';
+  const adminRoute = route === '#admin';
   const [view, setView] = useState({ ...readingView(undefined, Date.now()), updated: 'loading…' });
   const [status, setStatus] = useState(null); // null until the first answer, so no badge flashes before we know
   const [failed, setFailed] = useState(false);
@@ -88,14 +91,14 @@ export default function App() {
           <img src="/logo-light.svg" width="110" height="40" alt="" />
         </picture>
         <h1 className="app-fullname">Init: Indoor Heat Index Tracker</h1>
-        <p className="text-secondary app-room">{`Room: ${view.room}`}</p>
-        {status && (
+        {!adminRoute && <p className="text-secondary app-room">{`Room: ${view.room}`}</p>}
+        {status && !adminRoute && (
           <p className={`status status-${status.kind}`} role="status">
             <svg viewBox="0 0 24 24" aria-hidden="true">{STATUS_ICON[status.kind]}</svg>{status.text}
           </p>
         )}
       </header>
-      {schoolRoute ? <School deviceId={deviceId} ready={status !== null} /> : (
+      {adminRoute ? <Admin deviceId={deviceId} ready={status !== null} /> : schoolRoute ? <School deviceId={deviceId} ready={status !== null} /> : (
         <>
         <section className={`card heat${cat ? ` heat-${cat}` : ''}`} aria-label="Heat index">
           <div className="card-body">
