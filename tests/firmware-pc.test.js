@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-for (const name of ['interval', 'room', 'readings']) {
+for (const name of ['interval', 'room', 'readings', 'wifi_setup']) {
   test(`firmware/init/tests/${name}_test.cpp builds and passes`, () => {
     const dir = mkdtempSync(path.join(tmpdir(), 'fw-'));
     try {

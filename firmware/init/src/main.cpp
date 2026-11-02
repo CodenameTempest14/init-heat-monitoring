@@ -2,13 +2,17 @@
 // tells us in its reply; 60 s until the first reply), queue each reading and send the queue over HTTPS.
 // While the hotspot or the server is down the readings stay in the queue (F-11) and go out in batches later.
 // The OLED shows the latest reading all the time. The server certificate is checked against root_ca.h (S-11):
-// no setInsecure(). Still to come: setup page (P03-05).
+// no setInsecure(). P03-05: the hotspot name and password live in flash; with none saved, or when the saved network
+// cannot be joined at start-up, the device opens its own network Init-Setup with a setup page (D-011).
 // Build `esp32dev_screens` instead draws the 9 approved screens and dumps them over serial (screen_test.h).
 #include <Arduino.h>
 #include <Wire.h>
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <HTTPClient.h>
+#include <WebServer.h>
+#include <DNSServer.h>
+#include <Preferences.h>
 #include <time.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -20,6 +24,7 @@
 #include "room.h"
 #include "readings.h"
 #include "screens.h"
+#include "wifi_setup.h"
 #ifdef SCREEN_TEST
 #include "screen_test.h"
 #endif
@@ -54,13 +59,115 @@ void readSensor() {
   else Serial.println("sensor read failed");
 }
 
-// Blocks up to 20 s. Only used once at start-up, while the "Connecting Wi-Fi..." screen is up.
+static_assert(sizeof(SECRET_SETUP_PASS) - 1 >= PASS_MIN && sizeof(SECRET_SETUP_PASS) - 1 <= PASS_MAX,
+              "SECRET_SETUP_PASS in secrets.h must be 8 to 63 characters (WPA2)");
+
+// The hotspot, saved in flash by the setup page (Preferences namespace "wifi"). Empty name: nothing saved yet.
+char wifiSsid[SSID_MAX + 1] = "";
+char wifiPass[PASS_MAX + 1] = "";
+
+bool loadWifi() {
+  Preferences prefs;
+  if (!prefs.begin("wifi", true)) return false;  // the namespace does not exist until the first save
+  prefs.getString("ssid", wifiSsid, sizeof wifiSsid);
+  prefs.getString("pass", wifiPass, sizeof wifiPass);
+  prefs.end();
+  return checkWifi(wifiSsid, wifiPass) == WifiCheck::Ok;
+}
+
+// Blocks up to WIFI_JOIN_MS. Only used once at start-up, while the "Connecting Wi-Fi..." screen is up.
 bool joinWifi() {
   if (WiFi.status() == WL_CONNECTED) return true;
   WiFi.mode(WIFI_STA);
-  WiFi.begin(SECRET_WIFI_SSID, SECRET_WIFI_PASS);
-  for (int i = 0; i < 40 && WiFi.status() != WL_CONNECTED; i++) delay(500);
+  WiFi.begin(wifiSsid, wifiPass);
+  for (uint32_t t = millis(); millis() - t < WIFI_JOIN_MS && WiFi.status() != WL_CONNECTED; ) delay(500);
   return WiFi.status() == WL_CONNECTED;
+}
+
+// --- Setup mode (P03-05, D-011) -----------------------------------------------------------------------------------
+// The device becomes its own network Init-Setup (WPA2, SECRET_SETUP_PASS) and serves the approved page at
+// 192.168.4.1. A DNS server answers every name with that address, so most phones open the page by themselves.
+// Never returns: a good save restarts into the new network, and after SETUP_TIMEOUT_MS it restarts to try again.
+WebServer web(80);
+DNSServer dns;
+char page[SETUP_PAGE_MAX];
+char nearbyNames[NEARBY_MAX][SSID_MAX + 1];
+const char* nearby[NEARBY_MAX];
+size_t nNearby = 0;
+
+// Names of the networks around, for the suggestions under the name field. Done before the access point starts.
+void scanNearby() {
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  const int n = WiFi.scanNetworks();
+  for (int i = 0; i < n && nNearby < NEARBY_MAX; i++) {
+    const String s = WiFi.SSID(i);
+    if (s.isEmpty() || s.length() > SSID_MAX) continue;
+    bool seen = false;
+    for (size_t j = 0; j < nNearby; j++) seen = seen || strcmp(nearbyNames[j], s.c_str()) == 0;
+    if (seen) continue;
+    strcpy(nearbyNames[nNearby], s.c_str());
+    nearby[nNearby] = nearbyNames[nNearby];
+    nNearby++;
+  }
+  WiFi.scanDelete();
+}
+
+void sendPage(bool rendered) {
+  if (!rendered) { web.send(500, "text/plain", "page too large"); return; }
+  web.sendHeader("Cache-Control", "no-store");
+  web.send(200, "text/html; charset=utf-8", page);
+}
+
+void handleSetupForm() {
+  sendPage(renderSetupPage(page, sizeof page, wifiSsid, nearby, nNearby, wifiSsid, nullptr));
+}
+
+// WebServer has already decoded the form. A value with a NUL inside (%00) would be cut short by every C function
+// after this, so it counts as unreadable. The password is never printed or sent back.
+void handleSetupSave() {
+  const String s = web.arg("s"), p = web.arg("p");
+  WifiCheck c = WifiCheck::FormUnreadable;
+  if (web.hasArg("s") && s.length() == strlen(s.c_str()) && p.length() == strlen(p.c_str()))
+    c = checkWifi(s.c_str(), p.c_str());
+  if (c != WifiCheck::Ok) {
+    Serial.printf("setup: refused (%s)\n", wifiCheckMessage(c));
+    sendPage(renderSetupPage(page, sizeof page, wifiSsid, nearby, nNearby, s.length() <= SSID_MAX ? s.c_str() : "",
+                             wifiCheckMessage(c)));
+    return;
+  }
+  Preferences prefs;
+  const bool stored = prefs.begin("wifi", false) && prefs.putString("ssid", s) == s.length() &&
+                      prefs.putString("pass", p) == p.length();
+  prefs.end();
+  if (!stored) { web.send(500, "text/plain", "could not store the network, please try again"); return; }
+  Serial.printf("setup: saved network \"%s\", restarting\n", s.c_str());
+  sendPage(renderSavedPage(page, sizeof page, s.c_str()));
+  delay(2000);  // let the phone receive the page
+  ESP.restart();
+}
+
+void runSetupMode() {
+  Serial.println("setup mode");
+  screens::setupMode(oled);
+  scanNearby();
+  WiFi.mode(WIFI_AP);
+  if (!WiFi.softAP(SETUP_AP_NAME, SECRET_SETUP_PASS)) Serial.println("setup: access point failed");
+  dns.start(53, "*", WiFi.softAPIP());
+  web.on("/", HTTP_GET, handleSetupForm);
+  web.on("/save", HTTP_POST, handleSetupSave);
+  web.onNotFound([] {  // phones probe addresses like /generate_204: send them to the page
+    web.sendHeader("Location", "http://192.168.4.1/");
+    web.send(302, "text/plain", "");
+  });
+  web.begin();
+  for (const uint32_t start = millis(); millis() - start < SETUP_TIMEOUT_MS; ) {
+    dns.processNextRequest();
+    web.handleClient();
+    delay(2);
+  }
+  Serial.println("setup: nothing saved in time, restarting");
+  ESP.restart();
 }
 
 // The loop must keep reading and drawing while the hotspot is away, so this never waits: if the link is down
@@ -71,7 +178,7 @@ bool wifiUp() {
   if (intervalDue(millis(), lastWifiTry, WIFI_RETRY_MS)) {
     lastWifiTry = millis();
     WiFi.disconnect();
-    WiFi.begin(SECRET_WIFI_SSID, SECRET_WIFI_PASS);
+    WiFi.begin(wifiSsid, wifiPass);
   }
   return false;
 }
@@ -152,8 +259,16 @@ void loop() {
 }
 #else
   screens::starting(oled);
-  Serial.println("joining Wi-Fi");
-  if (!joinWifi()) Serial.println("Wi-Fi failed");
+  // Setup mode only at start-up (owner, s14): an outage while running is handled by the queue (F-11), not by setup.
+  if (!loadWifi()) {
+    Serial.println("no network saved");
+    runSetupMode();
+  }
+  Serial.printf("joining Wi-Fi \"%s\"\n", wifiSsid);
+  if (!joinWifi()) {
+    Serial.println("Wi-Fi failed");
+    runSetupMode();
+  }
   lastWifiTry = millis();
   configTime(0, 0, "pool.ntp.org", "time.google.com");  // UTC; the app shows local time
 }
