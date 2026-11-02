@@ -27,17 +27,31 @@ test('ageText: a time slightly in the future (clock skew) is "just now"; junk is
 
 test('readingView: units, one decimal for temperature, whole degrees for the heat index (D-019)', () => {
   const v = readingView({ temp_c: '29.5', rh_pct: '71.0', heat_index_c: '34.1', recorded_at: ago(120), room: 'Room 1' }, T);
-  assert.deepEqual(v, { room: 'Room 1', temp: '29.5 °C', rh: '71 %', heatIndex: '34 °C', updated: 'updated 2 min ago' });
+  assert.deepEqual(v, { room: 'Room 1', temp: '29.5 °C', rh: '71 %', heatIndex: '34', category: 'extreme-caution', updated: 'updated 2 min ago' });
 });
 
 test('readingView: numbers may arrive as numbers; rounds half up like the OLED', () => {
   const v = readingView({ temp_c: 31.14, rh_pct: 57.5, heat_index_c: 34.5, recorded_at: ago(5), room: 'Room 204' }, T);
   assert.equal(v.temp, '31.1 °C');
   assert.equal(v.rh, '58 %');
-  assert.equal(v.heatIndex, '35 °C');
+  assert.equal(v.heatIndex, '35');
+});
+
+test('readingView: category follows the rounded heat index', () => {
+  const row = (hi) => ({ temp_c: 30, rh_pct: 60, heat_index_c: hi, recorded_at: ago(5), room: 'R' });
+  assert.equal(readingView(row('24.0'), T).category, 'below-range');
+  assert.equal(readingView(row('44.0'), T).category, 'danger');
+  assert.equal(readingView(row('53'), T).category, 'extreme-danger');
+});
+
+test('readingView: a null heat index shows a dash, not 0', () => {
+  const v = readingView({ temp_c: 20, rh_pct: 50, heat_index_c: null, recorded_at: ago(5), room: 'R' }, T);
+  assert.equal(v.heatIndex, '—');
+  assert.equal(v.category, 'below-range');
 });
 
 test('readingView: no row yet gives a clear message, not a crash', () => {
   assert.equal(readingView(null, T).updated, 'no readings yet');
   assert.equal(readingView(undefined, T).temp, '—');
+  assert.equal(readingView(null, T).category, null);
 });

@@ -1,3 +1,5 @@
+import { categoryOf } from './category.js';
+
 // Text helpers for the page. Plain functions with no browser or network code, so tests/web-lib.test.js can run them.
 
 // "updated" age in words. `nowMs` is passed in so a test can fix the time.
@@ -15,14 +17,16 @@ export function ageText(recordedAt, nowMs) {
 }
 
 // One row of the readings table (as the REST API returns it) turned into the words shown on the page.
-// Numbers may arrive as strings (Postgres numeric). The heat index is shown in whole degrees (D-019).
+// Numbers may arrive as strings (Postgres numeric). The heat index is shown in whole degrees (D-019); `heatIndex` is the
+// bare number because the card draws the unit next to it. `category` is null when there is no row or no usable number.
 export function readingView(row, nowMs) {
-  if (!row) return { room: '—', temp: '—', rh: '—', heatIndex: '—', updated: 'no readings yet' };
+  if (!row) return { room: '—', temp: '—', rh: '—', heatIndex: '—', category: null, updated: 'no readings yet' };
   return {
     room: row.room || '—',
     temp: `${Number(row.temp_c).toFixed(1)} °C`,
     rh: `${Math.round(Number(row.rh_pct))} %`,
-    heatIndex: `${Math.round(Number(row.heat_index_c))} °C`,
+    heatIndex: row.heat_index_c === null ? '—' : String(Math.round(Number(row.heat_index_c))),
+    category: categoryOf(row.heat_index_c),
     updated: `updated ${ageText(row.recorded_at, nowMs)}`,
   };
 }

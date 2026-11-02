@@ -1,9 +1,20 @@
-// P04-01 skeleton: one public (logged-out) read of the newest reading, shown as text.
+// P04-02 live cards: heat index (coloured by PAGASA category), temperature, humidity, room name (F-01, F-02, F-21).
+// Markup and classes match design/home-cards/*.html (the approved design).
 import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { readingView } from './lib.js';
+import { CATEGORY_LABEL } from './category.js';
 
 const REFRESH_MS = 30000;
+
+// One shape per category, so colour is never the only cue (same shapes as the approved design).
+const SHAPES = {
+  'caution': <circle cx="12" cy="12" r="9" />,
+  'extreme-caution': <path d="M12 3 22 21H2z" />,
+  'danger': <path d="M12 2 22 12 12 22 2 12z" />,
+  'extreme-danger': <path d="M8 2h8l6 6v8l-6 6H8l-6-6V8z" />,
+  'below-range': <path d="M4 12h16" />,
+};
 
 async function latestReading() {
   const url = `${SUPABASE_URL}/rest/v1/readings?select=recorded_at,temp_c,rh_pct,heat_index_c,room&order=recorded_at.desc&limit=1`;
@@ -44,19 +55,29 @@ export default function App() {
     return () => { alive = false; clearInterval(timer); };
   }, []);
 
+  const cat = view.category;
   return (
     <main className="app-wrap">
-      <h1 className="app-title">Init</h1>
-      <p className="text-secondary">Room: {view.room}</p>
-      <div className="card"><div className="card-body">
-        <p className="app-label">Latest reading</p>
-        <ul className="app-list" aria-live="polite">
-          <li>Temperature <strong>{view.temp}</strong></li>
-          <li>Humidity <strong>{view.rh}</strong></li>
-          <li>Heat index <strong>{view.heatIndex}</strong></li>
-        </ul>
-        <p className="text-secondary mb-0">{failed ? 'Could not load the readings. Will try again.' : view.updated}</p>
-      </div></div>
+      <header className="app-head">
+        <h1 className="app-title">Init</h1>
+        <p className="text-secondary">Room: {view.room}</p>
+      </header>
+      <section className={`card heat${cat ? ` heat-${cat}` : ''}`} aria-label="Heat index">
+        <div className="card-body">
+          <p className="app-label">Heat index</p>
+          <p className="heat-num">{view.heatIndex}{view.heatIndex !== '—' && <span className="heat-unit">°C</span>}</p>
+          {cat && (
+            <p className="heat-cat">
+              <svg viewBox="0 0 24 24" aria-hidden="true">{SHAPES[cat]}</svg>{CATEGORY_LABEL[cat]}
+            </p>
+          )}
+        </div>
+      </section>
+      <div className="app-pair">
+        <section className="card" aria-label="Temperature"><div className="card-body"><p className="app-label">Temperature</p><p className="stat">{view.temp}</p></div></section>
+        <section className="card" aria-label="Humidity"><div className="card-body"><p className="app-label">Humidity</p><p className="stat">{view.rh}</p></div></section>
+      </div>
+      <p className="text-secondary app-updated">{failed ? 'Could not load the readings. Will try again.' : view.updated}</p>
     </main>
   );
 }
