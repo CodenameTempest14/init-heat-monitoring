@@ -1,6 +1,6 @@
 # design/school-day/
 
-**Awaiting owner approval (P04-07, F-12, D-016).** Mocks of the school-day view. Made-up readings and a made-up room (`Room 204`).
+**Approved by the owner (P04-07, F-12, D-016, D-033); built in `web/src/School.jsx`, gated by `tests/ui-gate-school.test.js`.** Mocks of the school-day view. Made-up readings and a made-up room (`Room 204`).
 School hours (owner, 2026-11-02): **Monday to Friday, 6:00 AM to 7:15 PM.** The summary shows both the extremes and the time in each level (owner, same answer).
 
 | File | What |

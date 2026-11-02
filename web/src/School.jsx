@@ -29,7 +29,8 @@ async function fetchSchoolDay(deviceId, day) {
   return res.json();
 }
 
-export default function School({ deviceId }) {
+// `ready` is false until the home page knows which device it shows; `deviceId` stays null if there are no readings at all.
+export default function School({ deviceId, ready }) {
   const [start] = useState(() => startDay(Date.now()));
   const [day, setDay] = useState(start.day);
   const [body, setBody] = useState(null); // null until the first answer for this day
@@ -37,6 +38,7 @@ export default function School({ deviceId }) {
   const today = manilaDay(Date.now());
 
   useEffect(() => {
+    if (!deviceId) return undefined;
     let alive = true;
     setBody(null);
     setFailed(false);
@@ -53,12 +55,13 @@ export default function School({ deviceId }) {
     return () => { alive = false; if (timer) clearInterval(timer); };
   }, [deviceId, day, today]);
 
+  const shown = body && body.day === day ? body : null; // never the previous day's numbers under the new day's name
   const prev = prevSchoolDay(day, today);
   const next = nextSchoolDay(day, today);
   const note = (
     <p className="viz-note">
       {start.weekend && day === start.day && <>No school on weekends. Showing the last school day.<br /></>}
-      <strong>{dayLabel(day, today)}</strong>{body ? ` · ${windowText(body)}` : ''}
+      <strong>{dayLabel(day, today)}</strong>{shown ? ` · ${windowText(shown)}` : ''}
     </p>
   );
   const nav = (
@@ -70,13 +73,14 @@ export default function School({ deviceId }) {
   const card = (children) => <div className="card viz-card"><div className="card-body">{children}</div></div>;
 
   let content;
-  if (failed) content = card(<p className="viz-empty">Could not load this day. Will try again.</p>);
-  else if (!body) content = card(<p className="viz-empty">Loading…</p>);
-  else if (body.readings === 0) content = card(<p className="viz-empty">No readings during school hours on this day.</p>);
+  if (ready && !deviceId) content = card(<p className="viz-empty">No readings yet.</p>);
+  else if (failed) content = card(<p className="viz-empty">Could not load this day. Will try again.</p>);
+  else if (!shown) content = card(<p className="viz-empty">Loading…</p>);
+  else if (shown.readings === 0) content = card(<p className="viz-empty">No readings during school hours on this day.</p>);
   else {
-    const stats = statsView(body);
-    const segs = barSegments(body.levels, BAR_W);
-    const bands = bandsView(body.levels);
+    const stats = statsView(shown);
+    const segs = barSegments(shown.levels, BAR_W);
+    const bands = bandsView(shown.levels);
     content = (
       <>
         {card(

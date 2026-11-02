@@ -26,6 +26,8 @@ for (const s of STATES) {
 <link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
 <link rel="stylesheet" href="../../web/src/tokens.css">
 <link rel="stylesheet" href="../../web/src/app.css">
+<link rel="stylesheet" href="../../web/src/charts.css">
+<link rel="stylesheet" href="../../web/src/school.css">
 </head>
 <body>
 <main class="app-wrap">
@@ -41,6 +43,7 @@ for (const s of STATES) {
     <section class="card" aria-label="Humidity"><div class="card-body"><p class="app-label">Humidity</p><p class="stat">${s.rh}</p></div></section>
   </div>
   <p class="text-secondary app-updated">${s.upd}</p>
+<a class="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
 </main>
 </body>
 </html>

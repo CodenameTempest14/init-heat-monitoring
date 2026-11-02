@@ -95,7 +95,7 @@ export default function App() {
           </p>
         )}
       </header>
-      {schoolRoute && deviceId ? <School deviceId={deviceId} /> : (
+      {schoolRoute ? <School deviceId={deviceId} ready={status !== null} /> : (
         <>
         <section className={`card heat${cat ? ` heat-${cat}` : ''}`} aria-label="Heat index">
           <div className="card-body">
@@ -113,7 +113,7 @@ export default function App() {
           <section className="card" aria-label="Humidity"><div className="card-body"><p className="app-label">Humidity</p><p className="stat">{view.rh}</p></div></section>
         </div>
         <p className="text-secondary app-updated">{failed ? 'Could not load the readings. Will try again.' : view.updated}</p>
-        {deviceId && <a className="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>}
+        <a className="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
         {deviceId && <History deviceId={deviceId} />}
         </>
       )}
