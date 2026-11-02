@@ -28,7 +28,7 @@ test('a good reading is saved with the server-computed heat index and the device
     const sent = good();
     const res = await ingest(device.key, [sent]);
     assert.equal(res.status, 200, JSON.stringify(res.body));
-    assert.deepEqual(res.body, { saved: 1, duplicates: 0, interval_s: 300 });
+    assert.deepEqual(res.body, { saved: 1, duplicates: 0, interval_s: 300, room: 'Room 204' });
 
     const [row] = await device.readings();
     assert.equal(row.temp_c, 31.2);
@@ -47,6 +47,18 @@ test('the reply carries the upload interval from settings (P03-03)', async () =>
     const res = await ingest(device.key, [good()]);
     assert.equal(res.status, 200, JSON.stringify(res.body));
     assert.equal(res.body.interval_s, 120);
+  });
+});
+
+test('the reply carries the device room for the OLED, and follows a room change (D-028)', async () => {
+  await withDevice({ room: 'Room 301' }, async (device) => {
+    let res = await ingest(device.key, [good({ recorded_at: minutesFromNow(-3) })]);
+    assert.equal(res.body.room, 'Room 301');
+
+    // moved to another room: the next accepted call (30 s rate limit lifted) says so
+    await service(`devices?id=eq.${device.id}`, { method: 'PATCH', body: { room: 'Lab 2', last_seen_at: new Date(Date.now() - 60_000).toISOString() } });
+    res = await ingest(device.key, [good({ recorded_at: minutesFromNow(-2) })]);
+    assert.equal(res.body.room, 'Lab 2');
   });
 });
 
@@ -85,7 +97,7 @@ test('a batch from the offline buffer is saved in one call', async () => {
   await withDevice({}, async (device) => {
     const batch = Array.from({ length: 50 }, (_, i) => good({ recorded_at: minutesFromNow(-5 * (i + 1)) }));
     const res = await ingest(device.key, batch);
-    assert.deepEqual(res.body, { saved: 50, duplicates: 0, interval_s: 300 });
+    assert.deepEqual(res.body, { saved: 50, duplicates: 0, interval_s: 300, room: 'Unassigned' });
     assert.equal((await device.readings()).length, 50);
   });
 });
@@ -94,7 +106,7 @@ test('the same reading sent twice is stored once', async () => {
   await withDevice({}, async (device) => {
     const r = good();
     const res = await ingest(device.key, [r, r]);
-    assert.deepEqual(res.body, { saved: 1, duplicates: 1, interval_s: 300 });
+    assert.deepEqual(res.body, { saved: 1, duplicates: 1, interval_s: 300, room: 'Unassigned' });
     assert.equal((await device.readings()).length, 1);
   });
 });

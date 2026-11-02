@@ -16,6 +16,7 @@
 #include "secrets.h"
 #include "root_ca.h"
 #include "interval.h"
+#include "room.h"
 #include "screens.h"
 #ifdef SCREEN_TEST
 #include "screen_test.h"
@@ -30,10 +31,13 @@ uint32_t intervalS = INTERVAL_MIN_S;  // until the server says otherwise; it ref
 float lastT = NAN, lastH = NAN;
 bool sensorOk = false;
 
+// Name in the status strip. Starts as the label in config.h; the server's reply replaces it (D-028).
+char roomLabel[ROOM_BUF] = OLED_ROOM_LABEL;
+
 void showReading() {
   const char* link = WiFi.status() == WL_CONNECTED ? "Wi-Fi OK" : "NO WI-FI";
-  if (sensorOk) screens::reading(oled, OLED_ROOM_LABEL, link, lastT, lastH);
-  else screens::sensorError(oled, OLED_ROOM_LABEL, link);
+  if (sensorOk) screens::reading(oled, roomLabel, link, lastT, lastH);
+  else screens::sensorError(oled, roomLabel, link);
 }
 
 void readSensor() {
@@ -84,6 +88,11 @@ int upload(float t, float h) {
     uint32_t next = intervalFromReply(reply.c_str(), intervalS);  // a bad or missing value keeps the old one
     if (next != intervalS) Serial.printf("  interval %lu s -> %lu s\n", (unsigned long)intervalS, (unsigned long)next);
     intervalS = next;
+
+    char before[ROOM_BUF];
+    strcpy(before, roomLabel);
+    if (roomFromReply(reply.c_str(), roomLabel, sizeof roomLabel) && strcmp(before, roomLabel) != 0)
+      Serial.printf("  room \"%s\" -> \"%s\"\n", before, roomLabel);
   }
   if (code < 0) {
     char err[100];

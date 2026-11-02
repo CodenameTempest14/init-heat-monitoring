@@ -6,6 +6,7 @@ Run with `npm test` (or `node --test`) from the repository root. `npm install` f
 - `heat-index.test.js` tests `src/heat-index.js`.
 - `heat-index-reference.json` is the shared table of expected values. The C++ port (P03) must pass the same table (D-015).
 - `oled.test.js` is the OLED-GATE (P03-D3): each screen in `design/oled/screens.mjs` must equal its approved image in `design/oled/ref/`. If a screen is changed on purpose, get the new image approved, then run `node design/oled/build-refs.mjs`.
+- `firmware-pc.test.js` builds and runs the PC tests of `interval.h` and `room.h` (g++, `-Werror`).
 - `firmware-heat-index.test.js` builds `firmware/init/tests/heat_index_test.cpp` with g++ and checks the device's C++ heat index against `src/heat-index.js` and the reference JSON (needs g++).
 - `oled-dump.test.js` tests the reader for the frame-buffer dump of the real OLED (`design/oled/dump.mjs`); `node design/oled/check-dump.mjs <capture>` is the OLED-GATE on the board.
 - `secret-scan.test.js` tests `tools/secret-scan.mjs`, the commit-time secret check.
