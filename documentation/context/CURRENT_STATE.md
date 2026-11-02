@@ -24,7 +24,7 @@
 6. Before every commit run `node tools/secret-scan.mjs` (exits 1 on a hit). `tools/db.mjs` now quotes arguments, so inline SQL works: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`.
 
 ## Waiting on the owner
-- **Live setup (commands given in s13, output not seen yet):** apply the 6th migration to live `init` and set the live "Init 1" interval to 60 (the server default 300 s switches the ROMOSS bank off). Later decide: dummy load or another bank.
+- ~~D-027 live setup~~ **Done 2026-11-02 (s13):** live `init` has all 6 migrations (read back with `live migration list`), and "Init 1" has `interval_s` 60 (owner ran the update in the dashboard SQL Editor, because the CLI token is read-only; read back by the assistant). Still to decide, later: dummy load or another bank. The board still uploads to init-test until P03 is done (D-026).
 - A push button for the OLED wake (D-025: until then the screen stays on; button part of F-08 deferred).
 - Optional: confirm the S-6 passwords are the generated, longer ones (the assistant only knows the logins work).
 - Later (P07): a USB inline meter to measure the awake current; the schematic runtime figures are estimates until then.
