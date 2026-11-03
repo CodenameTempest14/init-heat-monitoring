@@ -29,7 +29,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | **Whole project** | 52 / 72 | ███████░░░ | **72%** |
 
 ### Recommended model for this session
-**Sonnet 5.5**: `npm test`, the P05-04 migration and wiring, P04-08 and the first real admin saves. Opus 5.5 for P05-03 (push alerts: Edge Function, keys, subscriptions) and the live admin rollout (P05-05 on live).
+**Sonnet 5.5**: the phone results and ticks, the paper (names, references, updates), P04-08 leftovers. **Opus 5.5** for the live admin rollout (P05-05) and push alerts (P05-03: Edge Function, keys, subscriptions).
 
 ### Next concrete step
 1. Ask the phase-builder question (last answer: owner only). Ask the owner, who has the phone and the board: (a) does the OLED say `Unassigned` after a restart; (b) in `#admin` does **Reset** then **Save changes** work (live has no admin account yet, so use the test admin on init-test: run `npm run config` in `web/` only if the page must read init-test); (c) on the hosted page (https://init-heat-monitoring.vercel.app, deployed by the s27 push) does the **Readings table** under the history charts pick days, show hourly rows and download a CSV. Live "Init 1" has no readings yet, so the live table says "No readings yet" until a device uploads there. Tick what was seen (P05-06 and the F-24 line), with evidence.
