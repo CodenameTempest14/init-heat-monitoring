@@ -128,3 +128,12 @@ Owner's question (s25): does a visitor learn what the heat index number means, w
 |---|---|---|---|---|
 | F-23 | Reset room name, and "Unassigned" as the only default | (1) A **Reset** button next to the room box in `#admin` that puts the room back to `Unassigned`. (2) The default room name is always `Unassigned` unless an admin assigns a room (owner, s26): a new device, the board before its first upload reply, and a reset all show `Unassigned`. | Asked for by the owner (s26), to be done next session. To check first: the `devices.room` column default and `register` tooling on the server, the firmware's `OLED_ROOM_LABEL` in `config.h` (now "Room 1", used on the OLED until the first reply; "Unassigned" is 10 characters, fits the 12 limit), and the test fixtures (init-test device is "Room 1"; live is already "Unassigned"). Reset probably calls `admin_set_room` with "Unassigned" (confirm; no new migration if so). Old readings keep their room (F-21). Mock first (admin page, phone, light and dark), update the F-22 Room guide text and the admin gate. A firmware default change means another flash. Part of P05-06. | XS |
 
+
+## Requested 2026-11-03 (s27) by the owner: PROPOSED, WAITING FOR THE OWNER'S APPROVAL OF THE DESIGN, nothing designed or built
+
+| ID | Feature | What it does | Notes | Size |
+|---|---|---|---|---|
+| F-24 | Calendar filter for the table (user side) | On the public pages, the readings/history table can be narrowed by a **calendar date** (pick a day, or a from-to range) instead of only the fixed 24 h / 7 d ranges. | Owner's wording: "the table can be sorted out by calendar on the user side". Owner's answers (s27): a **new readings table**, picked by a **from-to range**, as long as there is data recorded in it (no fixed maximum; the page and the database function still need a row limit per request, paged, to be settled in the design). Likely needs a database function (like `history()` and `school_day()`), so a migration on init-test first, then live, and an `anon-probe` check that a stranger can read only what the public already reads. Native date input is the cheapest calendar on a phone. Mock first (phone, light and dark), owner approves, then test-first. | S |
+
+
+**Status (s27, 2026-11-03):** F-23 and F-24 approved by the owner (mocks `design/room-reset-readings/`, D-035, D-036) and **built test-first on init-test**. F-23: firmware default built, not flashed; F-24: not on live yet. Neither is seen on a phone yet, so neither is ticked in P05-06 / P04.

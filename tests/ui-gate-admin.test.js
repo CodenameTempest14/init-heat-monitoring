@@ -177,3 +177,32 @@ test('saving: only what changed is sent; an out-of-range value is stopped by the
   });
   assert.deepEqual(setting.calls.filter((c) => c.includes('/rest/')), ['POST /rest/v1/rpc/is_admin', 'PATCH /rest/v1/settings']);
 });
+
+test('F-23: Reset fills the box with Unassigned and disables itself; nothing is sent until Save, then admin_set_room gets Unassigned', async () => {
+  const r = await shootPage({
+    theme: 'light',
+    steps: async (p) => {
+      await STATES['b-settings'].steps(p);
+      assert.equal(await p.getByRole('button', { name: 'Reset' }).isEnabled(), true);
+      await p.getByRole('button', { name: 'Reset' }).click();
+      assert.equal(await p.inputValue('#room'), 'Unassigned');
+      assert.equal(await p.getByRole('button', { name: 'Reset' }).isDisabled(), true);
+      assert.deepEqual((await p.evaluate(() => performance.getEntriesByType('resource').map((e) => e.name))).filter((n) => n.includes('admin_set_room')), [], 'Reset alone must not save');
+      await p.click('button[type=submit]');
+      await p.getByRole('status').filter({ hasText: 'Saved' }).waitFor();
+    },
+  });
+  assert.deepEqual(r.calls.filter((c) => c.includes('/rest/')), ['POST /rest/v1/rpc/is_admin', 'POST /rest/v1/rpc/admin_set_room']);
+});
+
+test('F-23: typing a different name after Reset turns Reset back on', async () => {
+  await shootPage({
+    theme: 'light',
+    steps: async (p) => {
+      await STATES['b-settings'].steps(p);
+      await p.getByRole('button', { name: 'Reset' }).click();
+      await p.fill('#room', 'Room 305');
+      assert.equal(await p.getByRole('button', { name: 'Reset' }).isEnabled(), true);
+    },
+  });
+});

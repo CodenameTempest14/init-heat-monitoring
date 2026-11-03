@@ -3,7 +3,7 @@
 // The page only shows or hides; the database refuses every change from anyone who is not in `admins` (P05-05).
 import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { checkRoom, checkSettings, sessionFrom, needsRefresh, initialOf, SETTING_RANGES, signalState, restartState, reportState } from './admin.js';
+import { checkRoom, canReset, RESET_ROOM, checkSettings, sessionFrom, needsRefresh, initialOf, SETTING_RANGES, signalState, restartState, reportState } from './admin.js';
 
 const STORE = 'init-admin'; // sessionStorage: gone when the tab closes
 const KEYS = Object.keys(SETTING_RANGES);
@@ -206,9 +206,10 @@ function Settings({ session, call, deviceId, onSignOut }) {
       <form onSubmit={submit} noValidate>
         <p className="ab-group-label">Room</p>
         <div className="ab-group"><div className="ab-row ab-row-wide"><label className="fw-semibold" htmlFor="room">Where the device is now</label>
-          <input className="form-control" id="room" maxLength={60} value={room} onChange={(e) => { setRoom(e.target.value); setMessage(null); }} aria-invalid={Boolean(errors.room)} />
+          <div className="ab-roomrow"><input className="form-control" id="room" maxLength={60} value={room} onChange={(e) => { setRoom(e.target.value); setMessage(null); }} aria-invalid={Boolean(errors.room)} />
+            <button type="button" className="btn ab-reset" disabled={!canReset(room)} onClick={() => { setRoom(RESET_ROOM); setMessage(null); setErrors((was) => ({ ...was, room: undefined })); }}>Reset</button></div>
           {errors.room && <small className="ab-err">{errors.room}</small>}
-          <small className="d-block mt-1 text-secondary">A room name only, never a person's name. Old readings keep their room.</small></div></div>
+          <small className="d-block mt-1 text-secondary">A room name only, never a person's name. Reset puts Unassigned in the box. Press Save to keep it. Old readings keep their room.</small></div></div>
         <How part="room" />
 
         <Health health={loaded.health} nowMs={loaded.nowMs} />

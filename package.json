@@ -7,6 +7,7 @@
     "test:backend": "node --env-file=.env --test \"tests/backend/*.backend.js\""
   },
   "devDependencies": {
+    "docx": "^9.5.0",
     "playwright": "1.49.1",
     "supabase": "2.121.0"
   }

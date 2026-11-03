@@ -2,7 +2,7 @@
 // (supabase/migrations/20261031120000_core_schema.sql) so the admin sees a clear message; the database still decides.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { checkRoom, checkSettings, sessionFrom, needsRefresh, initialOf, SETTING_RANGES, signalState, restartState, reportState, agoText } from '../web/src/admin.js';
+import { checkRoom, checkSettings, sessionFrom, needsRefresh, initialOf, SETTING_RANGES, signalState, restartState, reportState, agoText, RESET_ROOM, canReset } from '../web/src/admin.js';
 
 const GOOD = { interval_s: '60', temp_offset_c: '0.0', rh_offset_pct: '0', alert_heat_index_c: '42', alert_quiet_min: '60' };
 
@@ -109,4 +109,15 @@ test('reportState: Just now up to 120 s (the offline rule of the live page), Lat
   assert.deepEqual(reportState(at(6 * 60_000), now), { word: 'Late', kind: 'bad', ago: '6 min ago' });
   assert.equal(reportState('not a date', now), null);
   assert.equal(reportState(undefined, now), null);
+});
+
+// F-23: Reset puts the default room name back in the box; Save then writes it.
+test('F-23: the reset name is Unassigned, it passes the room check, and Reset is only on when the box says something else', () => {
+  assert.equal(RESET_ROOM, 'Unassigned');
+  assert.deepEqual(checkRoom(RESET_ROOM), { ok: true, value: 'Unassigned' });
+  assert.ok(RESET_ROOM.length <= 12, 'must fit the 12 characters of the OLED');
+  assert.equal(canReset('Room 204'), true);
+  assert.equal(canReset(''), true, 'an empty box can be reset');
+  assert.equal(canReset('Unassigned'), false);
+  assert.equal(canReset('  Unassigned  '), false, 'spaces around it do not count');
 });

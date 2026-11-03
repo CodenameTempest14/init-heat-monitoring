@@ -11,6 +11,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { diffImages, loadApproved } from '../design/ui-gate.mjs';
+import { SPAN, ROWS } from '../design/room-reset-readings/section.mjs';
 import { series } from '../design/history-charts/mock-data.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -45,7 +46,7 @@ test.before(async () => {
 test.after(async () => { await browser?.close(); server?.close(); });
 
 // Open the page with fake Supabase answers; `act(page)` does what the state needs (click a range, point at a time).
-async function shootPage({ theme, size = { width: 390, height: 640 }, empty = false, act }) {
+async function shootPage({ theme, size = { width: 390, height: 640 }, empty = false, act, hourly }) {
   const ctx = await browser.newContext({ viewport: size, colorScheme: theme, reducedMotion: 'reduce', deviceScaleFactor: 1, timezoneId: 'UTC' });
   try {
     const page = await ctx.newPage();
@@ -58,11 +59,18 @@ async function shootPage({ theme, size = { width: 390, height: 640 }, empty = fa
       const { range_hours } = route.request().postDataJSON();
       route.fulfill({ contentType: 'application/json', body: JSON.stringify(empty ? [] : bucketRows(range_hours)) });
     });
+    const readingCalls = [];
+    await page.route('**/rest/v1/rpc/readings_span', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify(empty ? { first_at: null, last_at: null } : SPAN) }));
+    await page.route('**/rest/v1/rpc/readings_hourly', (route) => {
+      const body = route.request().postDataJSON();
+      readingCalls.push(body);
+      route.fulfill({ contentType: 'application/json', body: JSON.stringify(hourly ? hourly(body) : ROWS) });
+    });
     await page.goto(base, { waitUntil: 'networkidle' });
     await page.waitForSelector(empty ? '.viz-empty' : '.viz-charts');
     if (act) await act(page);
     const shot = loadApproved(await page.screenshot({ fullPage: true }));
-    return { shot, problems, page };
+    return { shot, problems, page, readingCalls };
   } finally { await ctx.close(); }
 }
 const approved = (state, kind, theme) => loadApproved(readFileSync(path.join(refs, `${state}-${kind}-${theme}.png`)));
@@ -116,7 +124,7 @@ test('table twin: one row per bucket, newest first, a dash only for a missing he
   let rows;
   await shootPage({ theme: 'light', act: async (page) => {
     await page.click('summary');
-    rows = await page.$$eval('.viz-table tbody tr', (trs) => trs.map((tr) => [...tr.children].map((td) => td.textContent)));
+    rows = await page.$$eval('.viz-tablebox .viz-table tbody tr', (trs) => trs.map((tr) => [...tr.children].map((td) => td.textContent)));
   } });
   const expected = bucketRows(24).length;
   assert.equal(rows.length, expected);
@@ -142,4 +150,63 @@ test('a tap on a chart shows no focus outline, keyboard focus does', async () =>
   assert.equal(tapped.cls, 'viz-svg', 'the tap should have focused the chart');
   assert.ok(tapped.style === 'none' || tapped.width === '0px', `outline after a tap: ${JSON.stringify(tapped)}`);
   assert.ok(keyboard.style !== 'none' && keyboard.width !== '0px', `outline from the keyboard: ${JSON.stringify(keyboard)}`);
+});
+
+// ---- F-24: the readings table (behaviour; the picture is part of the history states above) ----
+const fullPage = (n, startMs = Date.parse('2026-11-03T08:00:00Z')) => Array.from({ length: n }, (_, i) => ({ hour: new Date(startMs - i * 3_600_000).toISOString(), room: 'Room 204', temp_c: 30, rh_pct: 60, heat_index_c: 34, n: 60 }));
+
+test('F-24: the first load asks for the newest day, both ends, 500 rows', async () => {
+  const { readingCalls } = await shootPage({ theme: 'light' });
+  assert.deepEqual(readingCalls[0], { from_day: '2026-11-03', to_day: '2026-11-03', for_device: readingCalls[0].for_device, before_hour: null, page_size: 500 });
+});
+
+test('F-24: a short page has no Show more; a full page has it, and it adds the next rows from where the last ended', async () => {
+  await shootPage({ theme: 'light', act: async (p) => { assert.equal(await p.getByRole('button', { name: 'Show more' }).count(), 0); } });
+
+  const all = fullPage(503);
+  const r = await shootPage({
+    theme: 'light',
+    hourly: (b) => (b.before_hour ? all.slice(500) : all.slice(0, 500)),
+    act: async (p) => {
+      assert.equal(await p.locator('.rr-table tbody tr').count(), 500);
+      await p.getByRole('button', { name: 'Show more' }).click();
+      await p.waitForFunction(() => document.querySelectorAll('.rr-table tbody tr').length === 503);
+      assert.equal(await p.getByRole('button', { name: 'Show more' }).count(), 0, 'the end: no more button');
+    },
+  });
+  assert.equal(r.readingCalls.at(-1).before_hour, all[499].hour);
+});
+
+test('F-24: changing the days loads again; a To day before From is refused and nothing is asked', async () => {
+  const r = await shootPage({
+    theme: 'light',
+    act: async (p) => {
+      await p.fill('#rd-from', '2026-11-02');
+      await p.waitForFunction(() => document.querySelectorAll('.rr-table tbody tr').length > 0);
+    },
+  });
+  assert.equal(r.readingCalls.at(-1).from_day, '2026-11-02');
+  const n = r.readingCalls.length;
+  const bad = await shootPage({
+    theme: 'light',
+    act: async (p) => { await p.fill('#rd-to', '2026-11-02'); await p.getByRole('alert').waitFor(); },
+  });
+  assert.equal(bad.readingCalls.length, 1, 'only the first load; the bad range asked nothing');
+  assert.ok(n >= 2);
+});
+
+test('F-24: Download CSV gets every page of the range and saves one file named by the days', async () => {
+  const all = fullPage(503);
+  let name; let text;
+  await shootPage({
+    theme: 'light',
+    hourly: (b) => (b.before_hour ? all.slice(500) : all.slice(0, 500)),
+    act: async (p) => {
+      const [download] = await Promise.all([p.waitForEvent('download'), p.getByRole('button', { name: 'Download CSV' }).click()]);
+      name = download.suggestedFilename();
+      text = readFileSync(await download.path(), 'utf8');
+    },
+  });
+  assert.equal(name, 'init-readings_2026-11-03_to_2026-11-03.csv');
+  assert.equal(text.split('\r\n').length, 1 + 503 + 1, 'header, 503 rows, trailing newline');
 });

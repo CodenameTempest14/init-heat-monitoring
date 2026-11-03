@@ -17,6 +17,19 @@ Rules below are carried over from the Ad Astra project (`D:\System Documents\Doc
    *Amended 2026-10-31 (D-014, owner):* while the owner is the only builder, the owner's email may push `main`
    directly (no force-push, no deletion). **The moment Shem or anyone else works on the repo, this exception ends:**
    `main` changes only through a pull request that the other person reviews, and the hook entry for `main` is removed.
+5. **The research paper is kept in step with the project (owner, 2026-11-03, s27).** This is a high school
+   investigatory project. A ready-made paper exists as a `.docx` **and** a `.pdf` (short bond paper 8.5 x 11 in,
+   Times New Roman 12, 1.5 line spacing), built from scratch in the structure of the owner's reference paper
+   (`REF.pdf`: title page, Ch. 1 Introduction, Ch. 2 Methodology, Ch. 3 Presentation and Analysis of Data,
+   References, Appendices). It includes the diagrams of everything that involves the process (hardware, schematic,
+   software, data flow) and the gathered data. **Whenever a feature, a change to the code or hardware, or new data
+   is added, the paper and both files are updated in the same session** and listed in the Close Report.
+   **No hallucinated references (owner, s27):** every reference must be legit and reliable. Each has a link I
+   opened and read in this session (the page itself, not a search snippet, and not a subagent's word alone for
+   anything I cite); never invent or "complete from memory" an author, title, date, volume, pages, DOI or URL.
+   Prefer peer-reviewed papers and official bodies (PAGASA, DOST, NWS, journals). Published 2021 to 2026 only.
+   Unverified source = left out, and the gap is reported in the Close Report. The list is kept in
+   `paper/references.json` with the date checked and what each source was used for.
 
 ## Every session
 - **Model advice:** the first reply says which Claude model to use and why. The Close Report recommends the model for the next session.

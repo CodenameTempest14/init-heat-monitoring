@@ -20,3 +20,5 @@ dist/
 
 # PlatformIO extension output (machine-specific paths, regenerated)
 firmware/init/.vscode/
+paper/build/*
+!paper/build/README.md

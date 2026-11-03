@@ -1,0 +1,11 @@
+/* F-24: the readings table under the history charts (approved mock: design/room-reset-readings/). */
+.rr-range { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 8px 0 12px; }
+.rr-range label { display: block; font-weight: 600; font-size: 14px; }
+.rr-range input { min-height: 44px; width: 100%; }
+.rr-count { margin: 8px 0; font-size: 14px; }
+.rr-actions { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+.rr-actions .btn { min-height: 44px; font-weight: 700; flex: 1; }
+.rr-more { border: 2px solid var(--series-hi); color: var(--viz-ink); background: transparent; }
+.rr-csv { border: 2px solid var(--viz-ink-2); color: var(--viz-ink); background: transparent; }
+.rr-scroll { overflow-x: auto; }
+.rr-table th, .rr-table td { white-space: nowrap; }

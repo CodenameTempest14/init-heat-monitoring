@@ -61,3 +61,9 @@
 .ab-health-note { margin: -12px 4px 20px; font-size: 13px; color: var(--viz-ink-2); }
 /* More space after every How? link, so each link is clearly the end of the group above it. */
 .ab-how { margin-bottom: 22px; }
+
+/* F-23: Reset beside the room box (puts Unassigned in the box; Save still has to be pressed) */
+.ab-roomrow { display: flex; gap: 8px; margin-top: 8px; }
+.ab-roomrow .form-control { flex: 1 1 auto; min-width: 0; margin-top: 0 !important; }
+.ab-reset { min-height: 44px; min-width: 76px; font-weight: 700; border: 2px solid var(--series-hi); color: var(--viz-ink); background: transparent; }
+.ab-reset:disabled { opacity: .5; border-color: var(--bs-border-color); }

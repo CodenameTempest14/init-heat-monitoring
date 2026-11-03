@@ -55,6 +55,7 @@ const guide = `<h2 class="visually-hidden">Admin guide</h2>
     <p>Only when you move the device to another room.</p>
     <h3>Steps</h3>
     <ol><li>Sign in on the Admin page.</li><li>Under <strong>Room</strong>, type the new name, for example <strong>Room 204</strong>.</li><li>Press <strong>Save changes</strong>.</li></ol>
+    <p>To go back to the default name, press <strong>Reset</strong>, then <strong>Save changes</strong>. The room then shows as <strong>Unassigned</strong>.</p>
     <div class="gd-note">${WARN}<span>Type a room name only. Never type a person's name. Old readings keep their old room.</span></div>`)}
 
   ${sec(3, 'health', 'Device health', `

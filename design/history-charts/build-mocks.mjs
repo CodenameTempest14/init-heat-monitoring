@@ -6,6 +6,7 @@ import { writeFileSync } from 'node:fs';
 import { heatCategory } from '../../src/heat-index.js';
 
 import { series, DAYS, pad } from './mock-data.mjs';
+import { readingsSection } from '../room-reset-readings/section.mjs';
 
 const label = (p, range) => (range === '24h' ? `${pad(Math.floor(p.hod))}:${pad(Math.round((p.hod % 1) * 60))}` : `${DAYS[p.dow]} ${pad(Math.floor(p.hod))}:00`);
 
@@ -108,6 +109,7 @@ for (const s of STATES) {
 <link rel="stylesheet" href="../../web/src/app.css">
 <link rel="stylesheet" href="../../web/src/charts.css">
 <link rel="stylesheet" href="../../web/src/school.css">
+<link rel="stylesheet" href="../../web/src/readings.css">
 </head>
 <body>
 <main class="app-wrap">
@@ -126,6 +128,7 @@ for (const s of STATES) {
   <p class="text-secondary app-updated">updated just now</p>
   <a class="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
   ${history({ ...s, W })}
+  ${readingsSection(s.empty ? 'none' : 'rows')}
 </main>
 </body>
 </html>

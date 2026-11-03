@@ -1,0 +1,14 @@
+[
+ {
+  "band": "Extreme caution",
+  "n": 1024
+ },
+ {
+  "band": "Caution",
+  "n": 376
+ },
+ {
+  "band": "Danger",
+  "n": 29
+ }
+]

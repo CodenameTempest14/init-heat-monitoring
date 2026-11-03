@@ -5,6 +5,7 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { readingView, deviceStatus } from './lib.js';
 import { CATEGORY_LABEL } from './category.js';
 import History from './History.jsx';
+import Readings from './Readings.jsx';
 import School from './School.jsx';
 import Admin from './Admin.jsx';
 import Guide from './Guide.jsx';
@@ -124,6 +125,7 @@ export default function App() {
         <p className="text-secondary app-updated">{failed ? 'Could not load the readings. Will try again.' : view.updated}</p>
         <a className="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
         {deviceId && <History deviceId={deviceId} />}
+        {deviceId && <Readings deviceId={deviceId} />}
         </>
       )}
     </main>

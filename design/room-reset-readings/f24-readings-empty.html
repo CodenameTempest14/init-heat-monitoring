@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Init: mock f24-readings-empty</title>
+<link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
+<link rel="stylesheet" href="../../web/src/tokens.css">
+<link rel="stylesheet" href="../../web/src/app.css">
+<link rel="stylesheet" href="../../web/src/charts.css">
+<link rel="stylesheet" href="../../web/src/school.css">
+<link rel="stylesheet" href="../../web/src/readings.css">
+</head>
+<body>
+<main class="app-wrap">
+  <header class="app-head"><picture class="app-logo"><source media="(prefers-color-scheme: dark)" srcset="../../web/public/logo-dark.svg"><img src="../../web/public/logo-light.svg" width="110" height="40" alt=""></picture><h1 class="app-fullname">Init: Indoor Heat Index Tracker</h1><p class="text-secondary app-room">Room: Room 204</p>
+    <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>
+  <section class="card heat heat-extreme-caution" aria-label="Heat index"><div class="card-body">
+    <p class="app-label">Heat index</p>
+    <p class="heat-num">40<span class="heat-unit">°C</span></p>
+    <p class="heat-cat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 21H2z"/></svg>Extreme caution</p>
+    <a class="heat-more" href="#heat/extreme-caution">What does this mean? ›</a>
+  </div></section>
+  <div class="app-pair">
+    <section class="card" aria-label="Temperature"><div class="card-body"><p class="app-label">Temperature</p><p class="stat">32.2 °C</p></div></section>
+    <section class="card" aria-label="Humidity"><div class="card-body"><p class="app-label">Humidity</p><p class="stat">68 %</p></div></section>
+  </div>
+  <p class="text-secondary app-updated">updated just now</p>
+  <a class="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
+  <section class="viz-wrap" aria-label="History"><h2 class="viz-section">History</h2><div class="viz-filter" role="group" aria-label="Time range">
+      <button type="button" class="btn viz-range" aria-pressed="true">Last 24 hours</button>
+      <button type="button" class="btn viz-range" aria-pressed="false">Last 7 days</button></div>
+    <div class="card viz-card"><div class="card-body"><p class="viz-empty">No readings in the last 24 hours yet.</p></div></div></section>
+  
+  <section class="viz-wrap" aria-label="Readings table"><h2 class="viz-section">Readings table</h2>
+    <div class="card viz-card"><div class="card-body"><p class="viz-empty">No readings yet.</p></div></div>
+  </section>
+</main>
+</body>
+</html>

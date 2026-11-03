@@ -1,0 +1,162 @@
+// The paper's text, one source for both the .docx and the .pdf. Facts come from the repo (DECISIONS.md, SCHEMA.md,
+// the phase checklists, tests) and from paper/data/*.json (the 24 h run). Rule 5 in CLAUDE.md: keep this in step with the project.
+import { readFileSync } from 'node:fs';
+import { diagrams } from './diagrams.mjs';
+
+const j = (f) => JSON.parse(readFileSync(new URL(`./data/${f}.json`, import.meta.url), 'utf8'));
+const refs = JSON.parse(readFileSync(new URL('./references.json', import.meta.url), 'utf8'));
+const R = Object.fromEntries(refs.map((r) => [r.key, r]));
+const sum = j('summary')[0];
+const hourly = j('hourly');
+const bands = j('bands');
+const gaps = j('gaps');
+const bandN = (b) => bands.find((x) => x.band === b)?.n ?? 0;
+const pct = (n) => ((100 * n) / sum.n).toFixed(1);
+
+export const meta = { version: '0.1 (draft)', date: '2026-11-03' };
+
+export const blocks = [
+  { t: 'title', title: 'INIT: INDOOR HEAT INDEX TRACKER', sub: 'An IoT-Based Classroom Heat Index Monitoring System', field: 'PHYSICAL SCIENCE / INFORMATION TECHNOLOGY', researchers: ['[Researcher name]', '[Researcher name]', '[Researcher name]'], coach: '[Coach name]', school: '[School name]', date: 'Draft ' + meta.date },
+  { t: 'pb' },
+  { t: 'h1', x: 'Chapter 1', y: 'Introduction' },
+  { t: 'h2', x: 'I. Rationale of the Study' },
+  { t: 'p', x: `Classrooms in the Philippines are often hot, and the heat is expected to be stronger in an El Niño year. A study of more than 730,000 students in Cambodia, a neighbouring Southeast Asian country, found that sustained heat exposure significantly reduces examination performance (Tzintzun et al., 2026). That paper is a working paper, that is, research in progress, so its findings are evidence to consider and not a final result. Still, it supports a simple idea: a school should know how hot a room really is.` },
+  { t: 'p', x: `Air temperature alone does not tell how hot a person feels. The heat index combines temperature and humidity into an "apparent temperature" and is built on Steadman's model of human thermoregulation (Lu & Romps, 2022). For practical use the National Weather Service uses a polynomial fit to that model (Lu & Romps, 2022), although extrapolating such polynomial fits to hotter and more humid air has no basis in physiology, and the original index is undefined for some hot, humid conditions (Lu & Romps, 2022). In the Philippines, PAGASA, the national weather bureau, uses a four-tier, effect-based heat index classification, and it advises that school heads and local governments keep the final say on decisions such as class arrangements (Philippine Atmospheric, Geophysical and Astronomical Services Administration [PAGASA], 2024).` },
+  { t: 'p', x: `Low-cost sensors and Wi-Fi microcontrollers make room monitoring possible without expensive equipment. An earlier classroom study used a DHT22 temperature and humidity sensor on an ESP8266 or ESP32 board and sent the readings to a cloud database (Widjaja et al., 2022). That work centred on logging temperature and humidity and on modelling a cooling system. This study builds on that idea and adds the heat index with its PAGASA level and a public web page. The product is named "Init" (Tagalog for "heat"): a room monitor and a web app that show temperature, humidity and the heat index of one classroom, and tells at a glance whether the room is in a PAGASA caution, extreme caution, danger or extreme danger level.` },
+  { t: 'p', x: `The system also has limits that the study states openly. The sensor was not yet compared with a reference thermometer. The device needs a Wi-Fi connection (a phone hotspot or pocket router) because the classroom has no Wi-Fi. The power bank used to run the device switches itself off if the device does not draw current regularly, which shaped the design (Decision D-027).` },
+  { t: 'h2', x: 'II. Statement of the Problem' },
+  { t: 'p', x: `This study aims to design, build and test "Init", a low-cost Internet-of-Things (IoT) room monitor and web app that measures the temperature and relative humidity of a classroom, computes the heat index, and shows it to the public in real time with the matching PAGASA level.` },
+  { t: 'p', x: 'Specifically, the study sought to answer the following questions:' },
+  { t: 'ol', items: [
+    'What hardware and software components are needed to measure, send, store and show the heat index of a classroom, and how are they connected?',
+    'Does the computed heat index agree with a published reference table of expected values?',
+    'How reliably does the device send readings over 24 hours when powered by a USB power bank, in terms of (a) the number of readings recorded, (b) the longest gaps between readings and (c) the drop in power bank charge?',
+    'What were the temperature, relative humidity and heat index in the monitored room over the 24-hour run, and in which PAGASA level did the room spend its time?',
+    'Does the system show the room as offline when the device stops sending, and how soon?',
+    'Can the web app be read by any visitor on a phone while only an authorised administrator can change settings?',
+  ] },
+  { t: 'h2', x: 'III. Scope and Limitations' },
+  { t: 'p', x: 'The study covers one device in one room, read-only public viewing, free-tier hosting and a power bank as the only power source (Decision D-003). It does not claim sensor accuracy, because no reference thermometer or hygrometer was available yet, and it does not claim that the measured values apply to other rooms or seasons. The measured data come from a single 24-hour run on a test project of the database. Alerts to phones (push notifications), a physical wake button for the screen and over-the-air firmware updates are planned but not yet built.' },
+  { t: 'pb' },
+  { t: 'h1', x: 'Chapter 2', y: 'Research Methodology' },
+  { t: 'h2', x: '2.1 Research Design' },
+  { t: 'p', x: 'This study used an engineering design and experimental approach. The product was built in small steps (phases). Anything with a known correct answer, such as the heat index calculation, was written test-first: the test was run and seen failing before the code was written. After each step the result was checked on the real device or the running web page, and not only by automated tests. The independent variable of the main experiment was time of day (a 24-hour run); the measured variables were temperature, relative humidity, heat index, the number of readings and the power bank charge.' },
+  { t: 'h2', x: '2.2 Research Environment' },
+  { t: 'p', x: 'The device was run in the researchers\' test room with the Wi-Fi provided by a mobile phone hotspot. Data were stored in a cloud database located in Singapore, and the web page was hosted on a free static hosting service. Local time is Philippine time (Asia/Manila, UTC+8). [School and room details to be added by the researchers.]' },
+  { t: 'h2', x: '2.3 Research Instruments and Materials' },
+  { t: 'table', cap: 'Table 1. Hardware and software used', head: ['Item', 'Purpose', 'Notes'], rows: [
+    ['ESP32 DevKit, 38-pin, Type-C', 'Microcontroller with Wi-Fi', 'Decision D-017; firmware written in the Arduino framework with PlatformIO'],
+    ['DHT22 (AM2302), 4-pin', 'Temperature and relative humidity sensor', 'DATA on GPIO 4 with a 4.7 to 10 kΩ pull-up to 3.3 V; read at most once every 2 s'],
+    ['OLED 0.96 in, SSD1306, 128 x 64', 'Shows the room, readings and status', 'I2C on GPIO 21 (SDA) and GPIO 22 (SCL), address 0x3C'],
+    ['USB power bank, ROMOSS Sense 8P+, 30 000 mAh', 'Power', '5 V into the board USB-C port; replaced the original battery and converter design (D-008)'],
+    ['Pocket router or phone hotspot', 'Internet', 'The classroom has no Wi-Fi (D-004)'],
+    ['Supabase (PostgreSQL)', 'Database, upload function, sign-in', 'Free tier; public read, device-only upload'],
+    ['Vercel', 'Hosting of the web app', 'Free Hobby plan, non-commercial use only (D-030)'],
+    ['React 19, Vite 8, Tabler', 'Web app framework and styles', 'Open-source (MIT); installable as a phone app (PWA)'],
+    ['Node.js test runner, Playwright (Chromium)', 'Automated tests and page checks', 'Pixel comparison of the page against approved mock-ups'],
+  ] },
+  { t: 'h2', x: '2.4 Hardware Design' },
+  { t: 'p', x: 'The room monitor is an ESP32 board with a DHT22 sensor and an OLED screen, powered by a USB power bank. Figure 1 shows the whole system and Figure 2 the wiring. The first design used two 18650 cells and a converter; it was replaced by a power bank because there is nothing to build on the power side and the protection is inside the bank (D-008). An early bench test showed that the bank switched off whenever the board went to deep sleep, so deep sleep was dropped and the board stays awake (D-018).' },
+  { t: 'fig', k: 'blocks', n: 1 },
+  { t: 'fig', k: 'wiring', n: 2 },
+  { t: 'h2', x: '2.5 Software Design' },
+  { t: 'p', x: 'The firmware (Figure 3) reads the sensor every 5 seconds, shows the values, keeps unsent readings in a queue of up to 50, and sends them over HTTPS about once a minute. It checks the server certificate against built-in root certificates, so a wrong server is refused. The device holds only a secret device key; the server returns the upload interval and the room name in its reply. If no saved Wi-Fi works within 20 seconds, the device opens its own setup page ("Init-Setup") so that a teacher can enter the school Wi-Fi from a phone, and the Wi-Fi password is never stored in the web app (D-011).' },
+  { t: 'fig', k: 'flow', n: 3 },
+  { t: 'p', x: 'The server side (Figure 4) accepts readings only through one database function. The function checks the device key, the number of readings per call (1 to 50), the ranges (temperature 0 to 60 °C, humidity 0 to 100 %) and the call rate. A bad call is rejected as a whole. The server adds calibration offsets and computes the heat index itself, so a number worked out by the device is never trusted (D-023). Figure 5 shows the tables.' },
+  { t: 'fig', k: 'seq', n: 4 },
+  { t: 'fig', k: 'db', n: 5 },
+  { t: 'p', x: 'The web app (Figure 6) is a single page that anyone can open on a phone. It shows the live card with the PAGASA level and an online/offline badge (offline when the newest reading is more than 120 seconds old), history charts for 24 hours and 7 days, and a school-day summary. Under the history charts, a readings table lets a visitor pick a From and a To day on a calendar (only days that have readings can be picked) and see hourly averages of temperature, humidity and heat index with the PAGASA level, 500 rows at a time, and download the same rows as a CSV file (F-24). The database function that serves it caps one call at 500 rows so that the free tier is not overloaded. The admin page requires sign-in; the server, not the page, decides who may change settings. The admin can type a room name or press Reset, which puts the default name Unassigned in the box; Save writes it (F-23). A device with no room assigned shows Unassigned on the web page and on its own screen.' },
+  { t: 'fig', k: 'routes', n: 6 },
+  { t: 'h2', x: '2.6 Computing the Heat Index' },
+  { t: 'p', x: 'The heat index is computed from the temperature and relative humidity with the National Weather Service polynomial approach, using the range rule of that method; below the range of the method the value is left empty (D-015, D-020). PAGASA levels are applied to the heat index rounded to a whole degree Celsius: Caution 27 to 32 °C, Extreme caution 33 to 41 °C, Danger 42 to 51 °C and Extreme danger 52 °C and above (D-019). The formula exists in three languages, JavaScript, C++ for the device and SQL for the database, and all three are tested against the same file of expected values.' },
+  { t: 'h2', x: '2.7 Research Procedure' },
+  { t: 'ol', items: [
+    'Bench bring-up: the DHT22 and OLED were wired to the ESP32 and tested with a throw-away sketch.',
+    'The heat index function was written test-first and checked against the shared reference table.',
+    'The database, the secure upload function and the public read rules were built and tested on a separate test project; a "stranger" probe checks that a visitor with only the public key cannot write or read secrets.',
+    'The firmware was built in steps: upload, OLED screens, offline queue, room name from the server, Wi-Fi setup page and device health report.',
+    'The web app was built in steps: live card, offline badge, history charts, installable app, school-day view, admin page and guide. Each page was checked against an approved mock-up and then on the hosted page and a phone.',
+    'A 24-hour run (P03-07) was done on the power bank. The device uploaded about once a minute; the charge of the bank was written down at the start, halfway and the end.',
+    'The offline rule was checked by unplugging the device and photographing the phone screen after two minutes.',
+  ] },
+  { t: 'h2', x: '2.8 Research Treatment of Data' },
+  { t: 'p', x: 'Readings were counted and summarised with the minimum, mean and maximum. The expected number of readings in 24 hours at one per minute is 1,440. Gaps are the time between two consecutive readings; any gap over 90 seconds was listed. Hourly means were computed in Philippine time. The share of readings in each PAGASA level was computed from the heat index rounded to a whole degree. No statistical test was applied because there is a single device and a single run.' },
+  { t: 'pb' },
+  { t: 'h1', x: 'Chapter 3', y: 'Presentation, Analysis, and Interpretation of Data' },
+  { t: 'h2', x: 'I. Verification of the Heat Index Calculation' },
+  { t: 'p', x: 'The heat index function was checked in JavaScript, C++ and SQL against one shared reference file. As of the latest full run (3 November 2026, session 27), the full test suite passed 204 of 204 tests, of which the backend tests are 80 of 80. The stranger probe, which acts as a visitor with only the public key, passed 21 of 21 checks against the test project in session 26 and has not been re-run since the two new read-only functions were added. [These numbers are refreshed each session; see Appendix C.]' },
+  { t: 'h2', x: 'II. The 24-Hour Run on the Power Bank' },
+  { t: 'p', x: `The run started on 2 November 2026 at 18:03 Philippine time with the power bank at 100 % and ended on 3 November 2026 at 18:03. It was done in two legs of about 12 hours with a short break between them. The server recorded ${sum.n.toLocaleString('en')} readings of about 1,440 expected (${((100 * sum.n) / 1440).toFixed(1)} % of the expected number). The power bank went from 100 % to 95 % and then to 90 %.` },
+  { t: 'table', cap: 'Table 2. Summary of the 24-hour run (test project, one device)', head: ['Measure', 'Minimum', 'Mean', 'Maximum'], rows: [
+    ['Temperature (°C)', sum.tmin, sum.tavg, sum.tmax],
+    ['Relative humidity (%)', sum.rmin, sum.ravg, sum.rmax],
+    ['Heat index (°C)', sum.himin, sum.hiavg, sum.himax],
+  ] },
+  { t: 'table', cap: 'Table 3. Time in each PAGASA level during the run (number of one-minute readings)', head: ['PAGASA level (heat index, rounded)', 'Readings', 'Share'], rows: [
+    ['Caution (27 to 32 °C)', bandN('Caution'), pct(bandN('Caution')) + ' %'],
+    ['Extreme caution (33 to 41 °C)', bandN('Extreme caution'), pct(bandN('Extreme caution')) + ' %'],
+    ['Danger (42 to 51 °C)', bandN('Danger'), pct(bandN('Danger')) + ' %'],
+    ['Extreme danger (52 °C and above)', bandN('Extreme danger'), pct(bandN('Extreme danger')) + ' %'],
+  ] },
+  { t: 'p', x: `Most of the time the room was in the extreme caution level (${pct(bandN('Extreme caution'))} % of readings) and ${bandN('Danger')} readings (${pct(bandN('Danger'))} %) reached the danger level. The highest heat index was ${sum.himax} °C. The hourly values (Table 4) show the room was warmest in the early morning and afternoon hours and coolest between midnight and 3 AM.` },
+  { t: 'table', cap: 'Table 4. Hourly values of the 24-hour run (Philippine time)', head: ['Hour', 'Readings', 'Mean temp (°C)', 'Mean humidity (%)', 'Highest heat index (°C)'], rows: hourly.map((h) => [h.hour_manila, h.n, h.temp_avg, h.rh_avg, h.hi_max]) },
+  { t: 'p', x: `Only ${gaps.length} gaps longer than 90 seconds were found: ${gaps.map((g) => g.gap_s + ' seconds').join(' and ')}. The 385-second gap is the break between the two legs. The cause of the other gap has not yet been found; the firmware now reports why it restarted (power-on, brown-out, crash or watchdog) so that the next run can show it (P03-07 follow-up).` },
+  { t: 'h2', x: 'III. Offline Check and Power Bank Behaviour' },
+  { t: 'p', x: 'When the device was unplugged, the hosted page showed "Offline: no reading for 2 min" in the owner\'s phone screenshot taken at two minutes. In an earlier test on the power bank, uploads every 90 seconds made the bank switch itself off after about a minute, while uploads every 60 seconds ran for 10 minutes and then for the full 24 hours. For this bank the interval therefore has to stay at 60 seconds (D-027).' },
+  { t: 'h2', x: 'IV. Features Built and Verified' },
+  { t: 'table', cap: 'Table 5. Progress of the project by phase (project table, 3 November 2026)', head: ['Phase', 'Done / Total', '%'], rows: [
+    ['P00 Kickoff and decisions', '13 / 13', '100'], ['P01 Heat index core and bench bring-up', '7 / 7', '100'], ['P02 Backend and secure upload', '7 / 7', '100'], ['P03 Device firmware', '10 / 10', '100'], ['P04 Web app core', '12 / 13 (+1 partly)', '92'], ['P05 Admin, alerts and device health', '3 / 7 (+3 partly)', '43'], ['P06 Display and sharing extras', '0 / 5', '0'], ['P07 Field trial and hardening', '0 / 7', '0'], ['P08 Over-the-air updates (optional)', '0 / 3', '0'], ['Whole project', '52 / 72', '72'],
+  ] },
+  { t: 'h2', x: 'V. Not Yet Done' },
+  { t: 'ul', items: [
+    'Comparison of the DHT22 with a reference thermometer and hygrometer (sensor accuracy).',
+    'Push alerts to phones and the live-project admin account.',
+    'The calendar readings table (F-24) is built and tested and works on the test database, but it is not yet on the live project and has not yet been seen on a phone.',
+    'Reset room to Unassigned (F-23) is built and tested in the page and the database, and the firmware default is built but not yet flashed to the board.',
+    'A school day with several levels seen on a phone, and the installed app on an iPhone.',
+    'The cause of the 220-second gap in the run, and a run in a real classroom (phase P07).',
+  ] },
+  { t: 'pb' },
+  { t: 'h1', x: 'Chapter 4', y: 'Summary, Conclusions and Recommendations' },
+  { t: 'h2', x: 'Summary' },
+  { t: 'p', x: `A working prototype of Init was built: an ESP32 room monitor with a DHT22 and an OLED screen, a secure upload to a cloud database, and a public web app that shows temperature, humidity, heat index and the PAGASA level. In a 24-hour run on a power bank, the device recorded ${sum.n.toLocaleString('en')} readings, with two gaps over 90 seconds, and the bank lost about 10 % of its charge.` },
+  { t: 'h2', x: 'Conclusions' },
+  { t: 'ol', items: [
+    'The parts listed in Table 1 are enough to measure, send, store and show a classroom heat index (question 1).',
+    'The heat index calculation agrees with the shared reference table in all three languages (question 2).',
+    `The device ran for 24 hours on one power bank with ${((100 * sum.n) / 1440).toFixed(1)} % of the expected readings and a 10 % drop in charge (question 3).`,
+    `In the monitored room the heat index was between ${sum.himin} and ${sum.himax} °C and the room was mostly in the extreme caution level (question 4).`,
+    'The page shows the room as offline after 2 minutes without a reading (question 5).',
+    'Visitors can read the page without signing in, and changing settings needs a signed-in admin, which the server enforces (question 6).',
+  ] },
+  { t: 'p', x: 'These conclusions are limited to one device, one room and one 24-hour run. They do not show that the sensor readings are accurate.' },
+  { t: 'h2', x: 'Recommendations' },
+  { t: 'ol', items: [
+    'Compare the DHT22 with a reference thermometer and hygrometer before using the numbers for decisions.',
+    'Run the device for several school days in a real classroom and with a dummy load or a different power bank (phase P07).',
+    'Have a teacher review all wording the public sees before it goes live.',
+    'Add push alerts and the over-the-air update only after the basic system is stable.',
+  ] },
+  { t: 'pb' },
+  { t: 'refs', items: refs.map((r) => r.apa).sort() },
+  { t: 'pb' },
+  { t: 'h1', x: 'Appendices' },
+  { t: 'h2', x: 'Appendix A. Pin list of the room monitor' },
+  { t: 'table', cap: 'Table A1. Connections', head: ['ESP32 pin', 'Connected to', 'Note'], rows: [
+    ['3V3', 'DHT22 pin 1 (VCC)', 'and the pull-up resistor'], ['GPIO 4', 'DHT22 pin 2 (DATA)', '4.7 to 10 kΩ pull-up to 3V3'], ['GPIO 21', 'OLED SDA', 'I2C'], ['GPIO 22', 'OLED SCL (SCK)', 'I2C'], ['GND', 'DHT22 pin 4, OLED GND', ''], ['GPIO 33', 'reserved', 'OLED wake button, not built'], ['USB-C', 'USB power bank', '5 V'],
+  ] },
+  { t: 'h2', x: 'Appendix B. Database settings and limits' },
+  { t: 'table', cap: 'Table B1. Settings the admin can change', head: ['Setting', 'Allowed range'], rows: [
+    ['Upload interval', '60 to 3600 s (60 s for the power bank)'], ['Temperature offset', '-5.0 to +5.0 °C'], ['Humidity offset', '-10.0 to +10.0 %'], ['Alert heat index', '27 to 60 °C'], ['Alert quiet time', '10 to 1440 min'], ['Room name', 'up to 12 characters'],
+  ] },
+  { t: 'h2', x: 'Appendix C. Tests and checks' },
+  { t: 'ul', items: [
+    'Full suite (3 November 2026): 204 of 204 passed; backend tests 80 of 80; stranger probe 21 of 21 on the test project (session 26). The numbers are refreshed each session.',
+    'Page checks compare the built page with approved mock-ups pixel by pixel in Chromium at phone width, in light and dark mode.',
+    'The 24-hour data in Chapter 3 are saved in the project folder paper/data as JSON files.',
+  ] },
+  { t: 'h2', x: 'Appendix D. Project decisions' },
+  { t: 'p', x: 'The numbered decisions (D-001 to D-034) referred to in this paper are kept in the project file documentation/DECISIONS.md with the date and the reason for each.' },
+];
+
+export const figures = diagrams;

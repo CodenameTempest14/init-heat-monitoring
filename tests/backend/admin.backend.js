@@ -163,3 +163,14 @@ test('admin access ends when the admin row is removed, and a forged token is ref
     assert.ok(refused(await patchSettings(forged, device.id, { interval_s: 110 })), 'forged token changed settings');
   });
 });
+
+test('F-23: Reset is admin_set_room with Unassigned: the admin can do it, a stranger cannot', async () => {
+  await withActors(async ({ device, asStranger, asAdmin }) => {
+    const set = (who, room) => who('rpc/admin_set_room', { method: 'POST', body: { p_device: device.id, p_room: room } });
+    assert.ok(refused(await set(asStranger, 'Unassigned')), 'non-admin reset the room');
+    assert.equal(await readRoom(device.id), 'Room 204');
+    const ok = await set(asAdmin, 'Unassigned');
+    assert.ok(ok.status < 300, JSON.stringify(ok.body));
+    assert.equal(await readRoom(device.id), 'Unassigned');
+  });
+});

@@ -12,6 +12,10 @@ export const SETTING_RANGES = {
 
 const show = (n) => String(n).replace('-', '−');
 
+// F-23: what Reset puts in the room box (the database default; 10 characters, fits the OLED's 12). Save still has to be pressed.
+export const RESET_ROOM = 'Unassigned';
+export const canReset = (text) => String(text ?? '').trim() !== RESET_ROOM;
+
 export function checkRoom(text) {
   const value = String(text ?? '').trim();
   if (value.length < 1) return { ok: false, error: 'Type a room name.' };

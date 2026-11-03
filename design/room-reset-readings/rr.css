@@ -1,0 +1,15 @@
+/* Mock-only styles for F-23 (Reset beside the room box) and F-24 (readings table under the charts). Promoted to web/src when built. */
+.rr-reset { min-height: 44px; min-width: 76px; font-weight: 700; border: 2px solid var(--series-hi); color: var(--viz-ink); background: transparent; }
+.rr-reset:disabled { opacity: .5; border-color: var(--bs-border-color); }
+.rr-range { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 8px 0 12px; }
+.rr-range label { display: block; font-weight: 600; font-size: 14px; }
+.rr-range input { min-height: 44px; width: 100%; }
+.rr-count { margin: 8px 0; font-size: 14px; }
+.rr-actions { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+.rr-actions .btn { min-height: 44px; font-weight: 700; flex: 1; }
+.rr-more { border: 2px solid var(--series-hi); color: var(--viz-ink); background: transparent; }
+.rr-csv { border: 2px solid var(--bs-border-color); color: var(--viz-ink); background: transparent; }
+.rr-scroll { overflow-x: auto; }
+.rr-table th, .rr-table td { white-space: nowrap; }
+.rr-roomrow { display: flex; gap: 8px; margin-top: 8px; }
+.rr-roomrow .form-control { flex: 1 1 auto; min-width: 0; margin-top: 0 !important; }

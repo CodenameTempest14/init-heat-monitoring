@@ -8,7 +8,7 @@ constexpr uint8_t PIN_SCL = 22;     // OLED
 constexpr uint8_t OLED_ADDR = 0x3C;
 // Name on the left of the OLED status strip until the first upload reply brings the room set on the server (D-028).
 // At most 12 characters (room.h).
-#define OLED_ROOM_LABEL "Room 1"
+#define OLED_ROOM_LABEL "Unassigned"
 constexpr uint32_t DISPLAY_REFRESH_MS = 5000;  // the DHT22 needs 2 s between reads
 constexpr uint32_t WIFI_RETRY_MS = 15000;      // while the hotspot is away: a new connection attempt this often
 constexpr uint32_t SEND_GAP_MS = 35000;        // after a send attempt, wait this long (the server takes one call per 30 s)

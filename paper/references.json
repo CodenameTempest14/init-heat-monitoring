@@ -1,0 +1,30 @@
+[
+ {
+  "key": "lu2022",
+  "apa": "Lu, Y.-C., & Romps, D. M. (2022). Extending the Heat Index. Journal of Applied Meteorology and Climatology, 61(10). https://doi.org/10.1175/JAMC-D-22-0021.1",
+  "checked": "2026-11-03",
+  "how": "Read the front page of the eScholarship PDF copy (https://escholarship.org/uc/item/5qw5f679): title, authors, journal 61(10), 2022-10-01, DOI. Read the introduction: the Heat Index uses Steadman's model; polynomial fits (Rothfusz 1990) are used by the National Weather Service.",
+  "used_for": "Background: what the heat index is and that the National Weather Service uses a polynomial fit."
+ },
+ {
+  "key": "widjaja2022",
+  "apa": "Widjaja, M., Halim, D. K., & Andarini, R. (2022). The development of an IoT-based indoor air monitoring system towards smart energy efficient classroom. Ultima Computing: Jurnal Sistem Komputer, 14(1), 28-35. https://doi.org/10.31937/sk.v14i1.2565",
+  "checked": "2026-11-03",
+  "how": "Read the article page on ejournals.umn.ac.id (published 2022-07-17) and the Garuda record: title, authors, volume, pages, DOI. The abstract says indoor air temperature and relative humidity are two essential components of thermal comfort.",
+  "used_for": "Related work: an IoT classroom temperature and humidity logger with a DHT22 and ESP8266/ESP32."
+ },
+ {
+  "key": "pagasa2024",
+  "apa": "Philippine Atmospheric, Geophysical and Astronomical Services Administration. (2024, April 12). Official statement on creating extreme heat protocol [Press release]. DOST-PAGASA. https://www.pagasa.dost.gov.ph/index.php/press-release/155",
+  "checked": "2026-11-03",
+  "how": "Read the page: dated 12 April 2024, signed by the PAGASA Administrator. It says a 4-tier effect-based classification is used and that school heads and local governments should have the final say on decisions.",
+  "used_for": "Official source that PAGASA uses a four-tier, effect-based heat index classification and leaves school decisions to school heads and local governments. The tier ranges (27-32, 33-41, 42-51, 52 and above) are NOT in this source; they are project decision D-019 and need a PAGASA table before the paper cites a source for them."
+ },
+ {
+  "key": "tzintzun2026",
+  "apa": "Tzintzun, I., Schwarz, L., Lawrence, A., & Thomas, M. (2026). Effects of extreme temperature exposure on learning (ADB Economics Working Paper Series No. 866). Asian Development Bank. https://www.adb.org/sites/default/files/publication/1185876/ewp-866-extreme-temperature-exposure-learning.pdf",
+  "checked": "2026-11-03",
+  "how": "Downloaded the PDF and read its first pages with a PDF reader: title, four authors, series number 866, October 2026, abstract (730,000 Cambodian students, sustained heat exposure significantly reduces performance).",
+  "used_for": "Rationale: heat exposure lowers learning outcomes in a Southeast Asian country. It is a working paper (research in progress), not a peer-reviewed article; the paper says so."
+ }
+]

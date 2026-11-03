@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Init: mock f23-reset-before</title>
+<link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
+<link rel="stylesheet" href="../../web/src/tokens.css">
+<link rel="stylesheet" href="../../web/src/app.css">
+<link rel="stylesheet" href="../../web/src/charts.css">
+<link rel="stylesheet" href="../../web/src/school.css">
+<link rel="stylesheet" href="../admin/proposal-b/admin-b.css"><link rel="stylesheet" href="rr.css">
+</head>
+<body>
+<main class="app-wrap">
+  <header class="app-head"><picture class="app-logo"><source media="(prefers-color-scheme: dark)" srcset="../../web/public/logo-dark.svg"><img src="../../web/public/logo-light.svg" width="110" height="40" alt=""></picture><h1 class="app-fullname">Init: Indoor Heat Index Tracker</h1></header>
+  <a class="school-back" href="#">‹ Live readings</a>
+  <div class="ab-who"><span class="ab-avatar" aria-hidden="true">A</span>
+  <div class="ab-who-text"><strong>admin@example.com</strong><span>Admin</span></div>
+  <button type="button" class="ab-link">Sign out</button></div>
+  <form>
+    <p class="ab-group-label">Room</p>
+    <div class="ab-group"><div class="ab-row ab-row-wide"><label class="fw-semibold" for="room">Where the device is now</label>
+      <div class="ab-roomrow"><div class="rr-roomrow"><input class="form-control" id="room" maxlength="60" value="Room 204"><button type="button" class="btn rr-reset">Reset</button></div><button type="button" class="btn ab-reset">Reset</button></div>
+      <small class="d-block mt-1 text-secondary">A room name only, never a person's name. Reset puts Unassigned in the box. Press Save to keep it. Old readings keep their room.</small></div></div>
+    <a class="ab-how" href="#guide/room"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01"/></svg>How? ›</a>
+
+    <p class="ab-group-label">Device</p>
+    <div class="ab-group">
+      <div class="ab-row"><div class="ab-row-text"><label for="iv">Reporting interval</label><small>60 to 3600</small></div>
+      <div class="input-group"><input class="form-control" id="iv" type="number" min="60" max="3600" step="1" value="60"><span class="input-group-text">s</span></div></div>
+      <div class="ab-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 21H2z"/><path d="M12 10v4M12 17.5v.01"/></svg><span>On the power bank keep it at 60 s, or the bank may switch off.</span></div>
+      <div class="ab-row"><div class="ab-row-text"><label for="to">Temperature offset</label><small>−5.0 to +5.0</small></div>
+      <div class="input-group"><input class="form-control" id="to" type="number" min="-5" max="5" step="0.1" value="0.0"><span class="input-group-text">°C</span></div></div>
+      <div class="ab-row"><div class="ab-row-text"><label for="ho">Humidity offset</label><small>−10.0 to +10.0</small></div>
+      <div class="input-group"><input class="form-control" id="ho" type="number" min="-10" max="10" step="0.1" value="0.0"><span class="input-group-text">%</span></div></div>
+    </div>
+    <a class="ab-how" href="#guide/interval"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01"/></svg>How? ›</a>
+
+    <p class="ab-group-label">Heat alerts (coming later)</p>
+    <div class="ab-group">
+      <div class="ab-row"><div class="ab-row-text"><label for="al">Alert at heat index</label><small>42 = Danger</small></div>
+      <div class="input-group"><input class="form-control" id="al" type="number" min="27" max="60" step="1" value="42"><span class="input-group-text">°C</span></div></div>
+      <div class="ab-row"><div class="ab-row-text"><label for="qp">Quiet period</label><small>10 to 1440</small></div>
+      <div class="input-group"><input class="form-control" id="qp" type="number" min="10" max="1440" step="1" value="60"><span class="input-group-text">min</span></div></div>
+    </div>
+    <a class="ab-how" href="#guide/alerts"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01"/></svg>How? ›</a>
+
+    <div class="ab-save"><button type="submit" class="btn btn-primary ab-btn">Save changes</button>
+      </div>
+  </form>
+</main>
+</body>
+</html>
