@@ -2,6 +2,12 @@
 
 Newest first. One entry per session.
 
+## 2026-11-03 · s28
+Owner only. Owner skipped the researcher, coach and school names, and parked Chapter 4 of the paper (`paper/chapter4.parked.txt`, restore only when the owner says). Phone and board results: the OLED showed `Unassigned` after a restart; a room save from `#admin` ("MJ's Abode") showed on the OLED and the user page; Reset then Save returned both to `Unassigned` (owner's screenshots); the F-24 Readings table works on the hosted page (owner's word). **P05-06 ticked** (P05 4/7). Paper: PAGASA tier source found and read (Petaca 2026, slide 4), hardware specifications and technology stack tables in Chapter 2 (datasheet values not cited: no confirmable date), references as clickable bullets in alphabetical order, queue size sentence fixed (300, batches of 50), F-23 and F-24 status updated. `npm test` now runs the whole suite (204/204). Not done: live admin rollout, P04-08 leftovers, teacher review, more references. Pushed to `codenametempest14` and `main` (`14acd27`).
+
+## 2026-11-03 · s27
+(Entry added at the s28 close; s27 had none.) New hard rule 5 (research paper in `paper/`, .docx and .pdf, real references only); the whole paper built; F-23 Reset room and F-24 readings table designed, approved and built test-first, migrations on init-test and live; suite 204/204; not yet seen on a phone. See the s27 close report.
+
 ## 2026-11-03 · s26
 Whole suite run after the board was replugged: `node --test --test-concurrency=1` 187/187 (plain `npm test` fails on the `web/dist` race between the UI gates), backend 73/73. P05-04: migration applied to init-test, `health.backend.js` 6/6, `main.cpp` wired (FW_VERSION 0.6.0), flashed on COM8 (needed BOOT held), server row read back, owner's phone screenshot of `#admin` Device health. P05-04 ticked (`3e3a849`). Owner asked for a reset-room button and for "Unassigned" to be the only default room name (F-23, proposed, next session). Not done: P04-08 leftovers, a real room or interval save, live rollout.
 

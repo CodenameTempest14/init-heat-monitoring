@@ -22,32 +22,30 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | P02 Backend and secure upload | 7 / 7 | ██████████ | 100% |
 | P03 Device firmware | 10 / 10 | ██████████ | 100% |
 | P04 Web app core | 12 / 13 (+1 partly) | █████████░ | 92% |
-| P05 Admin, alerts and device health | 3 / 7 (+3 partly) | ████░░░░░░ | 43% |
+| P05 Admin, alerts and device health | 4 / 7 (+2 partly) | ██████░░░░ | 57% |
 | P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 52 / 72 | ███████░░░ | **72%** |
+| **Whole project** | 53 / 72 | ███████░░░ | **74%** |
 
 ### Recommended model for this session
-**Sonnet 5.5**: the phone results and ticks, the paper (names, references, updates), P04-08 leftovers. **Opus 5.5** for the live admin rollout (P05-05) and push alerts (P05-03: Edge Function, keys, subscriptions).
+**Opus 5.5** for the live admin rollout (P05-05) and then push alerts (P05-03: Edge Function, keys, subscriptions). Sonnet 5.5 for the paper, phone results and ticks.
 
 ### Next concrete step
-1. Ask the phase-builder question (last answer: owner only). Ask the owner, who has the phone and the board: (a) does the OLED say `Unassigned` after a restart; (b) in `#admin` does **Reset** then **Save changes** work (live has no admin account yet, so use the test admin on init-test: run `npm run config` in `web/` only if the page must read init-test); (c) on the hosted page (https://init-heat-monitoring.vercel.app, deployed by the s27 push) does the **Readings table** under the history charts pick days, show hourly rows and download a CSV. Live "Init 1" has no readings yet, so the live table says "No readings yet" until a device uploads there. Tick what was seen (P05-06 and the F-24 line), with evidence.
-2. **Research paper (rule 5), every session:** `node paper/build.mjs` rebuilds `paper/Init_Research_Paper.docx` and `.pdf`. Open items: researcher, coach and school names (blank); a readable PAGASA source for the tier ranges 27-32 / 33-41 / 42-51 / 52+ (none found; the paper cites D-019 only: ask the owner for a screenshot or a teacher's copy of PAGASA's table); more references 2021 to 2026 (only 4 verified; ideas: a DHT22 accuracy paper, a classroom heat and learning paper; each must be opened and read, never from memory); update the paper for every feature built. Look at the Word file in Word once (only the PDF pages were looked at).
-3. **Teacher review (D-034):** the new Reset sentence in the F-22 guide, and the Readings table wording.
+1. Ask the phase-builder question (last answer: owner only). **Live admin rollout (P05-05, Opus 5.5), the owner's chosen start:** the owner makes a live admin account in the Supabase dashboard (an email they own, a long generated password, never in chat or the repo); then add that email to `admins` on live (the owner runs live writes in the terminal: Claude Code's classifier blocks `tools/db.mjs live ...` writes), sign in on the hosted page against live (`npm run config -- live` in `web/` also changes the Supabase host in `web/vercel.json`, whose CSP names it), try a real save, and run the admin backend checks and `node tools/anon-probe.mjs` against live. The three admin migrations are already on live (21/21). `tools/make-test-admin.mjs` is test only. The device still uploads to init-test; moving it to live "Init 1" is a separate decision (D-026). Then P05-03 push alerts.
+2. **Research paper (rule 5), every session:** `node paper/build.mjs` rebuilds the `.docx` and `.pdf`. Chapter 4 is parked until the owner says so. Skipped by the owner: researcher, coach and school names. Open: more references 2021 to 2026 (only 5 verified; each must be opened and read, never from memory; the ESP32 and DHT22 datasheets are used in Table 2 but not in References for lack of a confirmable date); add anything built to the paper; look at the Word file in Word once.
+3. **Teacher review (D-034):** the Reset sentence in the F-22 guide and the Readings table wording.
 4. **P04-08 leftovers:** a school day with several levels, the offline page on a phone, an iPhone add-to-home-screen, F-15 `#heat` and the P05-04 health group on a phone in light mode.
-5. **P05-05 live admin rollout (Opus 5.5):** a live admin account (email you own, long generated password, made in the dashboard), then `tools/make-test-admin.mjs` is test only; the three migrations are already on live (s27, `anon-probe` 21/21 on live). Then P05-03 push alerts (Opus 5.5).
-6. **Test command:** `node --env-file=.env --test --test-concurrency=1` (204/204 in s27) and `node --env-file=.env --test --test-concurrency=1 "tests/backend/*.backend.js"` (80/80). Plain `npm test` fails (UI gates race on `web/dist`): consider putting this in package.json. The backend tests wipe init-test readings (the 24 h run is saved in `paper/data/`).
-7. P03-07 follow-ups: causes of the gaps (the run query shows 220 s and 385 s); health report says why a restart happened. Not done: sensor accuracy check (needs a reference thermometer and hygrometer); the probe has never caught a real hole and does not probe the new public functions `readings_hourly` / `readings_span`; page loads 2.7 to 4.2 s; stylesheet 698 kB; P03-05 setup timeout and iPhone; P03-06 queue over 50, full queue, the 400 drop. Flash is about 77 % full (matters for P08).
-8. F-24 edge: if a page ends between two rooms of the same hour (device moved in that hour), the second room's row is skipped. F-15 P06-03 not ticked.
-9. Before every commit run `node tools/secret-scan.mjs`. Inline SQL: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`. Flash: in `firmware/init`, `pio run -t upload --upload-port COM8`, hold BOOT on `Connecting....`. Use the Edit tool (not a shell heredoc) for edits that contain backslash escapes such as a carriage-return and line-feed pair; look at the page in a browser, not only the build. Never build a path with `new URL(...).pathname` (it percent-encodes spaces: use `fileURLToPath`, s27 bug).
+5. **Test command:** `npm test` (= `node --env-file=.env --test --test-concurrency=1`, 204/204 in s28) and `npm run test:backend` (80/80). The backend tests wipe init-test readings (the 24 h run is saved in `paper/data/`).
+6. P03-07 follow-ups: causes of the gaps (220 s and 385 s); health report says why a restart happened. Not done: sensor accuracy check (needs a reference thermometer and hygrometer); the probe does not probe `readings_hourly` / `readings_span`; page loads 2.7 to 4.2 s; stylesheet 698 kB; P03-05 setup timeout and iPhone; P03-06 queue over 50, full queue, the 400 drop. Flash is about 77 % full (matters for P08). Firmware version is still 0.6.0.
+7. F-24 edge: if a page ends between two rooms of the same hour (device moved in that hour), the second room's row is skipped. F-15 P06-03 not ticked. Timing note: a room change reaches the OLED at the device's next upload (up to `interval_s`, 60 s now).
+8. Before every commit run `node tools/secret-scan.mjs`. Inline SQL: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`. Flash: in `firmware/init`, `pio run -t upload --upload-port COM8`, hold BOOT on `Connecting....`. Use the Edit tool for edits with backslash escapes; look at the page in a browser, not only the build. Never build a path with `new URL(...).pathname` (use `fileURLToPath`). `.vscode/settings.json` is untracked and not ours: leave it.
 
 ### Waiting on the owner
-- On the phone: Reset then Save in `#admin`; the Readings table (From/To days, Download CSV) on the hosted page; what the OLED shows after a restart.
-- Researcher, coach and school names for the paper; a PAGASA tier table source.
-- For live: an admin email you own and a long generated password, created in the dashboard (the migrations are on live).
+- For the live admin rollout: an admin email you own and a long generated password, created in the dashboard (the migrations are on live).
 - Teacher review of the Reset sentence and of the app's other user-facing wording.
 - Optional: try add-to-home-screen on the iPhone; send a phone screenshot of a school day with several levels and of the light mode.
+- Paper: researcher, coach and school names (skipped for now); say "put Chapter 4 back" when wanted.
 - Write `SECRET_SETUP_PASS` on a sticker for the case.
 - Later: dummy load or another bank (D-027). A push button for the OLED wake (D-025). Optional: confirm the S-6 passwords. Optional: a reference thermometer and hygrometer; later (P07) a USB inline meter.
 - Before 2028-01-28: GlobalSign Root CA in `firmware/init/include/root_ca.h` expires (D-026).
