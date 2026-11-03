@@ -5,7 +5,7 @@
 | File | What |
 |---|---|
 | `home-danger.html`, `home-caution.html` | The approved home mock with one new link, **What does this mean? ›**, inside the heat card under the level name (it opens `#heat/<level>`); same text colour as the level, so the contrast of the card is unchanged |
-| `heat.html` | The `#heat` page: a "general advice" note, what the heat index is, one part per level (range, what it can do to the body, what to prepare and do), and warning signs for heat exhaustion and heat stroke |
+| `heat.html` | The `#heat` page: a "general advice" note, what the heat index is, one part per level, each with a small picture (range, picture, what it can do to the body, what to prepare and do). The pictures are flat inline SVG drawn in `build-mocks.mjs` (no image files, no copyright, they work offline and follow light and dark); they are decoration and hidden from screen readers: Caution = sun and water bottle, Extreme caution = open window, airflow and a glass of water, Danger = a clock with 12 to 4 marked and shade, Extreme danger = thermometer and a medical cross; the intro has a thermometer and a water drop, and warning signs for heat exhaustion and heat stroke |
 | `heat-info.css` | The few new styles |
 | `build-mocks.mjs`, `capture.mjs` | `node design/heat-info/build-mocks.mjs`, then `capture.mjs` writes `ref/<state>-<phone\|desktop>-<light\|dark>.png` |
 
