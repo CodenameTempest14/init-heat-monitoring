@@ -121,3 +121,10 @@ Owner's question (s25): does a visitor learn what the heat index number means, w
 - All "what to prepare" text stays general (water, shade, light clothing, rest breaks, knowing the warning signs, when to ask a teacher or call for medical help). It is **advisory wording, not official DepEd or PAGASA guidance**, and **a teacher reviews every sentence before it goes live (D-034, F-15)**. No medical dosing or treatment claims.
 
 **Suggested place in the plan:** right after P05-04 (a P06 item brought forward), because it helps every visitor and needs no backend. Mocks first (home link, `#heat` page, phone light and dark), owner approves, then build with a UI gate like the guide's. Sonnet 5.5.
+
+## Requested 2026-11-03 (s26) by the owner: PROPOSED, WAITING FOR THE OWNER'S APPROVAL OF THE DESIGN, nothing designed or built
+
+| ID | Feature | What it does | Notes | Size |
+|---|---|---|---|---|
+| F-23 | Reset room name, and "Unassigned" as the only default | (1) A **Reset** button next to the room box in `#admin` that puts the room back to `Unassigned`. (2) The default room name is always `Unassigned` unless an admin assigns a room (owner, s26): a new device, the board before its first upload reply, and a reset all show `Unassigned`. | Asked for by the owner (s26), to be done next session. To check first: the `devices.room` column default and `register` tooling on the server, the firmware's `OLED_ROOM_LABEL` in `config.h` (now "Room 1", used on the OLED until the first reply; "Unassigned" is 10 characters, fits the 12 limit), and the test fixtures (init-test device is "Room 1"; live is already "Unassigned"). Reset probably calls `admin_set_room` with "Unassigned" (confirm; no new migration if so). Old readings keep their room (F-21). Mock first (admin page, phone, light and dark), update the F-22 Room guide text and the admin gate. A firmware default change means another flash. Part of P05-06. | XS |
+

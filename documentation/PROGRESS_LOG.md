@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-03 · s26
+Whole suite run after the board was replugged: `node --test --test-concurrency=1` 187/187 (plain `npm test` fails on the `web/dist` race between the UI gates), backend 73/73. P05-04: migration applied to init-test, `health.backend.js` 6/6, `main.cpp` wired (FW_VERSION 0.6.0), flashed on COM8 (needed BOOT held), server row read back, owner's phone screenshot of `#admin` Device health. P05-04 ticked (`3e3a849`). Owner asked for a reset-room button and for "Unassigned" to be the only default room name (F-23, proposed, next session). Not done: P04-08 leftovers, a real room or interval save, live rollout.
+
 ## 2026-11-03 · s25
 P03-07 ticked: 24 h run on the power bank in two legs (12 h + 12 h, 7 min break), 1 429 of about 1 440 rows, gaps 221 s, 385 s (the break), 95 s, bank 100 % to 95 % to 90 %. 2 min offline rule verified on the hosted page afterwards: the owner replugged and unplugged the board (last row 13:43:36Z) and the phone screenshot at 2 min shows `Offline: no reading for 2 min` (the earlier 3 h screenshot came too late). Also this session, recorded here late: P05-04 server and firmware parts written and not applied, F-15 extended `#heat` page built (wording draft, teacher review pending, not pushed).
 
