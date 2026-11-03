@@ -23,6 +23,8 @@
 #include "interval.h"
 #include "room.h"
 #include "readings.h"
+#include "health.h"
+#include <esp_system.h>
 #include "screens.h"
 #include "wifi_setup.h"
 #ifdef SCREEN_TEST
@@ -197,7 +199,11 @@ bool clockSet() {
 int sendPending() {
   Reading batch[MAX_BATCH];
   const size_t n = pending.peek(batch, MAX_BATCH);
-  if (!buildUploadBody(body, sizeof body, SECRET_DEVICE_KEY, batch, n)) {
+  // Wi-Fi signal, why the board last restarted and this firmware's version go with every upload (P05-04). If the
+  // fragment cannot be built the upload still goes, without health.
+  char health[HEALTH_JSON_MAX];
+  healthJson(health, sizeof health, WiFi.RSSI(), (int)esp_reset_reason(), FW_VERSION);
+  if (!buildUploadBody(body, sizeof body, SECRET_DEVICE_KEY, batch, n, health)) {
     Serial.println("upload body did not fit: dropping the batch");
     pending.pop(n);
     return -2;

@@ -17,3 +17,4 @@ constexpr uint32_t WIFI_JOIN_MS = 20000;        // how long start-up tries the s
 constexpr uint32_t SETUP_TIMEOUT_MS = 600000;   // nothing saved in 10 minutes: restart and try the saved network again
 #define SETUP_AP_NAME "Init-Setup"              // shown on OLED-05; the password is SECRET_SETUP_PASS (secrets.h)
 constexpr uint8_t PIN_BUTTON = 33;  // reserved for the OLED wake button (F-08), not used yet
+#define FW_VERSION "0.6.0"  // reported with the device health (P05-04); 1 to 20 characters of 0-9 A-Z a-z . _ + -
