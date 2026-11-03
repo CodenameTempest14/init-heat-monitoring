@@ -29,13 +29,15 @@ const drop = (x, y, s, fill = BLUE, shine = true) => at(x, y, s, `<path d="M0-10
 
 // A kid, bust only. Origin = the centre of the head. `arm`: 'down' | 'up' (the right hand is raised to hold something).
 const kid = (x, y, s, { shirt, face, arm = 'down' }) => at(x, y, s, `
-  <path d="M-15 46v-9q0-9 9-9h12q9 0 9 9v9z" fill="${shirt}" ${stroke}/>
+  <path d="M-16 42q0-14 10-14h12q10 0 10 14v3q0 4-4 4h-24q-4 0-4-4z" fill="${shirt}" ${stroke}/>
   ${arm === 'up' ? `<path d="M12 36q12 0 12-14" fill="none" stroke="${OUT}" stroke-width="9" stroke-linecap="round"/><path d="M12 36q12 0 12-14" fill="none" stroke="${shirt}" stroke-width="5.5" stroke-linecap="round"/><circle cx="24" cy="20" r="5" fill="${SKIN}" ${stroke}/>` : ''}
   <rect x="-4.5" y="13" width="9" height="9" fill="${SKIN}"/><path d="M-4.5 14v8M4.5 14v8" fill="none" ${stroke}/>
   <circle cx="0" cy="0" r="15" fill="${SKIN}" ${stroke}/>
   <path d="M-15 -2A15 15 0 0 1 15 -2Q9-10 0-9Q-9-10-15-2z" fill="${HAIR}" ${stroke}/>
   ${FACES[face]}`);
 
+// A soft white blob behind a group, so each picture has a focus.
+const blob = (x, y, r) => `<ellipse cx="${x}" cy="${y}" rx="${r * 1.25}" ry="${r}" fill="#ffffff" opacity=".5"/>`;
 const bottle = (x, y, s) => at(x, y, s, `<rect x="-4" y="-17" width="8" height="5" rx="1.5" fill="${OUT}"/><path d="M-6-12h12q3 0 3 3v22q0 5-5 5h-8q-5 0-5-5v-22q0-3 3-3z" fill="${LBLUE}" ${stroke}/><path d="M-8 -1h16v14q0 3-4 3h-8q-4 0-4-3z" fill="${BLUE}"/>`);
 const glass = (x, y, s) => at(x, y, s, `<path d="M-10-12h20l-3 26q0 3-3 3h-8q-3 0-3-3z" fill="${LBLUE}" ${stroke}/><path d="M-8.5 -1h17l-2 14q0 2-2 2h-9q-2 0-2-2z" fill="${BLUE}"/>`);
 
@@ -51,11 +53,11 @@ const window_ = (x, y, s) => at(x, y, s, `<rect x="-30" y="-34" width="60" heigh
 const plus = (x, y) => `<path d="M${x - 9} ${y}h18M${x} ${y - 9}v18" fill="none" ${stroke} stroke-width="5"/>`;
 
 const SCENES = {
-  what: () => `${thermometer(95, 52, 1, false)}${plus(170, 50)}${at(245, 50, 1, drop(0, 0, 3.6, BLUE, false) + `<g transform="translate(0 9)">${FACES.happy}</g>`)}`,
-  caution: () => `${sun(62, 44, 22, SUN, 'happy')}${kid(205, 30, 1.25, { shirt: GREEN, face: 'happy', arm: 'up' })}${bottle(244, 38, 1.3)}`,
-  'extreme-caution': () => `${window_(52, 52, 1)}${fan(120, 40, 1)}${kid(222, 30, 1.25, { shirt: AMBER, face: 'sweat' })}${drop(194, 20, 0.9)}${drop(252, 30, 0.9)}${drop(246, 12, 0.7)}${glass(296, 62, 1.1)}`,
-  danger: () => `${sun(272, 34, 20, HOT, 'hot')}${umbrella(106, 30, 1)}${kid(106, 58, 1, { shirt: PURPLE, face: 'tired' })}${clock(206, 66, 0.85)}`,
-  'extreme-danger': () => `${thermometer(56, 52, 1, true)}${kid(170, 30, 1.25, { shirt: PURPLE, face: 'dizzy' })}${drop(142, 16, 0.9)}${drop(202, 14, 0.8)}${cross(270, 52, 1)}`,
+  what: () => `${blob(95, 60, 44)}${blob(245, 60, 44)}${thermometer(95, 60, 1, false)}${plus(170, 60)}${at(245, 60, 1, drop(0, 0, 3.6, BLUE, false) + `<g transform="translate(0 9)">${FACES.happy}</g>`)}`,
+  caution: () => `${blob(62, 60, 40)}${blob(215, 60, 46)}${sun(62, 60, 22, SUN, 'happy')}${kid(205, 40, 1.25, { shirt: GREEN, face: 'happy', arm: 'up' })}${bottle(244, 56, 1.3)}`,
+  'extreme-caution': () => `${blob(54, 60, 36)}${blob(120, 60, 36)}${blob(222, 60, 46)}${window_(52, 60, 1)}${fan(120, 56, 1)}${kid(222, 40, 1.25, { shirt: AMBER, face: 'sweat' })}${drop(194, 26, 0.9)}${drop(254, 38, 0.9)}${drop(248, 22, 0.7)}${glass(296, 66, 1.1)}`,
+  danger: () => `${blob(106, 62, 48)}${umbrella(106, 50, 0.85)}${kid(106, 70, 0.75, { shirt: PURPLE, face: 'tired' })}${clock(206, 62, 0.85)}${blob(272, 60, 34)}${sun(272, 60, 20, HOT, 'hot')}`,
+  'extreme-danger': () => `${blob(58, 60, 36)}${blob(170, 60, 46)}${blob(270, 60, 40)}${thermometer(56, 60, 1, true)}${kid(170, 40, 1.25, { shirt: PURPLE, face: 'dizzy' })}${drop(142, 24, 0.9)}${drop(202, 22, 0.8)}${cross(270, 60, 1)}`,
 };
 
-export const art = (id) => `<svg class="hl-art hl-art-${id}" viewBox="0 0 326 110" aria-hidden="true">${SCENES[id]()}</svg>`;
+export const art = (id) => `<svg class="hl-art hl-art-${id}" viewBox="0 0 326 120" aria-hidden="true">${SCENES[id]()}</svg>`;
