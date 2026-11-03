@@ -1,4 +1,4 @@
-// F-22 admin guide mocks (D-034): the #guide page (the admin page's "How? >" links are drawn by design/admin/proposal-b/). Made-up room and numbers only.
+// F-22 admin guide mocks (D-034): the #guide page (the admin page's "How? >" links are drawn by design/admin/proposal-b/ and design/admin/health/). Made-up room and numbers only.
 // Usage: node design/admin-guide/build-mocks.mjs   (writes guide.html next to this file)
 import { writeFileSync } from 'node:fs';
 
@@ -36,6 +36,7 @@ const guide = `<h2 class="visually-hidden">Admin guide</h2>
   <nav class="gd-toc" aria-label="Sections"><p>In this guide</p><ol>
     <li><a href="#start">Before you start</a></li>
     <li><a href="#room">Room</a></li>
+    <li><a href="#health">Device health</a></li>
     <li><a href="#interval">Reporting interval</a></li>
     <li><a href="#offsets">Temperature and humidity offsets</a></li>
     <li><a href="#alerts">Heat alerts</a></li>
@@ -56,7 +57,29 @@ const guide = `<h2 class="visually-hidden">Admin guide</h2>
     <ol><li>Sign in on the Admin page.</li><li>Under <strong>Room</strong>, type the new name, for example <strong>Room 204</strong>.</li><li>Press <strong>Save changes</strong>.</li></ol>
     <div class="gd-note">${WARN}<span>Type a room name only. Never type a person's name. Old readings keep their old room.</span></div>`)}
 
-  ${sec(3, 'interval', 'Reporting interval', `
+  ${sec(3, 'health', 'Device health', `
+    <h3>What it does</h3>
+    <p>It shows how the device is doing right now. It is only for looking. You cannot change anything here.</p>
+    <h3>When to look at it</h3>
+    <p>When readings are missing, or the page says Offline. It helps you find out why.</p>
+    <h3>What each line means</h3>
+    <table class="gd-table gd-table-text"><thead><tr><th>Line</th><th>What it tells you</th></tr></thead><tbody>
+      <tr><td>Wi-Fi signal</td><td>How strong the connection is. <strong>Good</strong> and <strong>Fair</strong> are fine. <strong>Weak</strong> can make readings go missing.</td></tr>
+      <tr><td>Last restart</td><td>Why the device last started. See the list below.</td></tr>
+      <tr><td>Firmware</td><td>The version of the program on the device. Tell it to the person who set up the device when you ask for help.</td></tr>
+      <tr><td>Last report</td><td>When the device last sent a reading. <strong>Late</strong> means more than 2 minutes ago.</td></tr></tbody></table>
+    <h3>If the signal is Weak</h3>
+    <p>Move the Wi-Fi hotspot closer to the device, or the device closer to the hotspot. Then look again after a few minutes.</p>
+    <div class="gd-example"><span class="gd-label">Example</span>The number is in dBm, and closer to 0 is stronger. −58 dBm is stronger than −81 dBm.</div>
+    <h3>If you see a restart reason</h3>
+    <table class="gd-table gd-table-text"><thead><tr><th>It says</th><th>What to do</th></tr></thead><tbody>
+      <tr><td>Power on</td><td>Nothing. Someone plugged the device in.</td></tr>
+      <tr><td>Reset pin, Software restart</td><td>Nothing, if someone pressed the reset button or updated the device.</td></tr>
+      <tr><td>Power dipped</td><td>The power was too low for a moment. Check the cable and the power bank.</td></tr>
+      <tr><td>Stopped responding, Crash</td><td>The device froze and restarted by itself. If it keeps happening, tell the person who set up the device.</td></tr></tbody></table>
+    <div class="gd-note">${WARN}<span>Not reported yet means the device has not sent its health. This is normal until it gets its next update.</span></div>`)}
+
+  ${sec(4, 'interval', 'Reporting interval', `
     <h3>What it does</h3>
     <p>It is how often the device sends a reading. 60 means one reading every 60 seconds.</p>
     <h3>When to change it</h3>
@@ -65,7 +88,7 @@ const guide = `<h2 class="visually-hidden">Admin guide</h2>
     <ol><li>Under <strong>Device</strong>, find <strong>Reporting interval</strong>.</li><li>Type a number of seconds between 60 and 3600.</li><li>Press <strong>Save changes</strong>.</li></ol>
     <div class="gd-example"><span class="gd-label">Example</span>Wall charger, and you only need a reading every 5 minutes: 5 × 60 = <strong>300</strong>.</div>`)}
 
-  ${sec(4, 'offsets', 'Temperature and humidity offsets', `
+  ${sec(5, 'offsets', 'Temperature and humidity offsets', `
     <h3>What it does</h3>
     <p>An offset fixes a sensor that reads a little too high or too low. It is added to every new reading.</p>
     <h3>When to change it</h3>
@@ -76,7 +99,7 @@ const guide = `<h2 class="visually-hidden">Admin guide</h2>
     <p>Humidity works the same way, with the trusted humidity number.</p>
     <div class="gd-note">${WARN}<span>An offset changes new readings only. Old readings stay as they were.</span></div>`)}
 
-  ${sec(5, 'alerts', 'Heat alerts', `
+  ${sec(6, 'alerts', 'Heat alerts', `
     <div class="gd-note">${WARN}<span>Alerts are coming in a later step. These settings are saved now but nothing is sent yet.</span></div>
     <h3>The levels</h3>
     <p>These names and numbers are from PAGASA. They use the heat index in °C.</p>
@@ -92,7 +115,7 @@ const guide = `<h2 class="visually-hidden">Admin guide</h2>
     <h3>Steps</h3>
     <ol><li>Under <strong>Heat alerts</strong>, type the heat index for <strong>Alert at heat index</strong>.</li><li>Type the minutes for <strong>Quiet period</strong>.</li><li>Press <strong>Save changes</strong>.</li></ol>`)}
 
-  ${sec(6, 'wrong', 'If something looks wrong', `
+  ${sec(7, 'wrong', 'If something looks wrong', `
     <dl class="gd-qa">
       <dt>It says "Not saved"</dt><dd>A number is outside its range. The range is under each name. Fix the number and press Save again.</dd>
       <dt>It says "Not an admin"</dt><dd>You signed in with an account that is not an admin. Sign out and use the admin account. Ask the person who set it up.</dd>

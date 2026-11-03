@@ -1,0 +1,14 @@
+/* P05-04 mock: read-only "Device health" group, below the form. Reuses the .ab-* classes of web/src/admin.css. */
+.ab-val { flex: none; max-width: 55%; text-align: right; font-weight: 600; color: var(--viz-ink); overflow-wrap: anywhere; }
+.ab-val small { display: block; font-size: 13px; font-weight: 400; color: var(--viz-ink-2); }
+.ab-state { display: inline-flex; align-items: center; gap: 6px; }
+.ab-state svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.ab-state-ok { color: var(--status-online); }
+.ab-state-warn { color: var(--heat-extreme-caution-border); }
+.ab-state-bad { color: var(--status-offline); }
+.ab-health-note { margin: -12px 4px 20px; font-size: 13px; color: var(--viz-ink-2); }
+/* More space after every How? link, so each link is clearly the end of the group above it. */
+.ab-how { margin-bottom: 22px; }
+/* A table of words (not numbers): the last column reads left to right and wraps; the first column is a fixed share. */
+.gd-table-text td:last-child, .gd-table-text th:last-child { text-align: left; white-space: normal; }
+.gd-table-text td:first-child, .gd-table-text th:first-child { width: 36%; vertical-align: top; font-weight: 600; }

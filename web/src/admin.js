@@ -48,3 +48,42 @@ export function needsRefresh(session, nowMs) {
 }
 
 export const initialOf = (email) => (email ? email[0].toUpperCase() : '?');
+
+// P05-04 device health panel: words for what the device sent. Wording and bands as approved in design/admin/health/README.md.
+// Good at -65 dBm or stronger, Fair -66 to -75, Weak below -75. `kind` picks the icon: ok (tick), warn (triangle), bad (cross), null (none).
+export function signalState(rssiDbm) {
+  const word = rssiDbm >= -65 ? 'Good' : rssiDbm >= -75 ? 'Fair' : 'Weak';
+  return { word, kind: word === 'Weak' ? 'warn' : 'ok', dbm: `${show(rssiDbm)} dBm` };
+}
+
+const RESTART = {
+  POWERON: ['Power on', null],
+  EXT: ['Reset pin', null],
+  SW: ['Software restart', null],
+  DEEPSLEEP: ['Woke from sleep', null],
+  PANIC: ['Crash', 'warn'],
+  INT_WDT: ['Stopped responding', 'warn'],
+  TASK_WDT: ['Stopped responding', 'warn'],
+  WDT: ['Stopped responding', 'warn'],
+  BROWNOUT: ['Power dipped', 'warn'],
+};
+export function restartState(code) {
+  const [word, kind] = Object.hasOwn(RESTART, code) ? RESTART[code] : ['Unknown', null];
+  return { word, kind, code };
+}
+
+export function agoText(ms) {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  if (s < 60) return `${s} s ago`;
+  if (s < 3600) return `${Math.floor(s / 60)} min ago`;
+  if (s < 86400) return `${Math.floor(s / 3600)} h ago`;
+  return `${Math.floor(s / 86400)} d ago`;
+}
+
+// Late = older than 120 s, the same rule as the Offline badge on the live page.
+export function reportState(reportedAt, nowMs) {
+  const t = Date.parse(reportedAt);
+  if (!Number.isFinite(t)) return null;
+  const age = nowMs - t;
+  return { word: age > 120_000 ? 'Late' : 'Just now', kind: age > 120_000 ? 'bad' : 'ok', ago: agoText(age) };
+}

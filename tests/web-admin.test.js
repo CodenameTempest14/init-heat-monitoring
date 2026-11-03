@@ -2,7 +2,7 @@
 // (supabase/migrations/20261031120000_core_schema.sql) so the admin sees a clear message; the database still decides.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { checkRoom, checkSettings, sessionFrom, needsRefresh, initialOf, SETTING_RANGES } from '../web/src/admin.js';
+import { checkRoom, checkSettings, sessionFrom, needsRefresh, initialOf, SETTING_RANGES, signalState, restartState, reportState, agoText } from '../web/src/admin.js';
 
 const GOOD = { interval_s: '60', temp_offset_c: '0.0', rh_offset_pct: '0', alert_heat_index_c: '42', alert_quiet_min: '60' };
 
@@ -62,4 +62,51 @@ test('needsRefresh: in the last minute before the end, or after it', () => {
 test('initialOf: first letter of the email, upper case', () => {
   assert.equal(initialOf('admin@example.com'), 'A');
   assert.equal(initialOf(''), '?');
+});
+
+// P05-04 device health panel: words for the numbers the device sends (the approved wording, design/admin/health/README.md).
+test('signalState: Good at -65 dBm or stronger, Fair -66 to -75, Weak below -75', () => {
+  assert.deepEqual(signalState(-58), { word: 'Good', kind: 'ok', dbm: '−58 dBm' });
+  assert.equal(signalState(-65).word, 'Good');
+  assert.equal(signalState(-66).word, 'Fair');
+  assert.equal(signalState(-75).word, 'Fair');
+  assert.deepEqual(signalState(-81), { word: 'Weak', kind: 'warn', dbm: '−81 dBm' });
+  assert.equal(signalState(0).word, 'Good');
+  assert.equal(signalState(0).dbm, '0 dBm');
+});
+
+test('restartState: plain words, the raw code kept, and a warning only when the device stopped, crashed or lost power', () => {
+  assert.deepEqual(restartState('POWERON'), { word: 'Power on', kind: null, code: 'POWERON' });
+  assert.equal(restartState('EXT').word, 'Reset pin');
+  assert.equal(restartState('SW').word, 'Software restart');
+  assert.equal(restartState('DEEPSLEEP').word, 'Woke from sleep');
+  assert.deepEqual(restartState('TASK_WDT'), { word: 'Stopped responding', kind: 'warn', code: 'TASK_WDT' });
+  for (const c of ['INT_WDT', 'WDT']) assert.deepEqual([restartState(c).word, restartState(c).kind], ['Stopped responding', 'warn']);
+  assert.deepEqual([restartState('PANIC').word, restartState('PANIC').kind], ['Crash', 'warn']);
+  assert.deepEqual([restartState('BROWNOUT').word, restartState('BROWNOUT').kind], ['Power dipped', 'warn']);
+  for (const c of ['SDIO', 'UNKNOWN', 'SOMETHING_NEW', '', undefined]) assert.deepEqual([restartState(c).word, restartState(c).kind], ['Unknown', null]);
+});
+
+test('agoText: seconds, minutes, hours, days', () => {
+  assert.equal(agoText(0), '0 s ago');
+  assert.equal(agoText(59_000), '59 s ago');
+  assert.equal(agoText(60_000), '1 min ago');
+  assert.equal(agoText(6 * 60_000 + 20_000), '6 min ago');
+  assert.equal(agoText(59 * 60_000), '59 min ago');
+  assert.equal(agoText(2 * 3600_000), '2 h ago');
+  assert.equal(agoText(23 * 3600_000), '23 h ago');
+  assert.equal(agoText(47 * 3600_000), '1 d ago');
+  assert.equal(agoText(3 * 86400_000), '3 d ago');
+  assert.equal(agoText(-5000), '0 s ago'); // a clock a little behind
+});
+
+test('reportState: Just now up to 120 s (the offline rule of the live page), Late after that', () => {
+  const now = Date.parse('2026-11-02T13:00:00Z');
+  const at = (ms) => new Date(now - ms).toISOString();
+  assert.deepEqual(reportState(at(60_000), now), { word: 'Just now', kind: 'ok', ago: '1 min ago' });
+  assert.equal(reportState(at(120_000), now).word, 'Just now');
+  assert.deepEqual(reportState(at(120_001), now), { word: 'Late', kind: 'bad', ago: '2 min ago' });
+  assert.deepEqual(reportState(at(6 * 60_000), now), { word: 'Late', kind: 'bad', ago: '6 min ago' });
+  assert.equal(reportState('not a date', now), null);
+  assert.equal(reportState(undefined, now), null);
 });

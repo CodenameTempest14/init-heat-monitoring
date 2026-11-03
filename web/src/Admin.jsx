@@ -3,7 +3,7 @@
 // The page only shows or hides; the database refuses every change from anyone who is not in `admins` (P05-05).
 import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
-import { checkRoom, checkSettings, sessionFrom, needsRefresh, initialOf, SETTING_RANGES } from './admin.js';
+import { checkRoom, checkSettings, sessionFrom, needsRefresh, initialOf, SETTING_RANGES, signalState, restartState, reportState } from './admin.js';
 
 const STORE = 'init-admin'; // sessionStorage: gone when the tab closes
 const KEYS = Object.keys(SETTING_RANGES);
@@ -18,6 +18,8 @@ const ICON = {
   alert: <><circle cx="12" cy="12" r="9" /><path d="M12 8v5M12 16v.01" /></>,
   warn: <><path d="M12 3 22 21H2z" /><path d="M12 10v4M12 17.5v.01" /></>,
   tick: <path d="M5 12l5 5L20 7" />,
+  ok: <path d="M5 12.5 10 17.5 19 7.5" />,
+  bad: <><circle cx="12" cy="12" r="9" /><path d="M9 9l6 6M15 9l-6 6" /></>,
   help: <><circle cx="12" cy="12" r="9" /><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01" /></>,
   shield: <><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" /><path d="m9.5 9.5 5 5M14.5 9.5l-5 5" /></>,
 };
@@ -115,6 +117,33 @@ function Row({ id, label, hint, unit, value, error, onChange, disabled }) {
   );
 }
 
+// P05-04: what the device last said about itself (read-only). `health` is the device_health row, or null when there is none yet.
+const State = ({ kind, children }) => <span className={`ab-state ab-state-${kind}`}><Svg k={kind === 'warn' ? 'warn' : kind} />{children}</span>;
+const HealthRow = ({ label, hint, children }) => (
+  <div className="ab-row"><div className="ab-row-text"><span className="fw-semibold d-block">{label}</span><small>{hint}</small></div><div className="ab-val">{children}</div></div>
+);
+const NotYet = <small>Not reported yet</small>;
+function Health({ health, nowMs }) {
+  const signal = health && signalState(health.rssi_dbm);
+  const restart = health && restartState(health.reset_reason);
+  const report = health && reportState(health.reported_at, nowMs);
+  const trouble = health && (signal.kind === 'warn' || restart.kind === 'warn' || report?.kind === 'bad');
+  return (
+    <>
+      <p className="ab-group-label">Device health</p>
+      <div className="ab-group">
+        <HealthRow label="Wi-Fi signal" hint="Stronger is closer to 0">{signal ? <><State kind={signal.kind}>{signal.word}</State><small>{signal.dbm}</small></> : NotYet}</HealthRow>
+        <HealthRow label="Last restart" hint="Why the device last started">{restart ? <>{restart.kind ? <State kind={restart.kind}>{restart.word}</State> : restart.word}<small>{restart.code || 'UNKNOWN'}</small></> : NotYet}</HealthRow>
+        <HealthRow label="Firmware" hint="Version on the device">{health ? health.fw_version : NotYet}</HealthRow>
+        {health && report && <HealthRow label="Last report" hint="When it last sent a reading"><State kind={report.kind}>{report.word}</State><small>{report.ago}</small></HealthRow>}
+      </div>
+      {!health && <p className="ab-health-note">This device has not sent its health yet. It does after its next firmware update.</p>}
+      {trouble && <p className="ab-health-note">A weak signal or repeated restarts can leave gaps in the readings.</p>}
+      <How part="health" />
+    </>
+  );
+}
+
 function Settings({ session, call, deviceId, onSignOut }) {
   const [loaded, setLoaded] = useState(null); // { room, settings } as stored
   const [room, setRoom] = useState('');
@@ -126,9 +155,13 @@ function Settings({ session, call, deviceId, onSignOut }) {
   useEffect(() => {
     let alive = true;
     (async () => {
-      const [d, s] = await Promise.all([call(`device_status?id=eq.${deviceId}&select=room`), call(`settings?device_id=eq.${deviceId}`)]);
+      const [d, s, h] = await Promise.all([
+        call(`device_status?id=eq.${deviceId}&select=room`),
+        call(`settings?device_id=eq.${deviceId}`),
+        call(`device_health?device_id=eq.${deviceId}`).catch(() => null), // health is extra: a failure here never blocks the settings
+      ]);
       if (!alive) return;
-      const stored = { room: d.json?.[0]?.room ?? '', settings: s.json?.[0] || null };
+      const stored = { room: d.json?.[0]?.room ?? '', settings: s.json?.[0] || null, health: Array.isArray(h?.json) ? h.json[0] || null : null, nowMs: Date.now() };
       setLoaded(stored);
       setRoom(stored.room);
       if (stored.settings) setForm(formFrom(stored.settings));
@@ -158,7 +191,7 @@ function Settings({ session, call, deviceId, onSignOut }) {
         if (!res.ok || !res.json?.length) throw new Error(res.status); // an empty answer = refused by the row rule
         settings = res.json[0];
       }
-      setLoaded({ room: r.value, settings });
+      setLoaded((was) => ({ ...was, room: r.value, settings }));
       setRoom(r.value);
       setMessage({ kind: 'saved', text: 'Saved' });
     } catch { setMessage({ kind: 'error', text: 'Not saved. Sign in again and retry.' }); }
@@ -177,6 +210,8 @@ function Settings({ session, call, deviceId, onSignOut }) {
           {errors.room && <small className="ab-err">{errors.room}</small>}
           <small className="d-block mt-1 text-secondary">A room name only, never a person's name. Old readings keep their room.</small></div></div>
         <How part="room" />
+
+        <Health health={loaded.health} nowMs={loaded.nowMs} />
 
         <p className="ab-group-label">Device</p>
         <div className="ab-group">

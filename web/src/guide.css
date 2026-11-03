@@ -20,3 +20,7 @@
 .gd-table td:last-child, .gd-table th:last-child { text-align: right; white-space: nowrap; }
 .gd-qa dt { margin: 10px 0 2px; font-weight: 700; color: var(--viz-ink); }
 .gd-qa dd { margin: 0 0 6px; color: var(--viz-ink); }
+
+/* P05-04: a table of words (not numbers): the last column reads left to right and wraps; the first column is a fixed share. */
+.gd-table-text td:last-child, .gd-table-text th:last-child { text-align: left; white-space: normal; }
+.gd-table-text td:first-child, .gd-table-text th:first-child { width: 36%; vertical-align: top; font-weight: 600; }

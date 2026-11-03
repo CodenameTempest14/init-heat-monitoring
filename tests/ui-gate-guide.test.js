@@ -58,6 +58,7 @@ async function shootPage({ theme, hash = '#guide', size = { width: 390, height: 
     await page.route('**/rest/v1/rpc/is_admin', json(true));
     await page.route('**/rest/v1/device_status*', json([{ room: 'Room 204' }]));
     await page.route('**/rest/v1/settings*', json([SETTINGS]));
+    await page.route('**/rest/v1/device_health*', json([]));
     await page.goto(`${base}${hash}`, { waitUntil: 'networkidle' });
     if (steps) await steps(page);
     await page.mouse.move(0, 0);
@@ -115,8 +116,8 @@ test('the guide hides the room and status lines of the live page, and its back l
   assert.ok(page);
 });
 
-test('the How? links on the admin page open the guide at Room, Reporting interval and Heat alerts', async () => {
-  const wanted = { room: 'Room', interval: 'Reporting interval', alerts: 'Heat alerts' };
+test('the How? links on the admin page open the guide at Room, Device health, Reporting interval and Heat alerts', async () => {
+  const wanted = { room: 'Room', health: 'Device health', interval: 'Reporting interval', alerts: 'Heat alerts' };
   for (const [id, title] of Object.entries(wanted)) {
     const { page } = await shootPage({
       theme: 'light',
@@ -126,7 +127,7 @@ test('the How? links on the admin page open the guide at Room, Reporting interva
         await p.fill('#pw', 'xxxxxxxxxxxx');
         await p.click('button[type=submit]');
         await p.getByRole('button', { name: 'Save changes' }).waitFor();
-        assert.equal(await p.locator('a.ab-how').count(), 3);
+        assert.equal(await p.locator('a.ab-how').count(), 4);
         await p.locator(`a.ab-how[href="#guide/${id}"]`).click();
         await p.locator(`#${id}`).waitFor();
         await p.waitForFunction((sid) => { const r = document.getElementById(sid).getBoundingClientRect(); return r.top >= 0 && r.top < 200; }, id);

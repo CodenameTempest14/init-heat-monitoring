@@ -1,5 +1,6 @@
-// UI-GATE for the admin view #admin (P05-01, P05-02, P05-06, D-016): the built page must match the owner-approved
-// screenshots of proposal B in design/admin/proposal-b/ref/ (sign-in, wrong password, not an admin, settings, saved; phone
+// UI-GATE for the admin view #admin (P05-01, P05-02, P05-04, P05-06, D-016): the built page must match the owner-approved
+// screenshots of proposal B in design/admin/proposal-b/ref/ (sign-in, wrong password, not an admin) and of the settings page
+// with the device health group in design/admin/health/ref/ (settings = h-ok, saved = h-saved, h-trouble, h-none; phone
 // light and dark, plus settings on desktop). Supabase is faked with the mocks' made-up account and room
 // (design/admin/proposal-b/build-mocks.mjs); nothing reaches a real project. Needs `npm install` in web/ and Chromium.
 import test from 'node:test';
@@ -15,6 +16,7 @@ import { diffImages, loadApproved } from '../design/ui-gate.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'web', 'dist');
 const refs = path.join(root, 'design', 'admin', 'proposal-b', 'ref');
+const healthRefs = path.join(root, 'design', 'admin', 'health', 'ref');
 const headers = JSON.parse(readFileSync(path.join(root, 'web', 'vercel.json'), 'utf8')).headers[0].headers;
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
 
@@ -23,6 +25,8 @@ const DEVICE = '11111111-1111-1111-1111-111111111111';
 const EMAIL = 'admin@example.com'; // the mocks' made-up account
 const PASSWORD = 'xxxxxxxxxxxx';   // 12 characters, like the mock's dots
 const SETTINGS = { device_id: DEVICE, interval_s: 60, temp_offset_c: 0, rh_offset_pct: 0, alert_heat_index_c: 42, alert_quiet_min: 60 };
+const HEALTH_OK = { device_id: DEVICE, rssi_dbm: -58, reset_reason: 'POWERON', fw_version: '0.5.0', reported_at: new Date(NOW - 60_000).toISOString() };
+const HEALTH_TROUBLE = { device_id: DEVICE, rssi_dbm: -81, reset_reason: 'TASK_WDT', fw_version: '0.5.0', reported_at: new Date(NOW - 6 * 60_000).toISOString() };
 const newest = { device_id: DEVICE, recorded_at: new Date(NOW).toISOString(), received_at: new Date(NOW).toISOString(), temp_c: 32.2, rh_pct: 68, heat_index_c: 40, room: 'Room 204' };
 
 let browser, server, base;
@@ -46,7 +50,7 @@ test.after(async () => { await browser?.close(); server?.close(); });
  * Open #admin with a fake Supabase. `admin`: what is_admin() answers. `goodPassword`: whether sign-in succeeds.
  * `steps(page)` drives the page to the state; every non-GET call is recorded in `calls`.
  */
-async function shootPage({ theme, size = { width: 390, height: 640 }, admin = true, goodPassword = true, steps, act }) {
+async function shootPage({ theme, size = { width: 390, height: 640 }, admin = true, goodPassword = true, health = HEALTH_OK, steps, act }) {
   const ctx = await browser.newContext({ viewport: size, colorScheme: theme, reducedMotion: 'reduce', deviceScaleFactor: 1 });
   try {
     const page = await ctx.newPage();
@@ -66,6 +70,7 @@ async function shootPage({ theme, size = { width: 390, height: 640 }, admin = tr
     await page.route('**/rest/v1/device_status*', json([{ room: 'Room 204' }]));
     await page.route('**/rest/v1/settings*', (route) => (route.request().method() === 'PATCH'
       ? json([{ ...SETTINGS, ...route.request().postDataJSON() }])(route) : json([SETTINGS])(route)));
+    await page.route('**/rest/v1/device_health*', json(health ? [health] : []));
     await page.route('**/rest/v1/rpc/admin_set_room', (route) => route.fulfill({ status: 204 }));
     await page.goto(`${base}#admin`, { waitUntil: 'networkidle' });
     await page.getByRole('button', { name: 'Sign in' }).waitFor();
@@ -89,6 +94,8 @@ const STATES = {
   'b-sign-in-error': { goodPassword: false, steps: async (p) => { await signIn(p); await p.getByRole('alert').waitFor(); } },
   'b-not-admin': { admin: false, steps: async (p) => { await signIn(p); await p.getByText('Not an admin').waitFor(); } },
   'b-settings': { steps: async (p) => { await signIn(p); await p.getByRole('button', { name: 'Save changes' }).waitFor(); } },
+  'h-trouble': { health: HEALTH_TROUBLE, steps: async (p) => { await signIn(p); await p.getByRole('button', { name: 'Save changes' }).waitFor(); } },
+  'h-none': { health: null, steps: async (p) => { await signIn(p); await p.getByRole('button', { name: 'Save changes' }).waitFor(); } },
   'b-saved': {
     steps: async (p) => {
       await signIn(p);
@@ -114,7 +121,9 @@ function box(a, b) {
   }
   return `x ${x0}-${x1}, y ${y0}-${y1}`;
 }
-const approved = (state, kind, theme) => loadApproved(readFileSync(path.join(refs, `${state}-${kind}-${theme}.png`)));
+// The settings pages are drawn with the health group (design/admin/health/ref); the others are unchanged proposal B.
+const HEALTH_REF = { 'b-settings': 'h-ok', 'b-saved': 'h-saved', 'h-trouble': 'h-trouble', 'h-none': 'h-none' };
+const approved = (state, kind, theme) => loadApproved(readFileSync(path.join(HEALTH_REF[state] ? healthRefs : refs, `${HEALTH_REF[state] || state}-${kind}-${theme}.png`)));
 const same = (expected, shot) => {
   const r = diffImages(expected, shot);
   assert.equal(r.sameSize, true, `the page has another size than the approved image (${shot.w}x${shot.h} vs ${expected.w}x${expected.h})`);
