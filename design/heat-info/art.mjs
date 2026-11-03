@@ -60,4 +60,6 @@ const SCENES = {
   'extreme-danger': () => `${blob(58, 60, 36)}${blob(170, 60, 46)}${blob(270, 60, 40)}${thermometer(56, 60, 1, true)}${kid(170, 40, 1.25, { shirt: PURPLE, face: 'dizzy' })}${drop(142, 24, 0.9)}${drop(202, 22, 0.8)}${cross(270, 60, 1)}`,
 };
 
-export const art = (id) => `<svg class="hl-art hl-art-${id}" viewBox="0 0 326 120" aria-hidden="true">${SCENES[id]()}</svg>`;
+// Horizontal shift that centres each scene in the 326-wide frame (measured from the drawing's bounding box, blobs included).
+const SHIFT = { what: -7, caution: 21, 'extreme-caution': 5, danger: -17, 'extreme-danger': -3.5 };
+export const art = (id) => `<svg class="hl-art hl-art-${id}" viewBox="0 0 326 120" aria-hidden="true"><g class="scene" transform="translate(${SHIFT[id]} 0)">${SCENES[id]()}</g></svg>`;
