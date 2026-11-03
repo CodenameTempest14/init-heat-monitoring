@@ -3,7 +3,7 @@
 Newest first. One entry per session.
 
 ## 2026-11-03 · s25
-P03-07 ticked: 24 h run on the power bank in two legs (12 h + 12 h, 7 min break), 1 429 of about 1 440 rows, gaps 221 s, 385 s (the break), 95 s, bank 100 % to 95 % to 90 %. 2 min offline rule still unverified (owner's screenshot came 3 h after unplugging). Also this session, recorded here late: P05-04 server and firmware parts written and not applied, F-15 extended `#heat` page built (wording draft, teacher review pending, not pushed).
+P03-07 ticked: 24 h run on the power bank in two legs (12 h + 12 h, 7 min break), 1 429 of about 1 440 rows, gaps 221 s, 385 s (the break), 95 s, bank 100 % to 95 % to 90 %. 2 min offline rule verified on the hosted page afterwards: the owner replugged and unplugged the board (last row 13:43:36Z) and the phone screenshot at 2 min shows `Offline: no reading for 2 min` (the earlier 3 h screenshot came too late). Also this session, recorded here late: P05-04 server and firmware parts written and not applied, F-15 extended `#heat` page built (wording draft, teacher review pending, not pushed).
 
 ## 2026-11-02 · s24
 Short Q&A session during the 24 h run (329 rows at 15:32Z, largest gap 64 s; untouched). No code. Owner's light-mode phone screenshots (`#admin` sign-in, wrong password, signed in, guide, home with charts, finished school day) looked at: no defect, school-day numbers add up. Answered: admin is the same app (own sign-in per install, reads init-test), no new firmware needed for admin (interval and room come in the upload reply, offsets applied by the server), 77 % flash is harmless but matters for OTA, a saved room should reach the OLED at the next upload (not yet seen). Nothing ticked.
