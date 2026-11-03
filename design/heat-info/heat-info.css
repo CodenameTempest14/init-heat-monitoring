@@ -1,0 +1,10 @@
+/* F-15 extended mocks ("What does this mean?"): a link inside the heat card, and the #heat page. Colours only from tokens.css / charts.css. */
+.heat-more { display: flex; align-items: center; min-height: 44px; margin: 4px 0 -8px; font-weight: 600; color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.heat-more:hover, .heat-more:focus { color: inherit; }
+.hl-sec { border-left-width: 6px; }
+.hl-range { margin: 0 0 6px; font-weight: 700; color: var(--viz-ink); }
+.hl-caution { border-left-color: var(--heat-caution-border); }
+.hl-extreme-caution { border-left-color: var(--heat-extreme-caution-border); }
+.hl-danger { border-left-color: var(--heat-danger-border); }
+.hl-extreme-danger { border-left-color: var(--heat-extreme-danger-border); }
+.hl-signs { margin: 0 0 8px; padding-left: 22px; }
