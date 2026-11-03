@@ -34,7 +34,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\\System Documents\\Do
 3. Open every reply with the status line from \`node tools/phase-report.mjs\`.
 4. No new feature is planned, designed or built until the owner approves it in documentation/specs/FEATURES.md.
 5. **Push only to your own branch** (owner: \`codenametempest14\`) and **ask before every push and every merge to \`main\`**, naming the target.
-6. **Research paper (CLAUDE.md rule 5):** keep `paper/` (.docx and .pdf, `node paper/build.mjs`) in step with every feature, change and new data; every reference must be opened and read by you, published 2021 to 2026, never invented.
+6. **Research paper (CLAUDE.md rule 5):** keep \`paper/\` (.docx and .pdf, \`node paper/build.mjs\`) in step with every feature, change and new data; every reference must be opened and read by you, published 2021 to 2026, never invented.
 7. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run \`node tools/continuation-prompt.mjs\` and **show the generated prompt and the progress table in the final message**.
 
 ## Where we are

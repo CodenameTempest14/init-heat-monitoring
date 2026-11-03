@@ -8,7 +8,8 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 3. Open every reply with the status line from `node tools/phase-report.mjs`.
 4. No new feature is planned, designed or built until the owner approves it in documentation/specs/FEATURES.md.
 5. **Push only to your own branch** (owner: `codenametempest14`) and **ask before every push and every merge to `main`**, naming the target.
-6. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run `node tools/continuation-prompt.mjs` and **show the generated prompt and the progress table in the final message**.
+6. **Research paper (CLAUDE.md rule 5):** keep `paper/` (.docx and .pdf, `node paper/build.mjs`) in step with every feature, change and new data; every reference must be opened and read by you, published 2021 to 2026, never invented.
+7. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run `node tools/continuation-prompt.mjs` and **show the generated prompt and the progress table in the final message**.
 
 ## Where we are
 [P03 · Device firmware · 10/10 done · 0 blocked · unverified 0]
@@ -39,8 +40,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 6. **Test command:** `node --env-file=.env --test --test-concurrency=1` (204/204 in s27) and `node --env-file=.env --test --test-concurrency=1 "tests/backend/*.backend.js"` (80/80). Plain `npm test` fails (UI gates race on `web/dist`): consider putting this in package.json. The backend tests wipe init-test readings (the 24 h run is saved in `paper/data/`).
 7. P03-07 follow-ups: causes of the gaps (the run query shows 220 s and 385 s); health report says why a restart happened. Not done: sensor accuracy check (needs a reference thermometer and hygrometer); the probe has never caught a real hole and does not probe the new public functions `readings_hourly` / `readings_span`; page loads 2.7 to 4.2 s; stylesheet 698 kB; P03-05 setup timeout and iPhone; P03-06 queue over 50, full queue, the 400 drop. Flash is about 77 % full (matters for P08).
 8. F-24 edge: if a page ends between two rooms of the same hour (device moved in that hour), the second room's row is skipped. F-15 P06-03 not ticked.
-9. Before every commit run `node tools/secret-scan.mjs`. Inline SQL: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`. Flash: in `firmware/init`, `pio run -t upload --upload-port COM8`, hold BOOT on `Connecting....`. Use the Edit tool (not a shell heredoc) for edits with 
- or backslashes; look at the page in a browser, not only the build. Never build a path with `new URL(...).pathname` (it percent-encodes spaces: use `fileURLToPath`, s27 bug).
+9. Before every commit run `node tools/secret-scan.mjs`. Inline SQL: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`. Flash: in `firmware/init`, `pio run -t upload --upload-port COM8`, hold BOOT on `Connecting....`. Use the Edit tool (not a shell heredoc) for edits that contain backslash escapes such as a carriage-return and line-feed pair; look at the page in a browser, not only the build. Never build a path with `new URL(...).pathname` (it percent-encodes spaces: use `fileURLToPath`, s27 bug).
 
 ### Waiting on the owner
 - On the phone: Reset then Save in `#admin`; the Readings table (From/To days, Download CSV) on the hosted page; what the OLED shows after a restart.
