@@ -36,7 +36,7 @@ for (const s of STATES) {
   <section class="card heat${s.cat ? ` heat-${s.cat}` : ''}" aria-label="Heat index"><div class="card-body">
     <p class="app-label">${s.hiLabel}</p>
     <p class="heat-num">${s.hi}${s.cat ? '<span class="heat-unit">°C</span>' : ''}</p>
-    ${s.cat ? `<p class="heat-cat"><svg viewBox="0 0 24 24" aria-hidden="true">${SHAPES[s.cat]}</svg>${s.catLabel}</p>` : ''}
+    ${s.cat ? `<p class="heat-cat"><svg viewBox="0 0 24 24" aria-hidden="true">${SHAPES[s.cat]}</svg>${s.catLabel}</p>${s.cat === 'below-range' ? '' : `<a class="heat-more" href="#heat/${s.cat}">What does this mean? ›</a>`}` : ''}
   </div></section>
   <div class="app-pair">
     <section class="card" aria-label="Temperature"><div class="card-body"><p class="app-label">Temperature</p><p class="stat">${s.temp}</p></div></section>

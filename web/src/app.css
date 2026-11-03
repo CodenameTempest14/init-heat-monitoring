@@ -33,3 +33,7 @@ body { background: var(--init-bg); color: var(--init-text); font-family: system-
 .status-offline { color: var(--status-offline); }
 .status-wait { color: var(--status-wait); }
 .status-online svg circle.dot { fill: currentColor; }
+
+/* F-15 extended: the link inside the heat card under the level name. Same text colour as the level, so the card's contrast is unchanged. */
+.heat-more { display: flex; align-items: center; min-height: 44px; margin: 4px 0 -8px; font-weight: 600; color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.heat-more:hover, .heat-more:focus { color: inherit; }

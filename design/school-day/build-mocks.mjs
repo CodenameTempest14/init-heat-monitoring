@@ -92,7 +92,7 @@ for (const [name, body] of Object.entries(states)) { writeFileSync(new URL(`./${
 // The home page gains one row under "updated ...": a link to this view.
 const homeTop = `<section class="card heat heat-danger" aria-label="Heat index"><div class="card-body">
     <p class="app-label">Heat index</p><p class="heat-num">43<span class="heat-unit">°C</span></p>
-    <p class="heat-cat"><svg viewBox="0 0 24 24" aria-hidden="true">${SHAPES.danger}</svg>Danger</p></div></section>
+    <p class="heat-cat"><svg viewBox="0 0 24 24" aria-hidden="true">${SHAPES.danger}</svg>Danger</p><a class="heat-more" href="#heat/danger">What does this mean? ›</a></div></section>
   <div class="app-pair">
     <section class="card" aria-label="Temperature"><div class="card-body"><p class="app-label">Temperature</p><p class="stat">34.1 °C</p></div></section>
     <section class="card" aria-label="Humidity"><div class="card-body"><p class="app-label">Humidity</p><p class="stat">62 %</p></div></section>

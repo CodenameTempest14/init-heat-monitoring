@@ -1,4 +1,4 @@
-// Clip-art pictures for the #heat mock (F-15 extended): friendly flat cartoons with a dark outline, drawn as inline SVG.
+// Clip-art pictures for the #heat page (F-15 extended; the design mocks in design/heat-info/ import this same file): friendly flat cartoons with a dark outline, drawn as inline SVG.
 // No image files, no copyright, they work offline. Fixed bright colours on a pale "sticker" panel (see heat-info.css), so they look
 // the same in light and dark mode. They are decoration: the text says everything, so they are hidden from screen readers.
 const OUT = '#243044';

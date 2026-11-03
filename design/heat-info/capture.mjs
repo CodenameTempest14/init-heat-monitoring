@@ -11,7 +11,7 @@ const browser = await chromium.launch();
 for (const theme of ['light', 'dark']) {
   for (const [kind, size] of [['phone', { width: 390, height: 640 }], ['desktop', { width: 1280, height: 720 }]]) {
     const ctx = await browser.newContext({ viewport: size, colorScheme: theme, reducedMotion: 'reduce', deviceScaleFactor: 1 });
-    for (const s of kind === 'phone' ? ['home-danger', 'home-caution', 'heat'] : ['heat']) {
+    for (const s of kind === 'phone' ? ['heat'] : ['heat']) {
       const page = await ctx.newPage();
       await page.goto(pathToFileURL(join(here, `${s}.html`)).href, { waitUntil: 'load' });
       await page.evaluate((t) => document.documentElement.setAttribute('data-bs-theme', t), theme);

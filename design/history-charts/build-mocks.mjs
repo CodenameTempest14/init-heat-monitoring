@@ -116,7 +116,8 @@ for (const s of STATES) {
   <section class="card heat heat-${top.cat}" aria-label="Heat index"><div class="card-body">
     <p class="app-label">Heat index</p>
     <p class="heat-num">${Math.round(top.hi)}<span class="heat-unit">°C</span></p>
-    <p class="heat-cat"><svg viewBox="0 0 24 24" aria-hidden="true">${SHAPES[top.cat]}</svg>${CAT_LABEL[top.cat]}</p>
+    <p class="heat-cat"><svg viewBox="0 0 24 24" aria-hidden="true">${SHAPES[top.cat]}</svg>${CAT_LABEL[top.cat]}</p>${top.cat === 'below-range' ? '' : `
+    <a class="heat-more" href="#heat/${top.cat}">What does this mean? ›</a>`}
   </div></section>
   <div class="app-pair">
     <section class="card" aria-label="Temperature"><div class="card-body"><p class="app-label">Temperature</p><p class="stat">${top.temp.toFixed(1)} °C</p></div></section>

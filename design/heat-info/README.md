@@ -1,14 +1,13 @@
 # design/heat-info/
 
-**PROPOSED, waiting for the owner's approval of the mocks and for a teacher's review of every sentence (F-15 extended, s25; the owner approved the proposal, not these mocks yet).** Mocks of the "What does this mean?" link on the home page and of the public `#heat` page. Made-up room only. The wording is a **draft**: general advice, not official DepEd or PAGASA guidance. Level ranges are D-019 (27 / 33 / 42 / 52).
+**Mocks APPROVED by the owner (s25); built in `web/src/Heat.jsx` (route `#heat`, `#heat/<level>`), gated by `tests/ui-gate-heat.test.js`. NOT LIVE until a teacher has reviewed every sentence (D-034): do not push the wording to `main` before that.** F-15 extended, "What does this mean?". Made-up values only. The wording is a **draft**: general advice, not official DepEd or PAGASA guidance. Level ranges are D-019 (27 / 33 / 42 / 52).
 
 | File | What |
 |---|---|
-| `home-danger.html`, `home-caution.html` | The approved home mock with one new link, **What does this mean? ›**, inside the heat card under the level name (it opens `#heat/<level>`); same text colour as the level, so the contrast of the card is unchanged |
-| `heat.html` | The `#heat` page: a "general advice" note, what the heat index is, one part per level, each with a small picture (range, picture, what it can do to the body, what to prepare and do). The pictures are friendly clip-art cartoons (outlined, flat colour, a kid, the sun, a bottle, a fan, an umbrella), drawn in `art.mjs` as inline SVG: no image files, no copyright, they work offline. They sit on a pale panel in both light and dark mode so the colours always read well, and they are decoration only (hidden from screen readers). Caution = a smiling sun and a kid with a water bottle; Extreme caution = a sweating kid, a window, a fan and a glass of water; Danger = a tired kid under an umbrella, a clock and a cross sun; Extreme danger = a thermometer, a dizzy kid and a red-cross sign; the intro = a thermometer plus a smiling water drop, and warning signs for heat exhaustion and heat stroke |
-| `art.mjs` | The clip-art pictures (inline SVG), used by `build-mocks.mjs` |
-| `heat-info.css` | The few new styles |
-| `build-mocks.mjs`, `capture.mjs` | `node design/heat-info/build-mocks.mjs`, then `capture.mjs` writes `ref/<state>-<phone\|desktop>-<light\|dark>.png` |
+| `heat.html` | The `#heat` page: a "general advice" note, what the heat index is, one part per level (range, a clip-art picture, what it can do to the body, what to prepare and do), and warning signs for heat exhaustion and heat stroke. Written by `build-mocks.mjs` from the same text and pictures the page uses (`web/src/heatText.js`, `web/src/heatArt.js`) |
+| `build-mocks.mjs`, `capture.mjs` | `node design/heat-info/build-mocks.mjs`, then `capture.mjs` writes `ref/heat-<phone\|desktop>-<light\|dark>.png` |
+
+The **What does this mean? ›** link inside the heat card on the home page is drawn in the home mocks (`design/home-cards`, `history-charts`, `offline-badge`, `pwa`, `school-day`), whose pictures were redrawn for it; its style is in `web/src/app.css`. The pictures are friendly clip-art cartoons drawn as inline SVG (no image files, no copyright, they work offline), on a pale panel in both light and dark mode, hidden from screen readers.
 
 ## Sources and what is still unchecked
 - Advice (less outdoor activity 12:00 to 4:00, drink water, rest in shade, light-coloured clothes): PAGASA's 25 March 2024 outlook, `pagasa.dost.gov.ph/article/154`, read in full.

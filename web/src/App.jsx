@@ -8,6 +8,7 @@ import History from './History.jsx';
 import School from './School.jsx';
 import Admin from './Admin.jsx';
 import Guide from './Guide.jsx';
+import Heat from './Heat.jsx';
 
 const REFRESH_MS = 30000;
 
@@ -35,7 +36,7 @@ const STATUS_ICON = {
   wait: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
 };
 
-// The school-day view lives at #school, the admin view at #admin and the admin guide at #guide (or #guide/<part>), on the same address (F-12, P05, F-22); no server change.
+// The school-day view lives at #school, the admin view at #admin, the admin guide at #guide (or #guide/<part>) and the "what does this mean?" page at #heat (or #heat/<level>), on the same address (F-12, P05, F-22, F-15); no server change.
 function useRoute() {
   const [hash, setHash] = useState(() => window.location.hash);
   useEffect(() => {
@@ -63,7 +64,8 @@ export default function App() {
   const schoolRoute = route === '#school';
   const adminRoute = route === '#admin';
   const guideRoute = route === '#guide' || route.startsWith('#guide/');
-  const quietHeader = adminRoute || guideRoute; // these pages have no room or status line
+  const heatRoute = route === '#heat' || route.startsWith('#heat/');
+  const quietHeader = adminRoute || guideRoute || heatRoute; // these pages have no room or status line
   const [view, setView] = useState({ ...readingView(undefined, Date.now()), updated: 'loading…' });
   const [status, setStatus] = useState(null); // null until the first answer, so no badge flashes before we know
   const [failed, setFailed] = useState(false);
@@ -101,7 +103,7 @@ export default function App() {
           </p>
         )}
       </header>
-      {guideRoute ? <Guide section={route.slice('#guide/'.length)} /> : adminRoute ? <Admin deviceId={deviceId} ready={status !== null} /> : schoolRoute ? <School deviceId={deviceId} ready={status !== null} /> : (
+      {guideRoute ? <Guide section={route.slice('#guide/'.length)} /> : heatRoute ? <Heat section={route.slice('#heat/'.length)} /> : adminRoute ? <Admin deviceId={deviceId} ready={status !== null} /> : schoolRoute ? <School deviceId={deviceId} ready={status !== null} /> : (
         <>
         <section className={`card heat${cat ? ` heat-${cat}` : ''}`} aria-label="Heat index">
           <div className="card-body">
@@ -112,6 +114,7 @@ export default function App() {
                 <svg viewBox="0 0 24 24" aria-hidden="true">{SHAPES[cat]}</svg>{CATEGORY_LABEL[cat]}
               </p>
             )}
+            {cat && cat !== 'below-range' && <a className="heat-more" href={`#heat/${cat}`}>What does this mean? ›</a>}
           </div>
         </section>
         <div className="app-pair">
