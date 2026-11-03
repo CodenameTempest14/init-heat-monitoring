@@ -103,3 +103,21 @@ F-09, F-10, F-17 and F-21 are already approved (Tiers 1 to 3 in full, 2026-10-31
 **Tests first:** refused calls (anonymous and a signed-in non-admin) get written and seen failing before the policies exist. The offset and the alert's quiet period are correctness rules, so they get tests first too.
 
 **Model:** Opus 5.5 for P05-01 and P05-05 (login and policies). Sonnet 5.5 for the rest.
+
+## F-15 extended: "What does this mean?" page: PROPOSED (s25), WAITING FOR THE OWNER'S APPROVAL, nothing designed or built
+Owner's question (s25): does a visitor learn what the heat index number means, what it can do to the body, and what to prepare for each level? **Today: no.** The home page shows the number and the PAGASA level (name, colour, icon) and nothing more. F-15 (P06-03) covers only a short advice line under the level; this proposal widens it.
+
+| Part | What the visitor sees | Notes / risk |
+|---|---|---|
+| P-a | A **What does this mean? ›** link under the level on the home page (same style as the admin **How? ›** links) that opens a public page `#heat` | Text only: no new data, no server change, no sign-in. |
+| P-b | On that page, one part per level (Caution, Extreme caution, Danger, Extreme danger): the PAGASA range, **what it can do to the body**, and **what to prepare or do** | Written plainly for students and teachers, like the admin guide (what it means, what to do, an example). |
+| P-c | A short line under the level on the home page for the current level (the original F-15) | Optional second step. |
+| P-d | The link opens the part for the level the room is in now (`#heat/danger`) | Same scroll-to-part trick the guide already uses. |
+
+**Source and wording (what I checked in s25, and what I could not):**
+- PAGASA's own page `pagasa.dost.gov.ph/article/154` (a 25 March 2024 weather outlook, read in full) gives the advice itself: lessen physical outdoor activity from 12:00 to 4:00 in the afternoon; drink water regularly; stay and rest in shaded areas from time to time; wear light-coloured clothing; to avoid fatigue, heat cramps and heat exhaustion.
+- The level-by-level effects come from news summaries of PAGASA's classification, **not from PAGASA's table, which I could not read** (the table page is an image or script-rendered, and the older `www1.pagasa.dost.gov.ph` address does not resolve): Caution: fatigue possible with prolonged exposure. Extreme caution: heat cramps and heat exhaustion possible. Danger: heat cramps and heat exhaustion likely, heat stroke probable with continued exposure. Extreme danger: heat stroke highly likely, a medical emergency.
+- **Possible conflict to settle before any text is written:** one PAGASA-derived source lists the ranges as 27-32, 32-41, 41-54 and over 54 °C (an older table), while 2024-2025 reports and our D-019 use 27-32, 33-41, 42-51 and 52 and up. The project keeps D-019 until a teacher or PAGASA's current legend (`pagasa.dost.gov.ph/learnings/legend`, not yet read) says otherwise.
+- All "what to prepare" text stays general (water, shade, light clothing, rest breaks, knowing the warning signs, when to ask a teacher or call for medical help). It is **advisory wording, not official DepEd or PAGASA guidance**, and **a teacher reviews every sentence before it goes live (D-034, F-15)**. No medical dosing or treatment claims.
+
+**Suggested place in the plan:** right after P05-04 (a P06 item brought forward), because it helps every visitor and needs no backend. Mocks first (home link, `#heat` page, phone light and dark), owner approves, then build with a UI gate like the guide's. Sonnet 5.5.
