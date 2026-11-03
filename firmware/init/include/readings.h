@@ -53,8 +53,10 @@ class ReadingBuffer {
 };
 
 // {"device_key":"...","readings":[{"recorded_at":"2026-11-02T05:09:38Z","temp_c":31.1,"rh_pct":60.1},...]}
+// With a health fragment from health.h the body ends ...],"health":{...}} (P05-04); null or "" leaves it out.
 // Returns false (and leaves a terminated string) when n is 0 or more than MAX_BATCH, or it does not fit.
-inline bool buildUploadBody(char* out, size_t outSize, const char* deviceKey, const Reading* r, size_t n) {
+inline bool buildUploadBody(char* out, size_t outSize, const char* deviceKey, const Reading* r, size_t n,
+                            const char* healthJson = nullptr) {
   if (!out || outSize == 0) return false;
   out[0] = '\0';
   if (!deviceKey || !r || n == 0 || n > MAX_BATCH) return false;
@@ -73,6 +75,7 @@ inline bool buildUploadBody(char* out, size_t outSize, const char* deviceKey, co
     if (w < 0 || (size_t)w >= outSize - pos) return false;
     pos += (size_t)w;
   }
-  w = std::snprintf(out + pos, outSize - pos, "]}");
+  const bool withHealth = healthJson && healthJson[0];
+  w = std::snprintf(out + pos, outSize - pos, withHealth ? "],\"health\":%s}" : "]}", healthJson);
   return w >= 0 && (size_t)w < outSize - pos;
 }
