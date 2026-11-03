@@ -16,3 +16,6 @@ Analysis of Data, Ch. 4 Summary, References, Appendices).
 
 Update the paper in the same session as any feature, hardware or data change, then rebuild both files.
 Researcher, coach and school names are left as `[...]` placeholders until the owner gives them.
+
+## Chapter 4 parked (owner, s28)
+Chapter 4 (Summary, Conclusions and Recommendations) is left out of the build until the owner says to put it back. Its text is kept in `chapter4.parked.txt`; to restore it, paste its lines into `content.mjs` just before the `refs` block.

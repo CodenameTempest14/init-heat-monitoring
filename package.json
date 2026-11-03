@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test",
+    "test": "node --env-file=.env --test --test-concurrency=1",
     "test:backend": "node --env-file=.env --test \"tests/backend/*.backend.js\""
   },
   "devDependencies": {

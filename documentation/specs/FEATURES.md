@@ -137,3 +137,6 @@ Owner's question (s25): does a visitor learn what the heat index number means, w
 
 
 **Status (s27, 2026-11-03):** F-23 and F-24 approved by the owner (mocks `design/room-reset-readings/`, D-035, D-036) and **built test-first on init-test**. F-23: firmware default built, not flashed; F-24: not on live yet. Neither is seen on a phone yet, so neither is ticked in P05-06 / P04.
+
+**Status (s28, 2026-11-03):** owner on the hosted page: F-24 Readings table works (picks days, shows hourly rows, downloads a CSV) — owner's words, "Yes". F-23: the OLED shows `Unassigned` after a restart (owner, "Yes"); a room save from `#admin` showed on the OLED and the web app; the **Reset** button is not tried yet.
+**Reset seen (s28, 2026-11-03):** the owner pressed **Reset** then **Save changes** in `#admin` (screenshots: "Saved" tick, Room box `Unassigned`, Reset button greyed out) and the real OLED then showed `Unassigned  Wi-Fi OK`, 35 °C, EXTREME CAUTION, T 30.1 RH 69%. F-23 is seen on a phone and on the board.

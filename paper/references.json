@@ -1,7 +1,7 @@
 [
  {
   "key": "lu2022",
-  "apa": "Lu, Y.-C., & Romps, D. M. (2022). Extending the Heat Index. Journal of Applied Meteorology and Climatology, 61(10). https://doi.org/10.1175/JAMC-D-22-0021.1",
+  "apa": "Lu, Y.-C., & Romps, D. M. (2022). Extending the Heat Index. Journal of Applied Meteorology and Climatology, 61(10), 1367-1383. https://doi.org/10.1175/JAMC-D-22-0021.1",
   "checked": "2026-11-03",
   "how": "Read the front page of the eScholarship PDF copy (https://escholarship.org/uc/item/5qw5f679): title, authors, journal 61(10), 2022-10-01, DOI. Read the introduction: the Heat Index uses Steadman's model; polynomial fits (Rothfusz 1990) are used by the National Weather Service.",
   "used_for": "Background: what the heat index is and that the National Weather Service uses a polynomial fit."
@@ -19,6 +19,13 @@
   "checked": "2026-11-03",
   "how": "Read the page: dated 12 April 2024, signed by the PAGASA Administrator. It says a 4-tier effect-based classification is used and that school heads and local governments should have the final say on decisions.",
   "used_for": "Official source that PAGASA uses a four-tier, effect-based heat index classification and leaves school decisions to school heads and local governments. The tier ranges (27-32, 33-41, 42-51, 52 and above) are NOT in this source; they are project decision D-019 and need a PAGASA table before the paper cites a source for them."
+ },
+ {
+  "key": "petaca2026",
+  "apa": "Petaca, M. A. (2026, April 22). Heat index monitoring and early warning system of DOST-PAGASA [Slide presentation]. DOST-PAGASA, Climatology and Agrometeorology Division. https://pubfiles.pagasa.dost.gov.ph/climps/climateforum/special_lecture.pdf",
+  "checked": "2026-11-03",
+  "how": "Downloaded the PDF (14 slides) and looked at every slide as an image. Slide 1: title, author (Weather Specialist, IAAS-CAD, DOST-PAGASA), date 22 April 2026. Slide 4 (effect-based classification): Caution 27-32 C, Extreme Caution 33-41 C, Danger 42-51 C, Extreme Danger 52 C and beyond, each with its effect on the body.",
+  "used_for": "Source of the four PAGASA tier ranges used by the app (D-019) and of their effects on the body. It is a conference-style slide deck from PAGASA, not a peer-reviewed article; the paper says so."
  },
  {
   "key": "tzintzun2026",

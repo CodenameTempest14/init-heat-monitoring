@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType, ImageRun, PageBreak,
-  Footer, PageNumber, BorderStyle,
+  Footer, PageNumber, BorderStyle, ExternalHyperlink,
 } from 'docx';
 import { blocks, figures, meta } from './content.mjs';
 
@@ -39,6 +39,10 @@ const para = (text, o = {}) => new Paragraph({
   indent: o.indent, keepNext: o.keepNext, pageBreakBefore: o.pb,
   children: Array.isArray(text) ? text : [run(text, o)],
 });
+// A reference line: a bullet, the citation text, and every web address as a real clickable link.
+const refRuns = (x) => [run('•  '), ...x.split(/(https?:\/\/\S+)/).filter(Boolean).map((part) => /^https?:\/\//.test(part)
+  ? new ExternalHyperlink({ link: part, children: [new TextRun({ text: part, font: FONT, size: SZ, color: '0563C1', underline: {} })] })
+  : run(part))];
 const center = (t, o = {}) => para(t, { ...o, align: AlignmentType.CENTER });
 const cell = (t, o = {}) => new TableCell({
   width: { size: o.w, type: WidthType.DXA },
@@ -82,7 +86,7 @@ for (const b of blocks) {
     }
     case 'refs':
       kids.push(center('References', { bold: true, after: 240 }));
-      b.items.forEach((x) => kids.push(para(x, { align: AlignmentType.LEFT, indent: { left: 720, hanging: 720 } })));
+      b.items.forEach((x) => kids.push(para(refRuns(x), { align: AlignmentType.LEFT, indent: { left: 720, hanging: 360 } })));
       break;
   }
 }
@@ -109,14 +113,14 @@ for (const b of blocks) {
   else if (b.t === 'ul') html += '<div>' + b.items.map((x) => `<p class="li">•&nbsp; ${esc(x)}</p>`).join('') + '</div>';
   else if (b.t === 'table') html += `<p class="cap">${esc(b.cap)}</p><table><thead><tr>${b.head.map((h) => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${b.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
   else if (b.t === 'fig') { fn += 1; html += `<figure><img src="data:image/png;base64,${pngs[b.k].toString('base64')}"><figcaption>Figure ${fn}. ${esc(figures[b.k].title)}</figcaption></figure>`; }
-  else if (b.t === 'refs') html += `<h1>References</h1>` + b.items.map((x) => `<p class="ref">${esc(x)}</p>`).join('');
+  else if (b.t === 'refs') html += `<h1>References</h1>` + b.items.map((x) => `<p class="ref">•&nbsp; ${esc(x).replace(/(https?:\/\/\S+)/g, '<a href="$1">$1</a>')}</p>`).join('');
 }
 const css = `@page{size:8.5in 11in;margin:1in}
 body{font:12pt/1.5 "Times New Roman",Times,serif;margin:0}
 p{margin:0 0 6pt;text-align:justify}.ind{text-indent:.5in}.c{text-align:center}.c p{text-align:center}
 .title .big{font-size:16pt;font-weight:700;margin-top:1.2in}.title .mid{font-size:14pt;font-weight:700}.b{font-weight:700}.sp{margin-top:.6in;margin-bottom:.5in}.sp2{margin-top:.25in}
 h1{font-size:12pt;text-align:center;margin:0 0 12pt}h2{font-size:12pt;margin:6pt 0 3pt;break-after:avoid}
-.li{margin-left:.5in;text-indent:-.25in}.ref{margin-left:.5in;text-indent:-.5in;text-align:left}
+.li{margin-left:.5in;text-indent:-.25in}.ref{margin-left:.5in;text-indent:-.25in;text-align:left}.ref a{color:#0563C1;text-decoration:underline;word-break:break-all}
 .pb{break-after:page}
 table{border-collapse:collapse;width:100%;font-size:10.5pt;line-height:1.15;margin-bottom:10pt}th,td{border:1px solid #000;padding:2pt 4pt;text-align:left;vertical-align:top}th{background:#e7e7e7}tr{break-inside:avoid}thead{display:table-header-group}
 .cap{font-weight:700;text-align:left;break-after:avoid;margin-bottom:3pt}
