@@ -9,9 +9,10 @@
 .hl-extreme-danger { border-left-color: var(--heat-extreme-danger-border); }
 .hl-signs { margin: 0 0 8px; padding-left: 22px; }
 
-/* Decorative pictures (inline SVG): a calm panel, tinted with the level's own colour. */
-.hl-art { display: block; width: 100%; height: auto; margin: 0 0 12px; border-radius: 10px; background: color-mix(in srgb, var(--viz-grid) 45%, var(--viz-surface)); }
-.hl-art-caution { background: color-mix(in srgb, var(--heat-caution-border) 14%, var(--viz-surface)); }
-.hl-art-extreme-caution { background: color-mix(in srgb, var(--heat-extreme-caution-border) 14%, var(--viz-surface)); }
-.hl-art-danger { background: color-mix(in srgb, var(--heat-danger-border) 14%, var(--viz-surface)); }
-.hl-art-extreme-danger { background: color-mix(in srgb, var(--heat-extreme-danger-border) 14%, var(--viz-surface)); }
+/* Decorative clip art (inline SVG, art.mjs): a pale "sticker" panel in both light and dark, so the bright colours always read well. */
+.hl-art { display: block; width: 100%; height: auto; margin: 0 0 12px; border-radius: 10px; }
+.hl-art-what { background: #dff0ff; }
+.hl-art-caution { background: #fff5c9; }
+.hl-art-extreme-caution { background: #ffe8c4; }
+.hl-art-danger { background: #ffdcca; }
+.hl-art-extreme-danger { background: #ffd3d3; }

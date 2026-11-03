@@ -5,6 +5,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { art } from './art.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const cards = join(here, '..', 'home-cards');
@@ -30,23 +31,6 @@ for (const cat of ['danger', 'caution']) {
 }
 
 // 2) The #heat page.
-// Flat pictures, drawn here as inline SVG (no files, no copyright, they work offline and follow light and dark through the tokens).
-// They are decoration: the text says everything, so they are hidden from screen readers.
-const rays = (cx, cy, r) => [0, 45, 90, 135, 180, 225, 270, 315].map((a) => {
-  const t = (a * Math.PI) / 180;
-  const p = (k) => `${(cx + Math.cos(t) * k).toFixed(1)} ${(cy + Math.sin(t) * k).toFixed(1)}`;
-  return `<path d="M${p(r + 6)} L${p(r + 14)}"/>`;
-}).join('');
-const sun = (cx, cy, r, c) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${c}" stroke="none"/><g stroke="${c}">${rays(cx, cy, r)}</g>`;
-const thermo = (x, c, level) => `<rect x="${x}" y="8" width="16" height="60" rx="8"/><circle cx="${x + 8}" cy="76" r="13" fill="${c}"/><rect x="${x + 5}" y="${level}" width="6" height="${72 - level}" rx="3" fill="${c}" stroke="none"/>`;
-const ART = {
-  what: (c) => `${thermo(70, c, 30)}<path d="M128 48h20M138 38v20"/><path d="M240 16C240 16 218 44 218 60a22 22 0 0 0 44 0C262 44 240 16 240 16z" fill="${c}" fill-opacity=".35"/>`,
-  caution: (c) => `${sun(80, 48, 16, c)}<rect x="212" y="14" width="18" height="9" rx="2"/><path d="M208 28q0-5 5-5h12q5 0 5 5v44q0 8-8 8h-6q-8 0-8-8z"/><path d="M210 50h28v22q0 6-6 6h-16q-6 0-6-6z" fill="${c}" fill-opacity=".35" stroke="none"/>`,
-  'extreme-caution': (c) => `<rect x="86" y="12" width="70" height="72" rx="4"/><path d="M121 12v72M86 48h70"/><path d="M172 34q10-8 20 0t20 0t20 0M172 52q10-8 20 0t20 0t20 0" stroke="${c}"/><path d="M258 28h34l-5 52h-24z" fill="${c}" fill-opacity=".1"/><path d="M262 52h26l-3 28h-20z" fill="${c}" fill-opacity=".4" stroke="none"/>`,
-  danger: (c) => `<circle cx="80" cy="48" r="30"/><path d="M80 48V24M80 48l17 10"/><path d="M80 12A36 36 0 0 1 111 66" stroke="${c}" stroke-width="5"/><path d="M196 56a52 42 0 0 1 104 0z" fill="${c}" fill-opacity=".35"/><path d="M248 56v26q0 6 6 6"/>`,
-  'extreme-danger': (c) => `${thermo(66, c, 14)}<circle cx="240" cy="48" r="34" stroke="${c}" stroke-width="4"/><path d="M240 30v36M222 48h36" stroke="${c}" stroke-width="9"/>`,
-};
-const art = (id) => `<svg class="hl-art hl-art-${id}" viewBox="0 0 326 96" aria-hidden="true" fill="none" stroke="var(--viz-ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${ART[id](id === 'what' ? 'var(--series-hi)' : `var(--heat-${id}-border)`)}</svg>`;
 
 const LEVELS = [
   { id: 'caution', name: 'Caution', range: 'Heat index 27 to 32 °C',
