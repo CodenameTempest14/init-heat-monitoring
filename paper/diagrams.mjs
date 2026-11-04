@@ -170,6 +170,35 @@ const routes = (() => {
   s += line([[560, 80], [765, 148]], { arrow: true, dash: true });
   s += line([[765, 222], [765, 268]], { arrow: true });
   s += box(20, 270, 400, 60, ['Readings table (F-24): from-to calendar,', 'hourly averages, CSV; under the History charts'], { fs: 12 });
+  s += box(440, 270, 190, 60, ['Heat alerts (#alerts)', 'turn phone alerts on or off'], { fs: 12 });
+  s += line([[520, 80], [640, 112], [640, 245], [560, 268]], { arrow: true }); // through the gap between #heat and #admin
+  return { w, h, svg: wrap(w, h, s) };
+})();
+
+// 7. Heat alert flow (P05-03, supabase/migrations/20261108120000_push_alerts.sql, supabase/functions/send-alert)
+const alertSeq = (() => {
+  const w = 900, h = 470;
+  let s = '';
+  const xs = [90, 270, 460, 650, 820];
+  const names = ['Device', 'Database', 'send-alert', 'Push service', 'Phone'];
+  xs.forEach((x, i) => {
+    s += box(x - 70, 10, 140, 36, names[i], { bold: true, fs: 12 });
+    s += line([[x, 46], [x, 450]], { dash: true, w: 1.2 });
+  });
+  // White halo behind each label so the dashed lifelines never cut through the words.
+  const lbl = (x, y, t, fs = 11) => `<text x="${x}" y="${y}" font-size="${fs}" text-anchor="middle" stroke="#fff" stroke-width="5" paint-order="stroke" ${F}>${esc(t)}</text>`;
+  const msg = (y, x1, x2, t) => line([[xs[x1], y], [xs[x2], y]], { arrow: true }) + lbl((xs[x1] + xs[x2]) / 2, y - 7, t);
+  s += msg(80, 4, 3, '1. subscribe (on a tap)');
+  s += msg(120, 4, 1, '2. push_subscribe: push address and keys, no name');
+  s += msg(170, 0, 1, '3. readings upload');
+  s += lbl(270, 196, '4. trigger: rounded heat index >= alert level (default 42 °C)', 10);
+  s += lbl(270, 210, 'and quiet time passed (default 60 min)? then save an alert', 10);
+  s += msg(250, 1, 2, '5. alert id + secret');
+  s += msg(290, 2, 1, '6. read alert, phones');
+  s += msg(330, 2, 3, '7. encrypted, signed');
+  s += msg(370, 3, 4, '8. notification');
+  s += msg(410, 2, 1, '9. write sent / failed');
+  s += lbl(450, 444, 'Example notification: "Heat index 43 °C (Danger) in Room 204." Phones that are gone are removed.', 11);
   return { w, h, svg: wrap(w, h, s) };
 })();
 
@@ -224,5 +253,6 @@ export const diagrams = {
   seq: { title: 'Upload and read sequence between device, cloud and web app', ...seq },
   db: { title: 'Database tables and functions', ...db },
   routes: { title: 'Pages of the web app', ...routes },
+  alerts: { title: 'Heat alert sequence from an upload to a notification on a phone', ...alertSeq },
   hourly: { title: 'Heat index, temperature and relative humidity in the 24-hour run (hourly values, 2 to 3 November 2026)', ...hourlyChart },
 };
