@@ -22,17 +22,17 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | P02 Backend and secure upload | 7 / 7 | ██████████ | 100% |
 | P03 Device firmware | 10 / 10 | ██████████ | 100% |
 | P04 Web app core | 12 / 13 (+1 partly) | █████████░ | 92% |
-| P05 Admin, alerts and device health | 4 / 7 (+2 partly) | ██████░░░░ | 57% |
+| P05 Admin, alerts and device health | 5 / 7 (+1 partly) | ███████░░░ | 71% |
 | P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 53 / 72 | ███████░░░ | **74%** |
+| **Whole project** | 54 / 72 | ████████░░ | **75%** |
 
 ### Recommended model for this session
-**Opus 5.5** for the live admin rollout (P05-05) and then push alerts (P05-03: Edge Function, keys, subscriptions). Sonnet 5.5 for the paper, phone results and ticks.
+**Opus 5.5** for the P05-03 build (push alerts: migration with a trigger and `pg_net`, the project's first Edge Function, VAPID keys, service worker push handlers). Sonnet 5.5 if the session is only the paper, phone results or ticks.
 
 ### Next concrete step
-1. Ask the phase-builder question (last answer: owner only). **Live admin rollout (P05-05, Opus 5.5), the owner's chosen start:** the owner makes a live admin account in the Supabase dashboard (an email they own, a long generated password, never in chat or the repo); then add that email to `admins` on live (the owner runs live writes in the terminal: Claude Code's classifier blocks `tools/db.mjs live ...` writes), sign in on the hosted page against live (`npm run config -- live` in `web/` also changes the Supabase host in `web/vercel.json`, whose CSP names it), try a real save, and run the admin backend checks and `node tools/anon-probe.mjs` against live. The three admin migrations are already on live (21/21). `tools/make-test-admin.mjs` is test only. The device still uploads to init-test; moving it to live "Init 1" is a separate decision (D-026). Then P05-03 push alerts.
+1. Ask the phase-builder question (last answer: owner only, s30). **P05-03 heat alerts (Opus 5.5):** first the owner answers the five DECIDEs and approves the three new pieces in `documentation/specs/P05-03_DESIGN.md` section 10 (suggested: DECIDE 1 = (a) remind every quiet period, 2 = (a) trigger + pg_net, 3 = `Heat alerts ›` row opening `#alerts`, 4 = rounded heat index, 5 = cap 300; new pieces: `alerts` log table, `tools/vapid-keys.mjs`, `#alerts` view). Record the answers in the design file. Then build in the order of section 9: backend tests red first, migration (owner applies to init-test), VAPID pair (owner sets the function secrets), `send-alert` Edge Function (check first which Web Push library runs on Supabase's Deno runtime, and that `pg_net` and Vault are on the free plan), `#alerts` mock then build, end-to-end on the owner's Android with a low threshold on init-test. Live waits for the device move (D-026). Live admin: done s30 (P05-05); a real save on live becomes possible only after the move.
 2. **Research paper (rule 5), every session:** `node paper/build.mjs` rebuilds the `.docx` and `.pdf`. Chapter 4 is parked until the owner says so. Names are filled in (s29: three researchers, adviser Arvin C. Trangia, Abuno High School; the title page says Adviser, not Coach). Open: more references 2021 to 2026 (7 verified (s29: Kirkil 2025, Wardani 2023 added; Cen et al. 2024, Building and Environment, a Singapore secondary-school classroom heat and cognition study, was NOT added: ScienceDirect blocked my script, so I could not read it; try again from a browser copy); the ESP32 and DHT22 datasheets are used in Table 2 but not in References for lack of a confirmable date); add anything built to the paper; look at the Word file in Word once.
 3. **Teacher review (D-034):** the Reset sentence in the F-22 guide and the Readings table wording.
 4. **P04-08 leftovers:** a school day with several levels, the offline page on a phone, an iPhone add-to-home-screen, F-15 `#heat` and the P05-04 health group on a phone in light mode.
@@ -42,7 +42,8 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 8. Before every commit run `node tools/secret-scan.mjs`. Inline SQL: `node --env-file=.env tools/db.mjs test db query --linked "select 1;"`. Flash: in `firmware/init`, `pio run -t upload --upload-port COM8`, hold BOOT on `Connecting....`. Use the Edit tool for edits with backslash escapes; look at the page in a browser, not only the build. Never build a path with `new URL(...).pathname` (use `fileURLToPath`). `.vscode/settings.json` is untracked and not ours: leave it.
 
 ### Waiting on the owner
-- For the live admin rollout: an admin email you own and a long generated password, created in the dashboard (the migrations are on live).
+- P05-03 design answers: DECIDE 1 to 5 and the three new pieces (`documentation/specs/P05-03_DESIGN.md` section 10).
+- Teacher review of the alert title and body (design section 4) before alerts go live.
 - Teacher review of the Reset sentence and of the app's other user-facing wording.
 - Optional: try add-to-home-screen on the iPhone; send a phone screenshot of a school day with several levels and of the light mode.
 - Paper: say "put Chapter 4 back" when wanted.
