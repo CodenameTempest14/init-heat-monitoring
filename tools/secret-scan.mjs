@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const MIN_LENGTH = 8; // shorter values are plain words that would match everywhere
 const SECRET_NAME = /KEY|PASSWORD|PASS|TOKEN|SECRET/;
-const PUBLIC_NAME = /ANON|PUBLISHABLE|URL|REF/; // public by design, safe to appear in the repo
+const PUBLIC_NAME = /ANON|PUBLISHABLE|URL|REF|PUBLIC_KEY/; // public by design, safe to appear in the repo (VAPID_*_PUBLIC_KEY, P05-03)
 
 const isSecretName = (name) => SECRET_NAME.test(name) && !PUBLIC_NAME.test(name);
 

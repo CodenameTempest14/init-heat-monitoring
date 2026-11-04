@@ -13,6 +13,12 @@ test('reads secret values from .env and secrets.h text, skips public and short v
   assert.deepEqual([...values.keys()].sort(), ['hunter2hunter2', 'k3y-value-1234567890', 'my wifi pass']);
 });
 
+test('P05-03: the VAPID public key is public by design; the VAPID private key and the alert secret are secrets', () => {
+  const env = 'VAPID_TEST_PUBLIC_KEY=BPublicPublicPublic123\nVAPID_TEST_PRIVATE_KEY=privPrivPriv456789\nALERT_TEST_SECRET=alertAlertAlert789\n';
+  const values = secretValues(env, '');
+  assert.deepEqual([...values.keys()].sort(), ['alertAlertAlert789', 'privPrivPriv456789']);
+});
+
 test('a hit is reported with the secret name but never the value', () => {
   const hits = findHits(diff('const a = 1;', 'password: hunter2hunter2'), new Map([['hunter2hunter2', 'SUPABASE_DB_PASSWORD']]));
   assert.equal(hits.length, 1);

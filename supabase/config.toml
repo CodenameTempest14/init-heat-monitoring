@@ -383,6 +383,11 @@ inspector_port = 8083
 # The Deno major version to use.
 deno_version = 2
 
+# P05-03: send-alert is called by the database trigger (pg_net), not by a signed-in user, so the JWT check is off;
+# the function checks its own shared secret (x-alert-secret) instead and refuses everything else.
+[functions.send-alert]
+verify_jwt = false
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

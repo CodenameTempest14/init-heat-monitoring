@@ -1,6 +1,7 @@
-# P05-03 design: heat alerts by web push (DRAFT, s30, 2026-11-04)
+# P05-03 design: heat alerts by web push (APPROVED s31, 2026-11-04; drafted s30)
 
-**Status:** on paper only. Nothing is applied to any database, nothing is built, no keys exist yet. The feature is
+**Status (s31):** DECIDEs answered and NEW PIECEs approved by the owner (section 10); build started in s31.
+**Status (s30):** on paper only. Nothing is applied to any database, nothing is built, no keys exist yet. The feature is
 already approved: F-10 (Tier 2, 2026-10-31) and its details P5-f, P5-g, P5-h (FEATURES.md, owner, s22). This file is
 the plan for the build session (Opus 5.5). The items marked **DECIDE** need the owner's answer before building; the
 parts marked **NEW PIECE** are design details that the approved text does not name, so they need the owner's OK too.
@@ -138,6 +139,11 @@ notification. Then the threshold goes back to 42.
 8. Paper (rule 5): the alert flow in Chapter 2 (a diagram) and the result in Chapter 3.
 
 ## 10. Questions for the owner
+
+**ANSWERED (owner, s31, 2026-11-04): "All suggested".** DECIDE 1 = (a) remind every quiet period while it stays at or
+over the threshold. DECIDE 2 = (a) trigger + `pg_net`. DECIDE 3 = a `Heat alerts ›` row under `School day summary ›`
+opening `#alerts` (mock first). DECIDE 4 = rounded heat index. DECIDE 5 = cap 300. NEW PIECES approved: the `alerts`
+log table, `tools/vapid-keys.mjs`, the `#alerts` view. The teacher review of the message (section 4) is still open.
 
 - **DECIDE 1, still hot after the quiet period.** (a) Send again every quiet period while the heat index stays at or
   over the threshold (a reminder; with the default, at most one alert an hour). (b) Send again only after it drops
