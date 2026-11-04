@@ -1,0 +1,14 @@
+/* P05-03 (F-10): the #alerts view and its home row. Mock: design/alerts/ (waiting for the owner's approval). */
+.school-link + .alerts-link { margin-top: -4px; }
+.alerts-lead { margin: 0 0 12px; color: var(--viz-ink); }
+.alerts-rule { margin: 0 0 16px; padding: 0; list-style: none; }
+.alerts-rule li { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--viz-grid); color: var(--viz-ink); }
+.alerts-rule li:first-child { border-top: 0; padding-top: 0; }
+.alerts-rule strong { font-weight: 600; }
+.alerts-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 44px; font-weight: 600; }
+.alerts-btn svg { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.alerts-state { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 16px; font-weight: 600; color: var(--viz-ink); }
+.alerts-state svg { flex: none; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.alerts-steps { margin: 0 0 0 1.2em; padding: 0; color: var(--viz-ink); }
+.alerts-steps li { padding: 4px 0; }
+.alerts-fine { margin: 12px 0 0; color: var(--viz-ink-2); font-size: 0.875rem; }

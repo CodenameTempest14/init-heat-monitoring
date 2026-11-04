@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Init: mock alerts-off</title>
+<link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
+<link rel="stylesheet" href="../../web/src/tokens.css">
+<link rel="stylesheet" href="../../web/src/app.css">
+<link rel="stylesheet" href="../../web/src/charts.css">
+<link rel="stylesheet" href="../../web/src/school.css">
+<link rel="stylesheet" href="../../web/src/alerts.css">
+</head>
+<body>
+<main class="app-wrap">
+  <header class="app-head"><picture class="app-logo"><source media="(prefers-color-scheme: dark)" srcset="../../web/public/logo-dark.svg"><img src="../../web/public/logo-light.svg" width="110" height="40" alt=""></picture><h1 class="app-fullname">Init: Indoor Heat Index Tracker</h1><p class="text-secondary app-room">Room: Room 204</p>
+    <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>
+  <a class="school-back" href="#">‹ Live readings</a><section class="viz-wrap" aria-label="Heat alerts"><h2 class="viz-section">Heat alerts</h2>
+    <div class="card viz-card"><div class="card-body">
+      <p class="alerts-lead">Get a notification on this phone when the classroom gets dangerously hot.</p>
+      <ul class="alerts-rule">
+        <li><span>When the heat index in <strong>Room 204</strong> reaches <strong>42 °C</strong> (Danger).</span></li>
+        <li><span>If it stays that hot, a reminder comes every <strong>60 minutes</strong>.</span></li>
+      </ul>
+      <button type="button" class="btn btn-primary alerts-btn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span>Send me heat alerts</span></button>
+      <p class="alerts-fine">No name or email is asked. Only this phone gets the alerts, and you can stop them at any time.</p>
+    </div></div></section>
+</main>
+</body>
+</html>
