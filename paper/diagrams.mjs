@@ -1,5 +1,6 @@
 // Diagrams for the paper, drawn as plain SVG (black and white, prints well). Each entry: { title, w, h, svg }.
 // Facts come from the repo: hardware/schematic.html (Rev B), firmware/init, supabase/migrations, web/src.
+import { readFileSync } from 'node:fs';
 const F = 'font-family="Arial, Helvetica, sans-serif"';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
@@ -172,6 +173,50 @@ const routes = (() => {
   return { w, h, svg: wrap(w, h, s) };
 })();
 
+// Figure 7: the 24-hour run as line graphs (hourly values from data/hourly.json). Two panels on one shared time axis, never
+// two scales on one axis: top = degrees Celsius (heat index and temperature), bottom = relative humidity. Black and white:
+// the two lines differ by line style and by a direct label, so it still reads when printed or photocopied.
+const hourlyChart = (() => {
+  const rows = JSON.parse(readFileSync(new URL('./data/hourly.json', import.meta.url), 'utf8')).filter((r) => r.n >= 30); // the last hour has 4 readings: not drawn
+  const w = 640, h = 560, L = 62, R = 24;
+  const pw = w - L - R, X = (i) => L + (i * pw) / (rows.length - 1);
+  const panel = (top, bot, lo, hi, step, label) => {
+    const Y = (v) => bot - ((v - lo) * (bot - top)) / (hi - lo);
+    let g = '';
+    for (let v = lo; v <= hi + 1e-9; v += step) g += `<line x1="${L}" y1="${Y(v)}" x2="${w - R}" y2="${Y(v)}" stroke="#ccc" stroke-width="0.8"/>` + text(L - 8, Y(v) + 4, v, { a: 'end', fs: 11 });
+    g += `<line x1="${L}" y1="${top}" x2="${L}" y2="${bot}" stroke="#000" stroke-width="1.2"/><line x1="${L}" y1="${bot}" x2="${w - R}" y2="${bot}" stroke="#000" stroke-width="1.2"/>`;
+    g += `<text transform="translate(16 ${(top + bot) / 2}) rotate(-90)" text-anchor="middle" font-size="12" ${F}>${esc(label)}</text>`;
+    return { g, Y };
+  };
+  // ticks every 3 hours, midnight marked
+  const hr = (r) => +r.hour_manila.slice(11, 13);
+  const ticks = (bot) => rows.map((r, i) => (hr(r) % 3 === 0 ? `<line x1="${X(i)}" y1="${bot}" x2="${X(i)}" y2="${bot + 5}" stroke="#000" stroke-width="1"/>` + text(X(i), bot + 19, String(hr(r)).padStart(2, '0') + ':00', { fs: 11 }) : '')).join('');
+  const mid = rows.findIndex((r) => hr(r) === 0);
+  let s = '';
+  // top panel: heat index and temperature, degrees Celsius
+  const A = panel(70, 290, 26, 46, 4, 'Degrees Celsius (°C)');
+  s += A.g;
+  for (const [v, t] of [[33, 'Extreme caution starts at 33'], [42, 'Danger starts at 42']]) s += `<line x1="${L}" y1="${A.Y(v)}" x2="${w - R}" y2="${A.Y(v)}" stroke="#555" stroke-width="1.1" stroke-dasharray="2 3"/>` + text(w - R - 4, A.Y(v) - 5, t, { a: 'end', fs: 11, fill: '#333' });
+  const hi = rows.map((r, i) => [X(i), A.Y(+r.hi_max)]);
+  const tp = rows.map((r, i) => [X(i), A.Y(+r.temp_avg)]);
+  s += line(tp, { w: 1.8, dash: true }) + line(hi, { w: 2.4 });
+  s += hi.map((p) => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="#000" stroke="#fff" stroke-width="1.5"/>`).join('');
+  // direct labels (end of the lines are crowded, so they sit at points with free space)
+  const iMax = rows.reduce((m, r, i) => (+r.hi_max > +rows[m].hi_max ? i : m), 0);
+  s += text(X(iMax) - 8, A.Y(+rows[iMax].hi_max) - 8, `Highest: ${rows[iMax].hi_max} °C at ${String(hr(rows[iMax])).padStart(2, '0')}:00`, { a: 'end', fs: 11, bold: true });
+  // bottom panel: relative humidity, per cent
+  const B = panel(350, 480, 50, 80, 10, 'Relative humidity (%)');
+  s += B.g + line(rows.map((r, i) => [X(i), B.Y(+r.rh_avg)]), { w: 2 });
+  s += text(L + 8, B.Y(80) + 14, 'Relative humidity (hourly mean)', { a: 'start', fs: 11 });
+  // midnight marker through both panels
+  if (mid > 0) s += `<line x1="${X(mid)}" y1="70" x2="${X(mid)}" y2="480" stroke="#888" stroke-width="1" stroke-dasharray="1 4"/>` + text(X(mid) + 4, 64, '3 November', { a: 'start', fs: 11 }) + text(X(mid) - 4, 64, '2 November', { a: 'end', fs: 11 });
+  s += ticks(480) + text(L + pw / 2, 520, 'Hour of the day (Philippine time)', { fs: 12 });
+  // legend (two series in the top panel): line sample + words
+  s += `<line x1="${L}" y1="26" x2="${L + 34}" y2="26" stroke="#000" stroke-width="2.4"/><circle cx="${L + 17}" cy="26" r="3" fill="#000" stroke="#fff" stroke-width="1.5"/>` + text(L + 42, 30, 'Heat index (highest in the hour)', { a: 'start', fs: 12 });
+  s += `<line x1="${L + 250}" y1="26" x2="${L + 284}" y2="26" stroke="#000" stroke-width="1.8" stroke-dasharray="6 4"/>` + text(L + 292, 30, 'Temperature (mean of the hour)', { a: 'start', fs: 12 });
+  return { w, h, svg: wrap(w, h, s) };
+})();
+
 export const diagrams = {
   blocks: { title: 'System block diagram of Init', ...blocks },
   wiring: { title: 'Wiring schematic of the room monitor (Rev B)', ...wiring },
@@ -179,4 +224,5 @@ export const diagrams = {
   seq: { title: 'Upload and read sequence between device, cloud and web app', ...seq },
   db: { title: 'Database tables and functions', ...db },
   routes: { title: 'Pages of the web app', ...routes },
+  hourly: { title: 'Heat index, temperature and relative humidity in the 24-hour run (hourly values, 2 to 3 November 2026)', ...hourlyChart },
 };
