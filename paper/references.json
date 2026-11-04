@@ -33,5 +33,19 @@
   "checked": "2026-11-03",
   "how": "Downloaded the PDF and read its first pages with a PDF reader: title, four authors, series number 866, October 2026, abstract (730,000 Cambodian students, sustained heat exposure significantly reduces performance).",
   "used_for": "Rationale: heat exposure lowers learning outcomes in a Southeast Asian country. It is a working paper (research in progress), not a peer-reviewed article; the paper says so."
+ },
+ {
+  "key": "kirkil2025",
+  "apa": "Kirkil, G. (2025). Effects of classroom temperature and humidity on student learning performance: an experimental study using sensor-based monitoring. Frontiers in Built Environment, 11, Article 1678438. https://doi.org/10.3389/fbuil.2025.1678438",
+  "checked": "2026-11-04",
+  "how": "Opened the full-text page on frontiersin.org (https://www.frontiersin.org/journals/built-environment/articles/10.3389/fbuil.2025.1678438/full) and read the abstract and the start of the article; DOI registry metadata matches (author, title, volume 11, article 1678438, 19 December 2025). Abstract: 2-week experiment, 53 undergraduate students, 20 and 27 C, Arduino-based temperature and humidity sensors, thermal satisfaction and GPA account for 23.15 % of the variance in grades (p < 0.001); limits: no mean radiant temperature, short duration.",
+  "used_for": "Rationale: classroom thermal conditions and learning outcomes, measured with Arduino sensors. The paper says it was a short university study in Turkiye, so it does not prove the effect for Philippine classrooms."
+ },
+ {
+  "key": "wardani2023",
+  "apa": "Wardani, I. K., Ichniarsyah, A. N., Telaumbanua, M., Priyonggo, B., Fil’aini, R., Mufidah, Z., & Dewangga, D. A. (2023). The feasibility study: Accuracy and precision of DHT 22 in measuring the temperature and humidity in the greenhouse. IOP Conference Series: Earth and Environmental Science, 1230(1), Article 012146. https://doi.org/10.1088/1755-1315/1230/1/012146",
+  "checked": "2026-11-04",
+  "how": "Opened the article page on iopscience.iop.org and read the abstract, authors, volume and conference (FSSAT 4, 15-16 February 2023); DOI registry metadata matches (published 2023-09-01). Abstract: three DHT22 sensors with an ESP32 sending to Ubidots, compared with a thermo-hygrometer; RMSE 1.48 C and 3.18 %, correlations 0.81 and 0.85. The PDF itself was blocked to my script, so only the article page and abstract were read.",
+  "used_for": "Limitation: a DHT22 with an ESP32 had errors larger than the datasheet figures against a reference instrument, so the accuracy check in this study's recommendations matters. A conference paper from a greenhouse setting, not a classroom."
  }
 ]
