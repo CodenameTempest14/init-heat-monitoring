@@ -61,6 +61,17 @@ await refused('read the admin list', 'admins');
 await refused('add an admin', 'admins', { method: 'POST', body: { user_id: NOTHING } });
 await refused('call is_admin()', 'rpc/is_admin', { method: 'POST', body: {} });
 await refused('change the room (admin_set_room)', 'rpc/admin_set_room', { method: 'POST', body: { p_device: NOTHING, p_room: MARK } });
+// P05-03 (migration 20261108120000_push_alerts.sql): the phone list, the alert log and the quiet period are closed.
+// Live does not have this migration yet (s31): there these 7 checks fail until it is applied.
+await refused('read the push subscriptions', 'push_subscriptions?limit=1');
+await refused('read the alert log', 'alerts?limit=1');
+await refused('read the quiet-period state', 'alert_state?limit=1');
+await refused('insert a push subscription directly', 'push_subscriptions', { method: 'POST', body: { endpoint: `https://fcm.googleapis.com/${MARK}`, p256dh: 'x', auth: 'x' } });
+await refused('insert an alert', 'alerts', { method: 'POST', body: { device_id: NOTHING, heat_index_c: 50, room: MARK } });
+await refused('delete push subscriptions', 'push_subscriptions?endpoint=not.is.null', { method: 'DELETE' });
+// The one public door to the phone list only takes real push services: our server must never post to a stranger's address.
+const sub = await call('rpc/push_subscribe', { method: 'POST', body: { p_endpoint: `https://example.com/${MARK}`, p_p256dh: 'A'.repeat(87), p_auth: 'A'.repeat(22) } });
+check('push_subscribe refuses an address that is not a push service (400 bad_endpoint)', sub.status === 400 && sub.json?.message === 'bad_endpoint', `${sub.status} ${sub.text.slice(0, 160)}`);
 
 // The one write door is ingest_reading, and it needs the device's own key: a wrong key must not save anything.
 const door = await call('rpc/ingest_reading', { method: 'POST', body: { device_key: 'not-a-real-key', readings: [{ recorded_at: new Date().toISOString(), temp_c: 30, rh_pct: 60 }] } });
