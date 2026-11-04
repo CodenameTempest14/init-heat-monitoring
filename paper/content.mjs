@@ -100,6 +100,7 @@ export const blocks = [
     'The database, the secure upload function and the public read rules were built and tested on a separate test project; a "stranger" probe checks that a visitor with only the public key cannot write or read secrets.',
     'The firmware was built in steps: upload, OLED screens, offline queue, room name from the server, Wi-Fi setup page and device health report.',
     'The web app was built in steps: live card, offline badge, history charts, installable app, school-day view, admin page and guide. Each page was checked against an approved mock-up and then on the hosted page and a phone.',
+    'The admin rules were tested first on the test project (a visitor, a signed-in user who is not the admin, and the admin). Then the live project received its own admin account, made by the owner in the database dashboard; the write rules of the two projects were read back and compared, the admin signed in to the live project from the owner\'s computer, and the stranger probe was run against the live project.',
     'A 24-hour run (P03-07) was done on the power bank. The device uploaded about once a minute; the charge of the bank was written down at the start, halfway and the end.',
     'The offline rule was checked by unplugging the device and photographing the phone screen after two minutes.',
   ] },
@@ -108,7 +109,7 @@ export const blocks = [
   { t: 'pb' },
   { t: 'h1', x: 'Chapter 3', y: 'Presentation, Analysis, and Interpretation of Data' },
   { t: 'h2', x: 'I. Verification of the Heat Index Calculation' },
-  { t: 'p', x: 'The heat index function was checked in JavaScript, C++ and SQL against one shared reference file. As of the latest full run (3 November 2026, session 27), the full test suite passed 204 of 204 tests, of which the backend tests are 80 of 80. The stranger probe, which acts as a visitor with only the public key, passed 21 of 21 checks against the test project in session 26 and has not been re-run since the two new read-only functions were added. [These numbers are refreshed each session; see Appendix C.]' },
+  { t: 'p', x: 'The heat index function was checked in JavaScript, C++ and SQL against one shared reference file. As of the latest full run (3 November 2026, session 27), the full test suite passed 204 of 204 tests, of which the backend tests are 80 of 80. The stranger probe, which acts as a visitor with only the public key, passed 21 of 21 checks against the test project in session 26 and 21 of 21 against the live project on 4 November 2026 (session 30). On both projects the only rule that lets anyone change data is the admin rule for the five settings, and the list of admins cannot be read or changed by a visitor or a signed-in user. [These numbers are refreshed each session; see Appendix C.]' },
   { t: 'h2', x: 'II. The 24-Hour Run on the Power Bank' },
   { t: 'p', x: `The run started on 2 November 2026 at 18:03 Philippine time with the power bank at 100 % and ended on 3 November 2026 at 18:03. It was done in two legs of about 12 hours with a short break between them. The server recorded ${sum.n.toLocaleString('en')} readings of about 1,440 expected (${((100 * sum.n) / 1440).toFixed(1)} % of the expected number). The power bank went from 100 % to 95 % and then to 90 %.` },
   { t: 'table', cap: 'Table 4. Summary of the 24-hour run (test project, one device)', head: ['Measure', 'Minimum', 'Mean', 'Maximum'], rows: [
@@ -133,13 +134,14 @@ export const blocks = [
   { t: 'h2', x: 'III. Offline Check and Power Bank Behaviour' },
   { t: 'p', x: 'When the device was unplugged, the hosted page showed "Offline: no reading for 2 min" in the owner\'s phone screenshot taken at two minutes. In an earlier test on the power bank, uploads every 90 seconds made the bank switch itself off after about a minute, while uploads every 60 seconds ran for 10 minutes and then for the full 24 hours. For this bank the interval therefore has to stay at 60 seconds (D-027).' },
   { t: 'h2', x: 'IV. Features Built and Verified' },
-  { t: 'table', cap: 'Table 7. Progress of the project by phase (project table, 3 November 2026)', head: ['Phase', 'Done / Total', '%'], rows: [
-    ['P00 Kickoff and decisions', '13 / 13', '100'], ['P01 Heat index core and bench bring-up', '7 / 7', '100'], ['P02 Backend and secure upload', '7 / 7', '100'], ['P03 Device firmware', '10 / 10', '100'], ['P04 Web app core', '12 / 13 (+1 partly)', '92'], ['P05 Admin, alerts and device health', '3 / 7 (+3 partly)', '43'], ['P06 Display and sharing extras', '0 / 5', '0'], ['P07 Field trial and hardening', '0 / 7', '0'], ['P08 Over-the-air updates (optional)', '0 / 3', '0'], ['Whole project', '52 / 72', '72'],
+  { t: 'table', cap: 'Table 7. Progress of the project by phase (project table, 4 November 2026)', head: ['Phase', 'Done / Total', '%'], rows: [
+    ['P00 Kickoff and decisions', '13 / 13', '100'], ['P01 Heat index core and bench bring-up', '7 / 7', '100'], ['P02 Backend and secure upload', '7 / 7', '100'], ['P03 Device firmware', '10 / 10', '100'], ['P04 Web app core', '12 / 13 (+1 partly)', '92'], ['P05 Admin, alerts and device health', '5 / 7 (+1 partly)', '71'], ['P06 Display and sharing extras', '0 / 5', '0'], ['P07 Field trial and hardening', '0 / 7', '0'], ['P08 Over-the-air updates (optional)', '0 / 3', '0'], ['Whole project', '54 / 72', '75'],
   ] },
   { t: 'h2', x: 'V. Not Yet Done' },
   { t: 'ul', items: [
     'Comparison of the DHT22 with a reference thermometer and hygrometer (sensor accuracy).',
-    'Push alerts to phones and the live-project admin account.',
+    'Push alerts to phones.',
+    'A real settings change on the live project: the live admin account works (4 November 2026), but the admin page finds its device through the newest reading, and the live project has none until the device is moved there from the test project.',
     'The calendar readings table (F-24) is built and tested; the owner confirmed on 3 November 2026 that on the hosted page it picks days, shows hourly rows and downloads a CSV. The live project has no readings yet, so the table there says "No readings yet".',
     'Reset room to Unassigned (F-23) was seen working on 3 November 2026: an admin saved a room name, the page and the OLED showed it, then Reset and Save put the room back to Unassigned on both (screenshots by the owner). The firmware default Unassigned is flashed on the board.',
     'A school day with several levels seen on a phone, and the installed app on an iPhone.',
@@ -159,7 +161,7 @@ export const blocks = [
   ] },
   { t: 'h2', x: 'Appendix C. Tests and checks' },
   { t: 'ul', items: [
-    'Full suite (3 November 2026): 204 of 204 passed; backend tests 80 of 80; stranger probe 21 of 21 on the test project (session 26). The numbers are refreshed each session.',
+    'Full suite (3 November 2026): 204 of 204 passed; backend tests 80 of 80; stranger probe 21 of 21 on the test project (session 26) and 21 of 21 on the live project (4 November 2026, session 30). The numbers are refreshed each session.',
     'Page checks compare the built page with approved mock-ups pixel by pixel in Chromium at phone width, in light and dark mode.',
     'The 24-hour data in Chapter 3 are saved in the project folder paper/data as JSON files.',
   ] },
