@@ -79,16 +79,79 @@ function loadWorker() {
     if (!net.online) throw new TypeError('network down');
     return { ok: true, url: req.url, clone() { return this; } };
   };
-  const self = { location: { origin: 'https://app.example' }, addEventListener: (t, f) => { handlers[t] = f; }, skipWaiting: () => {}, clients: { claim: async () => {} } };
-  vm.runInNewContext(readFileSync(pub('sw.js'), 'utf8'), { self, caches, fetch: fetchFake, URL, Promise });
+  const shown = []; // notifications the worker showed
+  const opened = []; // windows the worker opened
+  const windows = []; // app windows already open: { url, focused, navigatedTo }
+  const self = {
+    location: { origin: 'https://app.example' }, addEventListener: (t, f) => { handlers[t] = f; }, skipWaiting: () => {},
+    registration: { showNotification: async (title, options) => { shown.push({ title, options }); } },
+    clients: {
+      claim: async () => {},
+      matchAll: async () => windows.map((w) => ({ url: w.url, focus: async () => { w.focused = true; }, navigate: async (u) => { w.navigatedTo = u; } })),
+      openWindow: async (u) => { opened.push(u); },
+    },
+  };
+  vm.runInNewContext(readFileSync(pub('sw.js'), 'utf8'), { self, caches, fetch: fetchFake, URL, Promise, JSON });
   // Fire a fetch event; resolves to the response the worker gave, or 'ignored' when it left the request alone.
   const request = (url, { method = 'GET', mode = 'cors' } = {}) => new Promise((resolve) => {
     let given = 'ignored';
     handlers.fetch({ request: { url, method, mode }, respondWith: (p) => { given = p; } });
     resolve(Promise.resolve(given));
   });
-  return { request, net, store };
+  // Fire a push or a notification click; resolves when the worker's waitUntil work is done.
+  const fire = async (type, event) => {
+    let work = Promise.resolve();
+    handlers[type]({ ...event, waitUntil: (p) => { work = p; } });
+    await work;
+  };
+  return { request, net, store, fire, shown, opened, windows };
 }
+
+// ---- P05-03 heat alerts: the worker shows the push and opens the app when it is tapped ----
+const pushData = (obj) => ({ data: { json: () => obj, text: () => JSON.stringify(obj) } });
+
+test('a push shows the alert with the app icon; a newer alert replaces an older one', async () => {
+  const w = loadWorker();
+  await w.fire('push', pushData({ title: 'Init heat alert', body: 'Heat index 43 °C (Danger) in Room 204.', url: '/' }));
+  assert.equal(w.shown.length, 1);
+  assert.equal(w.shown[0].title, 'Init heat alert');
+  assert.equal(w.shown[0].options.body, 'Heat index 43 °C (Danger) in Room 204.');
+  assert.equal(w.shown[0].options.icon, '/icon-192.png');
+  assert.equal(w.shown[0].options.tag, 'init-heat-alert');
+  assert.equal(w.shown[0].options.renotify, true);
+  assert.deepEqual({ ...w.shown[0].options.data }, { url: '/' });
+});
+
+test('a push with no readable data still shows a notification (browsers require one for every push)', async () => {
+  const w = loadWorker();
+  await w.fire('push', { data: null });
+  await w.fire('push', { data: { json: () => { throw new SyntaxError('bad'); }, text: () => 'x' } });
+  assert.equal(w.shown.length, 2);
+  for (const n of w.shown) {
+    assert.equal(n.title, 'Init heat alert');
+    assert.deepEqual({ ...n.options.data }, { url: '/' });
+  }
+});
+
+test('a push never sends the person anywhere outside the app (only paths on this site)', async () => {
+  const w = loadWorker();
+  await w.fire('push', pushData({ title: 'Init heat alert', body: 'x', url: 'https://evil.example/' }));
+  assert.deepEqual({ ...w.shown[0].options.data }, { url: '/' });
+});
+
+test('tapping the alert focuses the open app, or opens it when none is open', async () => {
+  const w = loadWorker();
+  let closed = 0;
+  const click = { notification: { data: { url: '/' }, close: () => { closed++; } } };
+  await w.fire('notificationclick', click);
+  assert.deepEqual(w.opened, ['/']);
+  w.windows.push({ url: 'https://app.example/#school' });
+  await w.fire('notificationclick', click);
+  assert.equal(w.windows[0].focused, true);
+  assert.equal(w.windows[0].navigatedTo, '/');
+  assert.deepEqual(w.opened, ['/'], 'opened a second window');
+  assert.equal(closed, 2);
+});
 
 test('worker never touches readings: another origin and non-GET are left to the network', async () => {
   const w = loadWorker();

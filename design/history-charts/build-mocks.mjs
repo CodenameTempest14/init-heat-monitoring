@@ -109,6 +109,7 @@ for (const s of STATES) {
 <link rel="stylesheet" href="../../web/src/app.css">
 <link rel="stylesheet" href="../../web/src/charts.css">
 <link rel="stylesheet" href="../../web/src/school.css">
+<link rel="stylesheet" href="../../web/src/alerts.css">
 <link rel="stylesheet" href="../../web/src/readings.css">
 </head>
 <body>
@@ -127,6 +128,7 @@ for (const s of STATES) {
   </div>
   <p class="text-secondary app-updated">updated just now</p>
   <a class="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
+  <a class="school-link alerts-link" href="#alerts"><span>Heat alerts</span><span aria-hidden="true">›</span></a>
   ${history({ ...s, W })}
   ${readingsSection(s.empty ? 'none' : 'rows')}
 </main>

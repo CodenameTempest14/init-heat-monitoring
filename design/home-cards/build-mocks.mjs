@@ -31,6 +31,7 @@ for (const s of STATES) {
 <link rel="stylesheet" href="../../web/src/app.css">
 <link rel="stylesheet" href="../../web/src/charts.css">
 <link rel="stylesheet" href="../../web/src/school.css">
+<link rel="stylesheet" href="../../web/src/alerts.css">
 </head>
 <body>
 <main class="app-wrap">
@@ -48,6 +49,7 @@ for (const s of STATES) {
   </div>
   <p class="text-secondary app-updated">updated 1 min ago</p>
   <a class="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
+  <a class="school-link alerts-link" href="#alerts"><span>Heat alerts</span><span aria-hidden="true">›</span></a>
 </main>
 </body>
 </html>

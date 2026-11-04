@@ -10,6 +10,7 @@ import School from './School.jsx';
 import Admin from './Admin.jsx';
 import Guide from './Guide.jsx';
 import Heat from './Heat.jsx';
+import Alerts from './Alerts.jsx';
 
 const REFRESH_MS = 30000;
 
@@ -66,6 +67,7 @@ export default function App() {
   const adminRoute = route === '#admin';
   const guideRoute = route === '#guide' || route.startsWith('#guide/');
   const heatRoute = route === '#heat' || route.startsWith('#heat/');
+  const alertsRoute = route === '#alerts'; // P05-03 heat alerts (F-10): keeps the room and status line, like #school
   const quietHeader = adminRoute || guideRoute || heatRoute; // these pages have no room or status line
   const [view, setView] = useState({ ...readingView(undefined, Date.now()), updated: 'loading…' });
   const [status, setStatus] = useState(null); // null until the first answer, so no badge flashes before we know
@@ -104,7 +106,7 @@ export default function App() {
           </p>
         )}
       </header>
-      {guideRoute ? <Guide section={route.slice('#guide/'.length)} /> : heatRoute ? <Heat section={route.slice('#heat/'.length)} /> : adminRoute ? <Admin deviceId={deviceId} ready={status !== null} /> : schoolRoute ? <School deviceId={deviceId} ready={status !== null} /> : (
+      {guideRoute ? <Guide section={route.slice('#guide/'.length)} /> : heatRoute ? <Heat section={route.slice('#heat/'.length)} /> : adminRoute ? <Admin deviceId={deviceId} ready={status !== null} /> : alertsRoute ? <Alerts deviceId={deviceId} ready={status !== null} room={view.room} /> : schoolRoute ? <School deviceId={deviceId} ready={status !== null} /> : (
         <>
         <section className={`card heat${cat ? ` heat-${cat}` : ''}`} aria-label="Heat index">
           <div className="card-body">
@@ -124,6 +126,7 @@ export default function App() {
         </div>
         <p className="text-secondary app-updated">{failed ? 'Could not load the readings. Will try again.' : view.updated}</p>
         <a className="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
+        <a className="school-link alerts-link" href="#alerts"><span>Heat alerts</span><span aria-hidden="true">›</span></a>
         {deviceId && <History deviceId={deviceId} />}
         {deviceId && <Readings deviceId={deviceId} />}
         </>

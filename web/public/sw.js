@@ -25,3 +25,31 @@ self.addEventListener('fetch', (event) => {
   // Hashed script, style and icon files never change under the same name: kept copy first.
   event.respondWith(caches.match(request).then((hit) => hit || fetch(request).then((res) => keep(request, res))));
 });
+
+// ---- P05-03 heat alerts (F-10) ----
+// The Edge Function sends { title, body, url }, encrypted for this phone only. Every push must show a notification
+// (browsers require it), so a push without readable data still shows one. A tap opens only a page of this site.
+const ALERT_TITLE = 'Init heat alert';
+const safePath = (url) => (typeof url === 'string' && url.startsWith('/') && !url.startsWith('//') ? url : '/');
+
+self.addEventListener('push', (event) => {
+  let msg = {};
+  try { msg = (event.data && event.data.json()) || {}; } catch { msg = {}; }
+  event.waitUntil(self.registration.showNotification(msg.title || ALERT_TITLE, {
+    body: msg.body || 'Open Init to see the heat index.',
+    icon: '/icon-192.png',
+    tag: 'init-heat-alert', // a newer alert replaces an older one on the phone
+    renotify: true,         // ...and still makes a sound
+    data: { url: safePath(msg.url) },
+  }));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = safePath(event.notification.data && event.notification.data.url);
+  event.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((wins) => {
+    const win = wins.find((w) => new URL(w.url).origin === self.location.origin);
+    if (win) return win.navigate(url).then(() => win.focus());
+    return self.clients.openWindow(url);
+  }));
+});

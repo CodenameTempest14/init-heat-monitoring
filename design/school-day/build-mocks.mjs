@@ -67,6 +67,7 @@ const head = (title) => `<!doctype html>
 <link rel="stylesheet" href="../../web/src/app.css">
 <link rel="stylesheet" href="../../web/src/charts.css">
 <link rel="stylesheet" href="../../web/src/school.css">
+<link rel="stylesheet" href="../../web/src/alerts.css">
 </head>`;
 const top = `<header class="app-head">${HEADER_TOP}<p class="text-secondary app-room">Room: Room 204</p>
     <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>`;
@@ -99,6 +100,7 @@ const homeTop = `<section class="card heat heat-danger" aria-label="Heat index">
   </div>
   <p class="text-secondary app-updated">updated just now</p>
   <a class="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
+  <a class="school-link alerts-link" href="#alerts"><span>Heat alerts</span><span aria-hidden="true">›</span></a>
   <section class="viz-wrap" aria-label="History"><h2 class="viz-section">History</h2><p class="viz-note">(the charts continue here, unchanged)</p></section>`;
 writeFileSync(new URL('./home-link.html', import.meta.url), page('home with the school day link', homeTop));
 console.log('home-link.html');
