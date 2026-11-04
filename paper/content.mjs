@@ -13,10 +13,10 @@ const gaps = j('gaps');
 const bandN = (b) => bands.find((x) => x.band === b)?.n ?? 0;
 const pct = (n) => ((100 * n) / sum.n).toFixed(1);
 
-export const meta = { version: '0.1 (draft)', date: '2026-11-03' };
+export const meta = { version: '0.1 (draft)', date: '2026-11-04' };
 
 export const blocks = [
-  { t: 'title', title: 'INIT: INDOOR HEAT INDEX TRACKER', sub: 'An IoT-Based Classroom Heat Index Monitoring System', field: 'PHYSICAL SCIENCE / INFORMATION TECHNOLOGY', researchers: ['[Researcher name]', '[Researcher name]', '[Researcher name]'], coach: '[Coach name]', school: '[School name]', date: 'Draft ' + meta.date },
+  { t: 'title', title: 'INIT: INDOOR HEAT INDEX TRACKER', sub: 'An IoT-Based Classroom Heat Index Monitoring System', field: 'PHYSICAL SCIENCE / INFORMATION TECHNOLOGY', researchers: ['John Michael A. Ompad', 'Jelhay C. Pangatungan', 'Mark Jacob G. Butaya'], coach: 'Arvin C. Trangia', school: 'Abuno High School', date: 'Draft ' + meta.date },
   { t: 'pb' },
   { t: 'h1', x: 'Chapter 1', y: 'Introduction' },
   { t: 'h2', x: 'I. Rationale of the Study' },

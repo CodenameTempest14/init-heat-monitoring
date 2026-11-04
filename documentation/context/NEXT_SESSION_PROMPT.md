@@ -1,4 +1,4 @@
-# Continue Classroom Heat Index Monitoring (prompt generated 2026-11-03)
+# Continue Classroom Heat Index Monitoring (prompt generated 2026-11-04)
 
 You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Documents\Codes\classroom-heat-index-monitoring): a power-bank-powered ESP32 room monitor (DHT22 + OLED) plus a public web app (PWA on Supabase + free static hosting) showing temperature, humidity and heat index for one classroom. The owner is learning: explain before and while implementing.
 
@@ -33,7 +33,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 
 ### Next concrete step
 1. Ask the phase-builder question (last answer: owner only). **Live admin rollout (P05-05, Opus 5.5), the owner's chosen start:** the owner makes a live admin account in the Supabase dashboard (an email they own, a long generated password, never in chat or the repo); then add that email to `admins` on live (the owner runs live writes in the terminal: Claude Code's classifier blocks `tools/db.mjs live ...` writes), sign in on the hosted page against live (`npm run config -- live` in `web/` also changes the Supabase host in `web/vercel.json`, whose CSP names it), try a real save, and run the admin backend checks and `node tools/anon-probe.mjs` against live. The three admin migrations are already on live (21/21). `tools/make-test-admin.mjs` is test only. The device still uploads to init-test; moving it to live "Init 1" is a separate decision (D-026). Then P05-03 push alerts.
-2. **Research paper (rule 5), every session:** `node paper/build.mjs` rebuilds the `.docx` and `.pdf`. Chapter 4 is parked until the owner says so. Skipped by the owner: researcher, coach and school names. Open: more references 2021 to 2026 (only 5 verified; each must be opened and read, never from memory; the ESP32 and DHT22 datasheets are used in Table 2 but not in References for lack of a confirmable date); add anything built to the paper; look at the Word file in Word once.
+2. **Research paper (rule 5), every session:** `node paper/build.mjs` rebuilds the `.docx` and `.pdf`. Chapter 4 is parked until the owner says so. Names are filled in (s29: three researchers, adviser Arvin C. Trangia, Abuno High School; the title page says Adviser, not Coach). Open: more references 2021 to 2026 (only 5 verified; each must be opened and read, never from memory; the ESP32 and DHT22 datasheets are used in Table 2 but not in References for lack of a confirmable date); add anything built to the paper; look at the Word file in Word once.
 3. **Teacher review (D-034):** the Reset sentence in the F-22 guide and the Readings table wording.
 4. **P04-08 leftovers:** a school day with several levels, the offline page on a phone, an iPhone add-to-home-screen, F-15 `#heat` and the P05-04 health group on a phone in light mode.
 5. **Test command:** `npm test` (= `node --env-file=.env --test --test-concurrency=1`, 204/204 in s28) and `npm run test:backend` (80/80). The backend tests wipe init-test readings (the 24 h run is saved in `paper/data/`).
@@ -45,7 +45,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 - For the live admin rollout: an admin email you own and a long generated password, created in the dashboard (the migrations are on live).
 - Teacher review of the Reset sentence and of the app's other user-facing wording.
 - Optional: try add-to-home-screen on the iPhone; send a phone screenshot of a school day with several levels and of the light mode.
-- Paper: researcher, coach and school names (skipped for now); say "put Chapter 4 back" when wanted.
+- Paper: say "put Chapter 4 back" when wanted.
 - Write `SECRET_SETUP_PASS` on a sticker for the case.
 - Later: dummy load or another bank (D-027). A push button for the OLED wake (D-025). Optional: confirm the S-6 passwords. Optional: a reference thermometer and hygrometer; later (P07) a USB inline meter.
 - Before 2028-01-28: GlobalSign Root CA in `firmware/init/include/root_ca.h` expires (D-026).

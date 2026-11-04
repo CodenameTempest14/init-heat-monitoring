@@ -59,7 +59,7 @@ for (const b of blocks) {
     case 'title':
       kids.push(center(b.title, { bold: true, size: 32, before: 1400 }), center(b.sub, { bold: true, size: 28, after: 600 }),
         center(b.field, { bold: true, after: 900 }), center('Researchers:'), ...b.researchers.map((r) => center(r, { bold: true })),
-        center('Coach:', { before: 360 }), center(b.coach, { bold: true }), center(b.school, { before: 360 }), center(b.date, { before: 120 }));
+        center('Adviser:', { before: 360 }), center(b.coach, { bold: true }), center(b.school, { before: 360 }), center(b.date, { before: 120 }));
       break;
     case 'pb': kids.push(new Paragraph({ children: [new PageBreak()] })); break;
     case 'h1': kids.push(center(b.x, { bold: true, after: 0 }), center(b.y, { bold: true, after: 240 })); break;
@@ -104,7 +104,7 @@ writeFileSync(OUT + 'Init_Research_Paper.docx', await Packer.toBuffer(doc));
 // 3. PDF from the same blocks (HTML rendered by Chromium)
 let html = '', fn = 0;
 for (const b of blocks) {
-  if (b.t === 'title') html += `<div class="c title"><p class="big">${esc(b.title)}</p><p class="mid">${esc(b.sub)}</p><p class="b sp">${esc(b.field)}</p><p>Researchers:</p>${b.researchers.map((r) => `<p class="b">${esc(r)}</p>`).join('')}<p class="sp2">Coach:</p><p class="b">${esc(b.coach)}</p><p class="sp2">${esc(b.school)}</p><p>${esc(b.date)}</p></div>`;
+  if (b.t === 'title') html += `<div class="c title"><p class="big">${esc(b.title)}</p><p class="mid">${esc(b.sub)}</p><p class="b sp">${esc(b.field)}</p><p>Researchers:</p>${b.researchers.map((r) => `<p class="b">${esc(r)}</p>`).join('')}<p class="sp2">Adviser:</p><p class="b">${esc(b.coach)}</p><p class="sp2">${esc(b.school)}</p><p>${esc(b.date)}</p></div>`;
   else if (b.t === 'pb') html += '<div class="pb"></div>';
   else if (b.t === 'h1') html += `<h1>${esc(b.x)}${b.y ? '<br>' + esc(b.y) : ''}</h1>`;
   else if (b.t === 'h2') html += `<h2>${esc(b.x)}</h2>`;
