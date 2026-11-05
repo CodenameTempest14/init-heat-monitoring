@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-05 · s32
+Owner only. **P05-03 ticked:** the room reached heat index 41.5 °C (rounds to 42) at 02:42Z with the alert level left at 42; `alerts` id 9 sent 1 / failed 0; the owner's Android (installed app, FCM, the only subscription) showed "Init heat alert — Heat index 42 °C (Danger) in Unassigned." (owner's screenshots, not stored); the 02:47Z reading at the same level made no second alert (quiet period). No iPhone subscribed; the 60-min reminder not seen. Hosted `sw.js` confirmed to carry the push handler. Lighthouse 12.6.1 re-run on the hosted page: 85 / 100 / 100 / 100 (P04-08 note). Paper: scope, procedure, Table 7 (55/72) and Not Yet Done updated, rebuilt. P05 6/7, project 55/72 (76%).
+
 ## 2026-11-04 · s31
 Owner only. P05-03 heat alerts built on init-test (owner: "all suggested"). Backend test-first: `push.backend.js` 14/14 (red 0/14 first); migration applied by the owner in the SQL Editor (`db push` could not reach the pooler); `anon-probe` 28/28. Web Push written with Web Crypto only (`_shared/webpush.js`, matches the RFC 8291 example byte for byte); `send-alert` Edge Function deployed by the owner (the CLI used the read-only `.env` token until `SUPABASE_ACCESS_TOKEN` was set in the terminal); secrets and Vault set; chain check sent 0 / failed 0. `tools/vapid-keys.mjs`. `#alerts` mock approved, then built (gate 16/16, red first), service worker push handlers, Heat alerts row on home (42 home screenshots redrawn). Pushed to `codenametempest14` and `main` (`87a88eb`). iPhone installed app and a school day with several levels seen (owner's screenshots; P04-08 evidence). Paper: Figure 7 alert sequence, `#alerts` in Figure 6, text. Not ticked: P05-03 waits for a real notification on the phone. Owner pasted a token in chat (deleted and replaced by the owner) and the test alert secret showed in an IDE selection (rotate before live).
 
