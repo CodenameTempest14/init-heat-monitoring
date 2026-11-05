@@ -139,7 +139,7 @@ export const blocks = [
   { t: 'p', x: 'When the device was unplugged, the hosted page showed "Offline: no reading for 2 min" in the owner\'s phone screenshot taken at two minutes. In an earlier test on the power bank, uploads every 90 seconds made the bank switch itself off after about a minute, while uploads every 60 seconds ran for 10 minutes and then for the full 24 hours. For this bank the interval therefore has to stay at 60 seconds (D-027).' },
   { t: 'h2', x: 'IV. Features Built and Verified' },
   { t: 'table', cap: 'Table 7. Progress of the project by phase (project table, 5 November 2026)', head: ['Phase', 'Done / Total', '%'], rows: [
-    ['P00 Kickoff and decisions', '13 / 13', '100'], ['P01 Heat index core and bench bring-up', '7 / 7', '100'], ['P02 Backend and secure upload', '7 / 7', '100'], ['P03 Device firmware', '10 / 10', '100'], ['P04 Web app core', '12 / 13 (+1 partly)', '92'], ['P05 Admin, alerts and device health', '6 / 7 (+1 partly)', '86'], ['P06 Display and sharing extras', '0 / 5', '0'], ['P07 Field trial and hardening', '0 / 7', '0'], ['P08 Over-the-air updates (optional)', '0 / 3', '0'], ['Whole project', '55 / 72', '76'],
+    ['P00 Kickoff and decisions', '13 / 13', '100'], ['P01 Heat index core and bench bring-up', '7 / 7', '100'], ['P02 Backend and secure upload', '7 / 7', '100'], ['P03 Device firmware', '10 / 10', '100'], ['P04 Web app core', '13 / 13', '100'], ['P05 Admin, alerts and device health', '6 / 7 (+1 partly)', '86'], ['P06 Display and sharing extras', '0 / 5', '0'], ['P07 Field trial and hardening', '0 / 7', '0'], ['P08 Over-the-air updates (optional)', '0 / 3', '0'], ['Whole project', '56 / 72', '78'],
   ] },
   { t: 'h2', x: 'V. Not Yet Done' },
   { t: 'ul', items: [
@@ -148,7 +148,7 @@ export const blocks = [
     'A real settings change on the live project: the live admin account works (4 November 2026), but the admin page finds its device through the newest reading, and the live project has none until the device is moved there from the test project.',
     'The calendar readings table (F-24) is built and tested; the owner confirmed on 3 November 2026 that on the hosted page it picks days, shows hourly rows and downloads a CSV. The live project has no readings yet, so the table there says "No readings yet".',
     'Reset room to Unassigned (F-23) was seen working on 3 November 2026: an admin saved a room name, the page and the OLED showed it, then Reset and Save put the room back to Unassigned on both (screenshots by the owner). The firmware default Unassigned is flashed on the board.',
-    'The installed app was seen on an iPhone on 4 November 2026 (opened from the Home Screen icon, full screen, with a school day of several levels); the offline page and light mode on a phone are not yet checked.',
+    'The installed app was seen on an iPhone on 4 November 2026 (opened from the Home Screen icon, full screen, with a school day of several levels); the offline page and light mode were checked on an Android phone on 5 November 2026 (the page showed Offline after two minutes without a reading and went back to Online when the board was plugged in again).',
     'The cause of the 220-second gap in the run, and a run in a real classroom (phase P07).',
   ] },
   { t: 'pb' },
