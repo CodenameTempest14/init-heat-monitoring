@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-05 · s34
+Owner only. Short session. Owner said to proceed, quickest first then hardest. F-13 and F-14 are already approved features (Tiers 1 to 3, D-010) but each page still needs approved mocks before building, so mocks only: design/qr-kiosk/ (poster with a real QR to the hosted app, kiosk page); screenshots in ref/ looked at (poster A4, kiosk TV and phone). Added qrcode-generator 2.0.4 (MIT) to web/package.json, not used by the app yet. Nothing built in web/, no tests run, no paper change (no feature or data added). Not done: calibration offsets decision, P07 (needs a classroom), P06-05 Tagalog toggle (hardest in P06: translation plus teacher review). Secret scan clean.
+
 ## 2026-11-05 · s33
 Owner only. **P04-08 ticked** (owner's Android screenshots: light-mode home, `#alerts`, Offline after unplugging, back Online). **P05-02 ticked:** interval saved 60 → 120 at 15:14:02Z (device took it at its next upload, gaps 120 s, bank stayed on for 5 min), back to 60 at 15:21:38Z; calibration offsets changed from the phone (+0.9 / +5.0, then −0.9 / −5.0, then −0.6 / 0), each change seen in the next reading. Admin label "Heat alerts (coming later)" → "Heat alerts" (mocks and approved images redrawn, admin gate 20/20), pushed `f7dac56` to `codenametempest14` and `main`. Paper: Figures 7 to 10 (phone screenshots of every page), figures renumbered to 12, Table 7 57/72, interval and offset test text. Whole project 57/72 (79 %). The old-readings roll-up (F-20, 90 days then hourly rows) already exists; nothing changed.
 
