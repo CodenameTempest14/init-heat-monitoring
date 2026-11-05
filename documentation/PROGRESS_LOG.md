@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-05 · s33
+Owner only. **P04-08 ticked** (owner's Android screenshots: light-mode home, `#alerts`, Offline after unplugging, back Online). **P05-02 ticked:** interval saved 60 → 120 at 15:14:02Z (device took it at its next upload, gaps 120 s, bank stayed on for 5 min), back to 60 at 15:21:38Z; calibration offsets changed from the phone (+0.9 / +5.0, then −0.9 / −5.0, then −0.6 / 0), each change seen in the next reading. Admin label "Heat alerts (coming later)" → "Heat alerts" (mocks and approved images redrawn, admin gate 20/20), pushed `f7dac56` to `codenametempest14` and `main`. Paper: Figures 7 to 10 (phone screenshots of every page), figures renumbered to 12, Table 7 57/72, interval and offset test text. Whole project 57/72 (79 %). The old-readings roll-up (F-20, 90 days then hourly rows) already exists; nothing changed.
+
 ## 2026-11-05 · s32
 Owner only. **P05-03 ticked:** the room reached heat index 41.5 °C (rounds to 42) at 02:42Z with the alert level left at 42; `alerts` id 9 sent 1 / failed 0; the owner's Android (installed app, FCM, the only subscription) showed "Init heat alert — Heat index 42 °C (Danger) in Unassigned." (owner's screenshots, not stored); the 02:47Z reading at the same level made no second alert (quiet period). No iPhone subscribed; the 60-min reminder not seen. Hosted `sw.js` confirmed to carry the push handler. Lighthouse 12.6.1 re-run on the hosted page: 85 / 100 / 100 / 100 (P04-08 note). Paper: scope, procedure, Table 7 (55/72) and Not Yet Done updated, rebuilt. P05 6/7, project 55/72 (76%).
 
