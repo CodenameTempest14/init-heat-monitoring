@@ -94,7 +94,7 @@ function settings({ saved } = {}) {
     </div>
     ${how('interval')}
 
-    <p class="ab-group-label">Heat alerts (coming later)</p>
+    <p class="ab-group-label">Heat alerts</p>
     <div class="ab-group">
       ${row('al', 'Alert at heat index', '42 = Danger', 42, '°C', 'min="27" max="60" step="1"')}
       ${row('qp', 'Quiet period', '10 to 1440', 60, 'min', 'min="10" max="1440" step="1"')}

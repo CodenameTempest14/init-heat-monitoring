@@ -223,7 +223,7 @@ function Settings({ session, call, deviceId, onSignOut }) {
         </div>
         <How part="interval" />
 
-        <p className="ab-group-label">Heat alerts (coming later)</p>
+        <p className="ab-group-label">Heat alerts</p>
         <div className="ab-group">
           {ALERT_ROWS.map(([id, label, hint, unit]) => <Row key={id} id={id} label={label} hint={hint} unit={unit} value={form[id] ?? ''} error={errors[id]} onChange={change} disabled={noSettings} />)}
         </div>
