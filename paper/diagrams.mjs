@@ -176,17 +176,24 @@ const routes = (() => {
 })();
 
 // 7. Heat alert flow (P05-03, supabase/migrations/20261108120000_push_alerts.sql, supabase/functions/send-alert)
-const phone = (() => {
+const phones = (list, pw) => {
   const img = (n) => 'data:image/jpeg;base64,' + readFileSync(new URL('./data/screens/' + n + '.jpg', import.meta.url)).toString('base64');
-  const w = 600, pw = 190, ph = 383, h = ph + 46;
-  const panels = [['home-online', '(a) Home page, online'], ['home-offline', '(b) Offline after 2 minutes'], ['alerts', '(c) Heat alerts page']];
+  const gap = 10, w = 600, x0 = (w - (list.length * pw + (list.length - 1) * gap)) / 2;
+  const ph = list.map(([n]) => Math.round((pw * dims[n][1]) / dims[n][0]));
+  const h = Math.max(...ph) + 50;
   let s = '';
-  panels.forEach(([n, cap], i) => {
-    const x = 7 + i * 200;
-    s += `<image href="${img(n)}" x="${x}" y="4" width="${pw}" height="${ph}"/><rect x="${x}" y="4" width="${pw}" height="${ph}" fill="none" stroke="#000" stroke-width="1"/>` + text(x + pw / 2, ph + 26, cap, { fs: 12 });
+  list.forEach(([n, cap], i) => {
+    const x = x0 + i * (pw + gap);
+    s += `<image href="${img(n)}" x="${x}" y="4" width="${pw}" height="${ph[i]}"/><rect x="${x}" y="4" width="${pw}" height="${ph[i]}" fill="none" stroke="#000" stroke-width="1"/>` + text(x + pw / 2, Math.max(...ph) + 28, cap, { fs: 12 });
   });
   return { w, h, svg: wrap(w, h, s) };
-})();
+};
+// pixel sizes of the screenshot files in paper/data/screens (width, height)
+const dims = { 'home-online': [420, 847], 'home-offline': [420, 847], alerts: [420, 847], charts: [400, 1026], readings: [400, 1073], school: [400, 1108], heat: [400, 1179], guide: [400, 1179], 'admin-signin': [400, 866], admin: [400, 974] };
+const phone1 = phones([['home-online', '(a) Live card, online'], ['home-offline', '(b) Offline'], ['charts', '(c) History charts']], 190);
+const phone2 = phones([['readings', '(a) Readings table'], ['school', '(b) School day summary'], ['alerts', '(c) Heat alerts']], 190);
+const phone3 = phones([['heat', '(a) What the heat index means'], ['guide', '(b) Admin guide']], 190);
+const phone4 = phones([['admin-signin', '(a) Admin sign-in'], ['admin', '(b) Admin, signed in']], 190);
 
 const alertSeq = (() => {
   const w = 900, h = 470;
@@ -265,7 +272,10 @@ export const diagrams = {
   seq: { title: 'Upload and read sequence between device, cloud and web app', ...seq },
   db: { title: 'Database tables and functions', ...db },
   routes: { title: 'Pages of the web app', ...routes },
-  phone: { title: 'The web app on an Android phone in light mode (screenshots, 5 November 2026)', ...phone },
+  phone1: { title: 'Home page of the web app on an Android phone, light mode (5 November 2026)', ...phone1 },
+  phone2: { title: 'Readings table, school day summary and heat alerts pages', ...phone2 },
+  phone3: { title: 'Help pages: what the heat index means and the admin guide', ...phone3 },
+  phone4: { title: 'Admin page: sign-in and settings (test account)', ...phone4 },
   alerts: { title: 'Heat alert sequence from an upload to a notification on a phone', ...alertSeq },
   hourly: { title: 'Heat index, temperature and relative humidity in the 24-hour run (hourly values, 2 to 3 November 2026)', ...hourlyChart },
 };
