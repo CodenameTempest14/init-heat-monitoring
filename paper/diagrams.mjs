@@ -176,6 +176,18 @@ const routes = (() => {
 })();
 
 // 7. Heat alert flow (P05-03, supabase/migrations/20261108120000_push_alerts.sql, supabase/functions/send-alert)
+const phone = (() => {
+  const img = (n) => 'data:image/jpeg;base64,' + readFileSync(new URL('./data/screens/' + n + '.jpg', import.meta.url)).toString('base64');
+  const w = 600, pw = 190, ph = 383, h = ph + 46;
+  const panels = [['home-online', '(a) Home page, online'], ['home-offline', '(b) Offline after 2 minutes'], ['alerts', '(c) Heat alerts page']];
+  let s = '';
+  panels.forEach(([n, cap], i) => {
+    const x = 7 + i * 200;
+    s += `<image href="${img(n)}" x="${x}" y="4" width="${pw}" height="${ph}"/><rect x="${x}" y="4" width="${pw}" height="${ph}" fill="none" stroke="#000" stroke-width="1"/>` + text(x + pw / 2, ph + 26, cap, { fs: 12 });
+  });
+  return { w, h, svg: wrap(w, h, s) };
+})();
+
 const alertSeq = (() => {
   const w = 900, h = 470;
   let s = '';
@@ -253,6 +265,7 @@ export const diagrams = {
   seq: { title: 'Upload and read sequence between device, cloud and web app', ...seq },
   db: { title: 'Database tables and functions', ...db },
   routes: { title: 'Pages of the web app', ...routes },
+  phone: { title: 'The web app on an Android phone in light mode (screenshots, 5 November 2026)', ...phone },
   alerts: { title: 'Heat alert sequence from an upload to a notification on a phone', ...alertSeq },
   hourly: { title: 'Heat index, temperature and relative humidity in the 24-hour run (hourly values, 2 to 3 November 2026)', ...hourlyChart },
 };
