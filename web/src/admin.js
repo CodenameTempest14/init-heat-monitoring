@@ -10,20 +10,22 @@ export const SETTING_RANGES = {
   alert_quiet_min: [10, 1440, 1],
 };
 
+import { translate } from './i18n.js';
+
 const show = (n) => String(n).replace('-', '−');
 
 // F-23: what Reset puts in the room box (the database default; 10 characters, fits the OLED's 12). Save still has to be pressed.
 export const RESET_ROOM = 'Unassigned';
 export const canReset = (text) => String(text ?? '').trim() !== RESET_ROOM;
 
-export function checkRoom(text) {
+export function checkRoom(text, lang = 'en') {
   const value = String(text ?? '').trim();
-  if (value.length < 1) return { ok: false, error: 'Type a room name.' };
-  if (value.length > 60) return { ok: false, error: 'At most 60 characters.' };
+  if (value.length < 1) return { ok: false, error: translate(lang, 'admin.errRoomNone') };
+  if (value.length > 60) return { ok: false, error: translate(lang, 'admin.errRoomLong') };
   return { ok: true, value };
 }
 
-export function checkSettings(form) {
+export function checkSettings(form, lang = 'en') {
   const values = {};
   const errors = {};
   for (const [key, [min, max, step]] of Object.entries(SETTING_RANGES)) {
@@ -31,7 +33,7 @@ export function checkSettings(form) {
     const pattern = step === 1 ? /^-?\d+$/ : /^-?\d+(\.\d)?$/;
     const n = Number(raw);
     if (!pattern.test(raw) || n < min || n > max) {
-      errors[key] = `Use ${show(min)} to ${show(max)}${step === 1 ? ', whole numbers' : ', one decimal at most'}.`;
+      errors[key] = translate(lang, step === 1 ? 'admin.rangeWhole' : 'admin.rangeDecimal', { min: show(min), max: show(max) });
     } else {
       values[key] = n;
     }
@@ -55,39 +57,40 @@ export const initialOf = (email) => (email ? email[0].toUpperCase() : '?');
 
 // P05-04 device health panel: words for what the device sent. Wording and bands as approved in design/admin/health/README.md.
 // Good at -65 dBm or stronger, Fair -66 to -75, Weak below -75. `kind` picks the icon: ok (tick), warn (triangle), bad (cross), null (none).
-export function signalState(rssiDbm) {
-  const word = rssiDbm >= -65 ? 'Good' : rssiDbm >= -75 ? 'Fair' : 'Weak';
-  return { word, kind: word === 'Weak' ? 'warn' : 'ok', dbm: `${show(rssiDbm)} dBm` };
+export function signalState(rssiDbm, lang = 'en') {
+  const level = rssiDbm >= -65 ? 'good' : rssiDbm >= -75 ? 'fair' : 'weak';
+  return { word: translate(lang, `signal.${level}`), kind: level === 'weak' ? 'warn' : 'ok', dbm: `${show(rssiDbm)} dBm` };
 }
 
+// code from the chip -> [key of its words, icon kind]
 const RESTART = {
-  POWERON: ['Power on', null],
-  EXT: ['Reset pin', null],
-  SW: ['Software restart', null],
-  DEEPSLEEP: ['Woke from sleep', null],
-  PANIC: ['Crash', 'warn'],
-  INT_WDT: ['Stopped responding', 'warn'],
-  TASK_WDT: ['Stopped responding', 'warn'],
-  WDT: ['Stopped responding', 'warn'],
-  BROWNOUT: ['Power dipped', 'warn'],
+  POWERON: ['POWERON', null],
+  EXT: ['EXT', null],
+  SW: ['SW', null],
+  DEEPSLEEP: ['DEEPSLEEP', null],
+  PANIC: ['PANIC', 'warn'],
+  INT_WDT: ['WDT', 'warn'],
+  TASK_WDT: ['WDT', 'warn'],
+  WDT: ['WDT', 'warn'],
+  BROWNOUT: ['BROWNOUT', 'warn'],
 };
-export function restartState(code) {
-  const [word, kind] = Object.hasOwn(RESTART, code) ? RESTART[code] : ['Unknown', null];
-  return { word, kind, code };
+export function restartState(code, lang = 'en') {
+  const [key, kind] = Object.hasOwn(RESTART, code) ? RESTART[code] : ['unknown', null];
+  return { word: translate(lang, `restart.${key}`), kind, code };
 }
 
-export function agoText(ms) {
+export function agoText(ms, lang = 'en') {
   const s = Math.max(0, Math.floor(ms / 1000));
-  if (s < 60) return `${s} s ago`;
-  if (s < 3600) return `${Math.floor(s / 60)} min ago`;
-  if (s < 86400) return `${Math.floor(s / 3600)} h ago`;
-  return `${Math.floor(s / 86400)} d ago`;
+  if (s < 60) return translate(lang, 'ago.s', { n: s });
+  if (s < 3600) return translate(lang, 'ago.min', { n: Math.floor(s / 60) });
+  if (s < 86400) return translate(lang, 'ago.h', { n: Math.floor(s / 3600) });
+  return translate(lang, 'ago.d', { n: Math.floor(s / 86400) });
 }
 
 // Late = older than 120 s, the same rule as the Offline badge on the live page.
-export function reportState(reportedAt, nowMs) {
+export function reportState(reportedAt, nowMs, lang = 'en') {
   const t = Date.parse(reportedAt);
   if (!Number.isFinite(t)) return null;
   const age = nowMs - t;
-  return { word: age > 120_000 ? 'Late' : 'Just now', kind: age > 120_000 ? 'bad' : 'ok', ago: agoText(age) };
+  return { word: translate(lang, age > 120_000 ? 'report.late' : 'report.just'), kind: age > 120_000 ? 'bad' : 'ok', ago: agoText(age, lang) };
 }

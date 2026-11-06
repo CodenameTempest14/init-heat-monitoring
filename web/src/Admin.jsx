@@ -2,6 +2,7 @@
 // Markup and classes match design/admin/proposal-b/*.html (owner chose proposal B, s22). Plain fetch, no supabase-js (D-031).
 // The page only shows or hides; the database refuses every change from anyone who is not in `admins` (P05-05).
 import { useEffect, useState } from 'react';
+import { useLang } from './Lang.jsx';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { checkRoom, canReset, RESET_ROOM, checkSettings, sessionFrom, needsRefresh, initialOf, SETTING_RANGES, signalState, restartState, reportState } from './admin.js';
 
@@ -24,7 +25,7 @@ const ICON = {
   shield: <><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z" /><path d="m9.5 9.5 5 5M14.5 9.5l-5 5" /></>,
 };
 // F-22: the link under each group box that opens the admin guide at that part.
-const How = ({ part }) => <a className="ab-how" href={`#guide/${part}`}><Svg k="help" />How? ›</a>;
+const How = ({ part }) => { const { t } = useLang(); return <a className="ab-how" href={`#guide/${part}`}><Svg k="help" />{t('admin.how')}</a>; };
 const Svg = ({ k }) => <svg viewBox="0 0 24 24" aria-hidden="true">{ICON[k]}</svg>;
 
 function load() { try { return JSON.parse(sessionStorage.getItem(STORE)); } catch { return null; } }
@@ -49,17 +50,19 @@ async function rest(token, path, { method = 'GET', body } = {}) {
   return { ok: res.ok, status: res.status, json: text ? JSON.parse(text) : null };
 }
 
+// [id, key of the label, hint (a text key, or the numbers themselves), unit]
 const ROWS = [
-  ['interval_s', 'Reporting interval', '60 to 3600', 's'],
-  ['temp_offset_c', 'Temperature offset', '−5.0 to +5.0', '°C'],
-  ['rh_offset_pct', 'Humidity offset', '−10.0 to +10.0', '%'],
+  ['interval_s', 'admin.interval', '60 to 3600', 's'],
+  ['temp_offset_c', 'admin.tempOffset', '−5.0 to +5.0', '°C'],
+  ['rh_offset_pct', 'admin.rhOffset', '−10.0 to +10.0', '%'],
 ];
 const ALERT_ROWS = [
-  ['alert_heat_index_c', 'Alert at heat index', '42 = Danger', '°C'],
-  ['alert_quiet_min', 'Quiet period', '10 to 1440', 'min'],
+  ['alert_heat_index_c', 'admin.alertAt', 'admin.alertAtHint', '°C'],
+  ['alert_quiet_min', 'admin.quiet', '10 to 1440', 'min'],
 ];
 
 function SignIn({ onSession }) {
+  const { t } = useLang();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [shown, setShown] = useState(false);
@@ -72,8 +75,8 @@ function SignIn({ onSession }) {
     try {
       const r = await auth('token?grant_type=password', { email: email.trim(), password });
       const s = r.ok && sessionFrom(r.json, Date.now());
-      if (s) { setPassword(''); onSession(s); } else setError('Email or password is wrong.');
-    } catch { setError('Could not reach the server. Try again.'); }
+      if (s) { setPassword(''); onSession(s); } else setError(t('admin.wrongLogin'));
+    } catch { setError(t('admin.unreachable')); }
     setBusy(false);
   };
 
@@ -81,28 +84,29 @@ function SignIn({ onSession }) {
     <div className="ab-center">
       <form className="card ab-card" onSubmit={submit}><div className="card-body">
         <div className="ab-badge"><Svg k="lock" /></div>
-        <h2 className="ab-title">Admin</h2>
-        <p className="ab-sub">Sign in to change the room and settings.</p>
+        <h2 className="ab-title">{t('admin.title')}</h2>
+        <p className="ab-sub">{t('admin.signinSub')}</p>
         {error && <div className="ab-alert" role="alert"><Svg k="alert" />{error}</div>}
-        <div className="ab-field"><label className="visually-hidden" htmlFor="email">Email address</label>
+        <div className="ab-field"><label className="visually-hidden" htmlFor="email">{t('admin.email')}</label>
           <div className="input-icon"><span className="input-icon-addon"><Svg k="mail" /></span>
-            <input className="form-control" id="email" type="email" autoComplete="username" placeholder="Email address" required value={email} onChange={(e) => setEmail(e.target.value)} /></div></div>
-        <div className="ab-field"><label className="visually-hidden" htmlFor="pw">Password</label>
+            <input className="form-control" id="email" type="email" autoComplete="username" placeholder={t('admin.email')} required value={email} onChange={(e) => setEmail(e.target.value)} /></div></div>
+        <div className="ab-field"><label className="visually-hidden" htmlFor="pw">{t('admin.password')}</label>
           <div className="input-icon position-relative"><span className="input-icon-addon"><Svg k="key" /></span>
-            <input className="form-control" id="pw" type={shown ? 'text' : 'password'} autoComplete="current-password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button type="button" className="ab-eye" aria-label={shown ? 'Hide password' : 'Show password'} aria-pressed={shown} onClick={() => setShown(!shown)}><Svg k="eye" /></button></div></div>
-        <button type="submit" className="btn btn-primary w-100 ab-btn" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+            <input className="form-control" id="pw" type={shown ? 'text' : 'password'} autoComplete="current-password" placeholder={t('admin.password')} required value={password} onChange={(e) => setPassword(e.target.value)} />
+            <button type="button" className="ab-eye" aria-label={shown ? t('admin.hidePw') : t('admin.showPw')} aria-pressed={shown} onClick={() => setShown(!shown)}><Svg k="eye" /></button></div></div>
+        <button type="submit" className="btn btn-primary w-100 ab-btn" disabled={busy}>{busy ? t('admin.signingIn') : t('admin.signIn')}</button>
       </div></form>
-      <p className="ab-foot">Viewing the readings needs no sign-in.</p>
+      <p className="ab-foot">{t('admin.viewFoot')}</p>
     </div>
   );
 }
 
 function Who({ email, onSignOut }) {
+  const { t } = useLang();
   return (
     <div className="ab-who"><span className="ab-avatar" aria-hidden="true">{initialOf(email)}</span>
-      <div className="ab-who-text"><strong>{email}</strong><span>Admin</span></div>
-      <button type="button" className="ab-link" onClick={onSignOut}>Sign out</button></div>
+      <div className="ab-who-text"><strong>{email}</strong><span>{t('admin.title')}</span></div>
+      <button type="button" className="ab-link" onClick={onSignOut}>{t('admin.signOut')}</button></div>
   );
 }
 
@@ -122,29 +126,31 @@ const State = ({ kind, children }) => <span className={`ab-state ab-state-${kind
 const HealthRow = ({ label, hint, children }) => (
   <div className="ab-row"><div className="ab-row-text"><span className="fw-semibold d-block">{label}</span><small>{hint}</small></div><div className="ab-val">{children}</div></div>
 );
-const NotYet = <small>Not reported yet</small>;
 function Health({ health, nowMs }) {
-  const signal = health && signalState(health.rssi_dbm);
-  const restart = health && restartState(health.reset_reason);
-  const report = health && reportState(health.reported_at, nowMs);
+  const { lang, t } = useLang();
+  const NotYet = <small>{t('admin.notYet')}</small>;
+  const signal = health && signalState(health.rssi_dbm, lang);
+  const restart = health && restartState(health.reset_reason, lang);
+  const report = health && reportState(health.reported_at, nowMs, lang);
   const trouble = health && (signal.kind === 'warn' || restart.kind === 'warn' || report?.kind === 'bad');
   return (
     <>
-      <p className="ab-group-label">Device health</p>
+      <p className="ab-group-label">{t('admin.healthGroup')}</p>
       <div className="ab-group">
-        <HealthRow label="Wi-Fi signal" hint="Stronger is closer to 0">{signal ? <><State kind={signal.kind}>{signal.word}</State><small>{signal.dbm}</small></> : NotYet}</HealthRow>
-        <HealthRow label="Last restart" hint="Why the device last started">{restart ? <>{restart.kind ? <State kind={restart.kind}>{restart.word}</State> : restart.word}<small>{restart.code || 'UNKNOWN'}</small></> : NotYet}</HealthRow>
-        <HealthRow label="Firmware" hint="Version on the device">{health ? health.fw_version : NotYet}</HealthRow>
-        {health && report && <HealthRow label="Last report" hint="When it last sent a reading"><State kind={report.kind}>{report.word}</State><small>{report.ago}</small></HealthRow>}
+        <HealthRow label={t('admin.wifi')} hint={t('admin.wifiHint')}>{signal ? <><State kind={signal.kind}>{signal.word}</State><small>{signal.dbm}</small></> : NotYet}</HealthRow>
+        <HealthRow label={t('admin.restart')} hint={t('admin.restartHint')}>{restart ? <>{restart.kind ? <State kind={restart.kind}>{restart.word}</State> : restart.word}<small>{restart.code || 'UNKNOWN'}</small></> : NotYet}</HealthRow>
+        <HealthRow label={t('admin.firmware')} hint={t('admin.firmwareHint')}>{health ? health.fw_version : NotYet}</HealthRow>
+        {health && report && <HealthRow label={t('admin.report')} hint={t('admin.reportHint')}><State kind={report.kind}>{report.word}</State><small>{report.ago}</small></HealthRow>}
       </div>
-      {!health && <p className="ab-health-note">This device has not sent its health yet. It does after its next firmware update.</p>}
-      {trouble && <p className="ab-health-note">A weak signal or repeated restarts can leave gaps in the readings.</p>}
+      {!health && <p className="ab-health-note">{t('admin.noHealth')}</p>}
+      {trouble && <p className="ab-health-note">{t('admin.trouble')}</p>}
       <How part="health" />
     </>
   );
 }
 
 function Settings({ session, call, deviceId, onSignOut }) {
+  const { lang, t } = useLang();
   const [loaded, setLoaded] = useState(null); // { room, settings } as stored
   const [room, setRoom] = useState('');
   const [form, setForm] = useState({});
@@ -165,7 +171,7 @@ function Settings({ session, call, deviceId, onSignOut }) {
       setLoaded(stored);
       setRoom(stored.room);
       if (stored.settings) setForm(formFrom(stored.settings));
-    })().catch(() => alive && setMessage({ kind: 'error', text: 'Could not load the settings. Try again.' }));
+    })().catch(() => alive && setMessage({ kind: 'error', text: t('admin.loadFailed') }));
     return () => { alive = false; };
   }, [deviceId, call]);
 
@@ -174,8 +180,8 @@ function Settings({ session, call, deviceId, onSignOut }) {
   const submit = async (e) => {
     e.preventDefault();
     setMessage(null);
-    const r = checkRoom(room);
-    const s = loaded.settings ? checkSettings(form) : { ok: true, values: {}, errors: {} };
+    const r = checkRoom(room, lang);
+    const s = loaded.settings ? checkSettings(form, lang) : { ok: true, values: {}, errors: {} };
     setErrors({ ...s.errors, ...(r.ok ? {} : { room: r.error }) });
     if (!r.ok || !s.ok) return;
     setBusy(true);
@@ -193,44 +199,44 @@ function Settings({ session, call, deviceId, onSignOut }) {
       }
       setLoaded((was) => ({ ...was, room: r.value, settings }));
       setRoom(r.value);
-      setMessage({ kind: 'saved', text: 'Saved' });
-    } catch { setMessage({ kind: 'error', text: 'Not saved. Sign in again and retry.' }); }
+      setMessage({ kind: 'saved', text: t('admin.saved') });
+    } catch { setMessage({ kind: 'error', text: t('admin.notSaved') }); }
     setBusy(false);
   };
 
-  if (!loaded) return <><Who email={session.email} onSignOut={onSignOut} />{message ? <div className="ab-alert" role="alert"><Svg k="alert" />{message.text}</div> : <p className="ab-foot">Loading…</p>}</>;
+  if (!loaded) return <><Who email={session.email} onSignOut={onSignOut} />{message ? <div className="ab-alert" role="alert"><Svg k="alert" />{message.text}</div> : <p className="ab-foot">{t('loading')}</p>}</>;
   const noSettings = !loaded.settings;
   return (
     <>
       <Who email={session.email} onSignOut={onSignOut} />
       <form onSubmit={submit} noValidate>
-        <p className="ab-group-label">Room</p>
-        <div className="ab-group"><div className="ab-row ab-row-wide"><label className="fw-semibold" htmlFor="room">Where the device is now</label>
+        <p className="ab-group-label">{t('admin.roomGroup')}</p>
+        <div className="ab-group"><div className="ab-row ab-row-wide"><label className="fw-semibold" htmlFor="room">{t('admin.roomLabel')}</label>
           <div className="ab-roomrow"><input className="form-control" id="room" maxLength={60} value={room} onChange={(e) => { setRoom(e.target.value); setMessage(null); }} aria-invalid={Boolean(errors.room)} />
-            <button type="button" className="btn ab-reset" disabled={!canReset(room)} onClick={() => { setRoom(RESET_ROOM); setMessage(null); setErrors((was) => ({ ...was, room: undefined })); }}>Reset</button></div>
+            <button type="button" className="btn ab-reset" disabled={!canReset(room)} onClick={() => { setRoom(RESET_ROOM); setMessage(null); setErrors((was) => ({ ...was, room: undefined })); }}>{t('admin.reset')}</button></div>
           {errors.room && <small className="ab-err">{errors.room}</small>}
-          <small className="d-block mt-1 text-secondary">A room name only, never a person's name. Reset puts Unassigned in the box. Press Save to keep it. Old readings keep their room.</small></div></div>
+          <small className="d-block mt-1 text-secondary">{t('admin.roomHelp')}</small></div></div>
         <How part="room" />
 
         <Health health={loaded.health} nowMs={loaded.nowMs} />
 
-        <p className="ab-group-label">Device</p>
+        <p className="ab-group-label">{t('admin.deviceGroup')}</p>
         <div className="ab-group">
-          {noSettings && <div className="ab-note"><Svg k="warn" /><span>This device has no settings yet. Only the room can be changed.</span></div>}
-          <Row id={ROWS[0][0]} label={ROWS[0][1]} hint={ROWS[0][2]} unit={ROWS[0][3]} value={form[ROWS[0][0]] ?? ''} error={errors[ROWS[0][0]]} onChange={change} disabled={noSettings} />
-          <div className="ab-note"><Svg k="warn" /><span>On the power bank keep it at 60 s, or the bank may switch off.</span></div>
-          {ROWS.slice(1).map(([id, label, hint, unit]) => <Row key={id} id={id} label={label} hint={hint} unit={unit} value={form[id] ?? ''} error={errors[id]} onChange={change} disabled={noSettings} />)}
+          {noSettings && <div className="ab-note"><Svg k="warn" /><span>{t('admin.noSettings')}</span></div>}
+          <Row id={ROWS[0][0]} label={t(ROWS[0][1])} hint={ROWS[0][2]} unit={ROWS[0][3]} value={form[ROWS[0][0]] ?? ''} error={errors[ROWS[0][0]]} onChange={change} disabled={noSettings} />
+          <div className="ab-note"><Svg k="warn" /><span>{t('admin.bankNote')}</span></div>
+          {ROWS.slice(1).map(([id, label, hint, unit]) => <Row key={id} id={id} label={t(label)} hint={hint} unit={unit} value={form[id] ?? ''} error={errors[id]} onChange={change} disabled={noSettings} />)}
         </div>
         <How part="interval" />
 
-        <p className="ab-group-label">Heat alerts</p>
+        <p className="ab-group-label">{t('admin.alertsGroup')}</p>
         <div className="ab-group">
-          {ALERT_ROWS.map(([id, label, hint, unit]) => <Row key={id} id={id} label={label} hint={hint} unit={unit} value={form[id] ?? ''} error={errors[id]} onChange={change} disabled={noSettings} />)}
+          {ALERT_ROWS.map(([id, label, hint, unit]) => <Row key={id} id={id} label={t(label)} hint={hint.startsWith('admin.') ? t(hint) : hint} unit={unit} value={form[id] ?? ''} error={errors[id]} onChange={change} disabled={noSettings} />)}
         </div>
         <How part="alerts" />
 
-        <div className="ab-save"><button type="submit" className="btn btn-primary ab-btn" disabled={busy}>{busy ? 'Saving…' : 'Save changes'}</button>
-          {message?.kind === 'saved' && <span className="ab-saved" role="status"><Svg k="tick" />Saved</span>}</div>
+        <div className="ab-save"><button type="submit" className="btn btn-primary ab-btn" disabled={busy}>{busy ? t('admin.saving') : t('admin.save')}</button>
+          {message?.kind === 'saved' && <span className="ab-saved" role="status"><Svg k="tick" />{t('admin.saved')}</span>}</div>
         {message?.kind === 'error' && <div className="ab-alert" role="alert"><Svg k="alert" />{message.text}</div>}
       </form>
     </>
@@ -238,6 +244,7 @@ function Settings({ session, call, deviceId, onSignOut }) {
 }
 
 export default function Admin({ deviceId, ready }) {
+  const { t } = useLang();
   const [session, setSession] = useState(load);
   const [role, setRole] = useState(null); // null = asking, 'admin', 'not-admin'
 
@@ -270,19 +277,19 @@ export default function Admin({ deviceId, ready }) {
 
   let body;
   if (!session) body = <SignIn onSession={signIn} />;
-  else if (role === null) body = <p className="ab-foot">Checking the account…</p>;
+  else if (role === null) body = <p className="ab-foot">{t('admin.checking')}</p>;
   else if (role === 'not-admin') {
     body = (
       <div className="ab-center"><div className="card ab-card ab-empty"><div className="card-body">
         <div className="ab-badge"><Svg k="shield" /></div>
-        <h2 className="ab-title">Not an admin</h2>
-        <p className="ab-sub">{session.email} can view the readings, but it cannot change anything here.</p>
-        <button type="button" className="btn w-100 ab-btn" onClick={signOut}>Sign out</button>
+        <h2 className="ab-title">{t('admin.notAdmin')}</h2>
+        <p className="ab-sub">{t('admin.notAdminSub', { email: session.email })}</p>
+        <button type="button" className="btn w-100 ab-btn" onClick={signOut}>{t('admin.signOut')}</button>
       </div></div></div>
     );
-  } else if (!ready) body = <p className="ab-foot">Loading…</p>;
-  else if (!deviceId) body = <><Who email={session.email} onSignOut={signOut} /><p className="ab-foot">No device has sent a reading yet.</p></>;
+  } else if (!ready) body = <p className="ab-foot">{t('loading')}</p>;
+  else if (!deviceId) body = <><Who email={session.email} onSignOut={signOut} /><p className="ab-foot">{t('admin.noDevice')}</p></>;
   else body = <Settings session={session} call={call} deviceId={deviceId} onSignOut={signOut} />;
 
-  return (<><a className="school-back" href="#">‹ Live readings</a>{body}</>);
+  return (<><a className="school-back" href="#">{t('back')}</a>{body}</>);
 }

@@ -157,3 +157,46 @@ test('levelsFor: Filipino has the same levels, the same number of advice lines, 
     assert.notEqual(l.body, LEVELS[i].body);
   });
 });
+
+// ---- stage 4 (s36): #admin words ----
+import { checkRoom, checkSettings, signalState, restartState, agoText, reportState } from '../web/src/admin.js';
+
+test('admin.js: form errors, health words and times in Filipino; English unchanged', () => {
+  assert.equal(checkRoom('').error, 'Type a room name.');
+  assert.equal(checkRoom('', 'fil').error, 'Mag-type ng pangalan ng silid.');
+  assert.equal(checkRoom('x'.repeat(61), 'fil').error, 'Hanggang 60 character lang.');
+  assert.equal(checkRoom(' Room 1 ', 'fil').value, 'Room 1');
+  const bad = checkSettings({ interval_s: '5', temp_offset_c: '9', rh_offset_pct: '0', alert_heat_index_c: '42', alert_quiet_min: '60' });
+  assert.equal(bad.errors.interval_s, 'Use 60 to 3600, whole numbers.');
+  assert.equal(checkSettings({ interval_s: '5', temp_offset_c: '9', rh_offset_pct: '0', alert_heat_index_c: '42', alert_quiet_min: '60' }, 'fil').errors.interval_s, 'Gamitin ang 60 hanggang 3600, buong numero lang.');
+  assert.equal(checkSettings({ interval_s: '60', temp_offset_c: '9', rh_offset_pct: '0', alert_heat_index_c: '42', alert_quiet_min: '60' }, 'fil').errors.temp_offset_c, 'Gamitin ang −5 hanggang 5, hanggang isang decimal lang.');
+  assert.equal(signalState(-60).word, 'Good');
+  assert.equal(signalState(-60, 'fil').word, 'Maganda');
+  assert.equal(signalState(-70, 'fil').word, 'Katamtaman');
+  assert.equal(signalState(-81, 'fil').word, 'Mahina');
+  assert.equal(signalState(-81, 'fil').dbm, '−81 dBm');
+  assert.equal(restartState('BROWNOUT').word, 'Power dipped');
+  assert.equal(restartState('BROWNOUT', 'fil').word, 'Bumaba ang kuryente');
+  assert.equal(restartState('WDT', 'fil').word, 'Tumigil sa pagtugon');
+  assert.equal(restartState('???', 'fil').word, 'Hindi alam');
+  assert.equal(agoText(5000), '5 s ago');
+  assert.equal(agoText(5000, 'fil'), '5 s na ang nakalipas');
+  assert.equal(agoText(2 * 3600_000, 'fil'), '2 h na ang nakalipas');
+  assert.equal(reportState('2026-11-02T10:00:00Z', Date.parse('2026-11-02T10:05:00Z')).word, 'Late');
+  assert.equal(reportState('2026-11-02T10:00:00Z', Date.parse('2026-11-02T10:05:00Z'), 'fil').word, 'Huli');
+  assert.equal(reportState('2026-11-02T10:00:00Z', Date.parse('2026-11-02T10:00:30Z'), 'fil').word, 'Ngayon lang');
+});
+
+test('the controls named in bold in the guide are the labels the admin page really shows (both languages)', () => {
+  const allowed = new Set(['Unassigned', 'What to do:', 'Ano ang gagawin:']);
+  for (const lang of LANGS) {
+    const list = STRINGS[lang];
+    const shown = new Set(Object.entries(list).filter(([k]) => /^(admin|signal|report)\./.test(k)).map(([, v]) => v));
+    const bold = Object.entries(list).filter(([k]) => k.startsWith('guide.')).flatMap(([, v]) => richParts(v).filter((p) => p.bold).map((p) => p.text));
+    assert.ok(bold.length > 20);
+    for (const name of bold) {
+      if (/\d/.test(name) || allowed.has(name)) continue;
+      assert.ok(shown.has(name), `${lang}: the guide says "${name}" but the admin page has no such label`);
+    }
+  }
+});

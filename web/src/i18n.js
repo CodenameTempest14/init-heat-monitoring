@@ -6,6 +6,7 @@
 // A {name} in a text is filled from the values passed to translate(); **text** is shown in bold (see richParts).
 
 import { GUIDE_EN, GUIDE_FIL } from './i18n-guide.js';
+import { ADMIN_EN, ADMIN_FIL } from './i18n-admin.js';
 
 export const LANGS = ['en', 'fil'];
 export const STORAGE_KEY = 'init-lang';
@@ -126,6 +127,7 @@ export const STRINGS = {
     'alerts.unsupported': 'This browser cannot receive heat alerts.',
     'alerts.unsupportedHelp': 'Try Chrome on Android, or on iPhone add Init to the Home Screen.',
     ...GUIDE_EN,
+    ...ADMIN_EN,
   },
   fil: {
     'lang.group': 'Language / Wika',
@@ -242,6 +244,7 @@ export const STRINGS = {
     'alerts.unsupported': 'Hindi makatanggap ng babala sa init ang browser na ito.',
     'alerts.unsupportedHelp': 'Subukan ang Chrome sa Android, o sa iPhone ay idagdag ang Init sa Home Screen.',
     ...GUIDE_FIL,
+    ...ADMIN_FIL,
   },
 };
 

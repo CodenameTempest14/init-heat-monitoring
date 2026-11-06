@@ -56,7 +56,7 @@ async function open({ reading = 'normal', theme = 'light', width = 390, hash = '
   await page.route('**/rest/v1/settings*', (route) => route.fulfill({ contentType: 'application/json', body: '[]' }));
   if (init) await init(page);
   await page.goto(`${base}${hash}`, { waitUntil: 'networkidle' });
-  await page.waitForSelector('.heat-cat, .heat-num, .viz-section');
+  await page.waitForSelector('.heat-cat, .heat-num, .viz-section, .ab-title, .ab-who');
   return { ctx, page, problems };
 }
 const shot = async (page) => { await page.mouse.move(0, 0); await page.evaluate(() => document.activeElement.blur()); return loadApproved(await page.screenshot({ fullPage: true })); };
@@ -228,4 +228,46 @@ test('#heat and #guide follow the choice (Filipino): headings, level names, advi
     assert.ok(await page.locator('.gd-sec strong').count() >= 10, 'bold pieces are drawn');
     assert.deepEqual(problems, []);
   } finally { await ctx.close(); }
+});
+
+test('#admin follows the choice (Filipino): sign-in page, the wrong-password message, and the settings page with health words', async () => {
+  const { ctx, page } = await open({ init: chooseFilipino, width: 360, hash: '#admin' });
+  try {
+    await page.route('**/auth/v1/token*', (route) => route.fulfill({ status: 400, contentType: 'application/json', body: '{"error":"invalid_grant"}' }));
+    let body = await page.textContent('body');
+    for (const word of ['Mag-sign in para baguhin ang silid at mga setting.', 'Hindi kailangang mag-sign in para makita ang mga reading.']) assert.ok(body.includes(word), `sign-in page is missing "${word}"`);
+    await page.fill('#email', 'x@example.com');
+    await page.fill('#pw', 'wrong');
+    await page.click('button[type="submit"]');
+    await page.waitForSelector('.ab-alert');
+    assert.equal((await page.textContent('.ab-alert')).trim(), 'Mali ang email o password.');
+    assert.equal(await page.getAttribute('#pw', 'placeholder'), 'Password');
+  } finally { await ctx.close(); }
+
+  // signed in as an admin (fake session and fake answers)
+  const { ctx: c2, page: p2, problems } = await open({ init: async (p) => {
+    await p.addInitScript(() => {
+      window.localStorage.setItem('init-lang', 'fil');
+      window.sessionStorage.setItem('init-admin', JSON.stringify({ token: 't', refresh: 'r', email: 'admin@example.com', expiresAt: Date.now() + 3_600_000 }));
+    });
+  }, width: 360, hash: '#admin' });
+  try {
+    const now = Date.now();
+    await p2.route('**/rest/v1/readings*', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify([{ device_id: 'dev-1', recorded_at: new Date(now).toISOString(), received_at: new Date(now).toISOString(), temp_c: '32.5', rh_pct: '66.0', heat_index_c: '43.0', room: 'Room 204' }]) }));
+    await p2.route('**/rest/v1/rpc/is_admin', (route) => route.fulfill({ contentType: 'application/json', body: 'true' }));
+    await p2.route('**/rest/v1/device_status*', (route) => route.fulfill({ contentType: 'application/json', body: '[{"room":"Room 204"}]' }));
+    await p2.route('**/rest/v1/settings*', (route) => route.fulfill({ contentType: 'application/json', body: '[{"interval_s":60,"temp_offset_c":0,"rh_offset_pct":0,"alert_heat_index_c":42,"alert_quiet_min":60}]' }));
+    await p2.route('**/rest/v1/device_health*', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify([{ rssi_dbm: -81, reset_reason: 'BROWNOUT', fw_version: '0.6.0', reported_at: new Date(now).toISOString() }]) }));
+    await p2.reload({ waitUntil: 'networkidle' });
+    await p2.waitForSelector('#interval_s');
+    const body = await p2.textContent('body');
+    for (const word of ['Silid', 'Kalagayan ng device', 'Mahina', 'Bumaba ang kuryente', 'Pagitan ng pag-uulat', 'Offset ng temperatura', 'Babala sa heat index', 'Tahimik na panahon', 'I-save ang mga pagbabago', 'Paano? ›', 'I-reset', 'Mag-sign out']) {
+      assert.ok(body.includes(word), `admin page is missing "${word}"`);
+    }
+    for (const english of ['Save changes', 'Reporting interval', 'Device health', 'Sign out', 'How? ›']) {
+      assert.ok(!body.includes(english), `admin page still has English: "${english}"`);
+    }
+    assert.equal(await p2.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, '#admin scrolls sideways');
+    assert.deepEqual(problems, []);
+  } finally { await c2.close(); }
 });
