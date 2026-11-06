@@ -6,9 +6,10 @@ import { mkdirSync } from 'node:fs';
 const here = dirname(fileURLToPath(import.meta.url)); mkdirSync(join(here, 'ref'), { recursive: true });
 const b = await chromium.launch();
 for (const [id, w] of [['home-en', 390], ['home-fil', 390], ['home-fil-longest', 360]]) {
-  for (const scheme of ['light']) {
+  for (const scheme of ['light', 'dark']) {
     const p = await (await b.newContext({ viewport: { width: w, height: 700 }, colorScheme: scheme })).newPage();
     await p.goto(pathToFileURL(join(here, `${id}.html`)).href, { waitUntil: 'load' });
+    await p.evaluate((t) => document.documentElement.setAttribute('data-bs-theme', t), scheme);
     await p.screenshot({ path: join(here, 'ref', `${id}-${scheme}.png`), fullPage: true });
   }
 }

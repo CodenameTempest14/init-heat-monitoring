@@ -6,7 +6,7 @@
 |---|---|
 | `home-en.html`, `home-fil.html` | The home page with the switch, in English and in Filipino (made-up room and readings) |
 | `home-fil-longest.html` | Stress case at 360 px: the longest Filipino texts (offline line, "Matinding panganib", "Huling heat index") |
-| `ref/*.png` | Light-mode screenshots made by `capture.mjs` (dark mode is not drawn here: the app sets its dark theme from script, a plain mock does not) |
+| `ref/*.png` | Light and dark screenshots made by `capture.mjs` (it sets `data-bs-theme` the way the app does) |
 | `build-mocks.mjs`, `capture.mjs` | Write the mocks and the screenshots |
 
 ## What is proposed
