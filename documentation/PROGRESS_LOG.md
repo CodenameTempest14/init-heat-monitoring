@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-06 · s35
+Owner only. Owner approved the three QR/kiosk mocks. **P06-01 ticked** (`#kiosk`), **P06-04 ticked** (F-24 CSV covers F-16, owner's word), **P06-02 ticked UNVERIFIED** (`#poster`; not scanned with a phone, not on the hosted page). Test-first: `web-qr-kiosk.test.js` 7/7 (red first), `ui-gate-qr-kiosk.test.js` 12/12 against the approved images (one real defect found and fixed: a split text node). All older gates and web tests still green. Real init-test data seen on the local build. Paper: new paragraph, Figure 6 boxes, Table 7 59/72 (82 %). The init-test temperature offset reads -0.5, not -0.6; the owner is to reset it to 0 in `#admin`. P06 is 2 done + 1 unverified of 5.
+
 ## 2026-11-05 · s34
 Owner only. Short session. Owner said to proceed, quickest first then hardest. F-13 and F-14 are already approved features (Tiers 1 to 3, D-010) but each page still needs approved mocks before building, so mocks only: design/qr-kiosk/ (poster with a real QR to the hosted app, kiosk page); screenshots in ref/ looked at (poster A4, kiosk TV and phone). Added qrcode-generator 2.0.4 (MIT) to web/package.json, not used by the app yet. Nothing built in web/, no tests run, no paper change (no feature or data added). Not done: calibration offsets decision, P07 (needs a classroom), P06-05 Tagalog toggle (hardest in P06: translation plus teacher review). Secret scan clean.
 

@@ -1,4 +1,4 @@
-# Continue Classroom Heat Index Monitoring (prompt generated 2026-11-05)
+# Continue Classroom Heat Index Monitoring (prompt generated 2026-11-06)
 
 You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Documents\Codes\classroom-heat-index-monitoring): a power-bank-powered ESP32 room monitor (DHT22 + OLED) plus a public web app (PWA on Supabase + free static hosting) showing temperature, humidity and heat index for one classroom. The owner is learning: explain before and while implementing.
 
@@ -12,7 +12,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 7. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run `node tools/continuation-prompt.mjs` and **show the generated prompt and the progress table in the final message**.
 
 ## Where we are
-[P03 · Device firmware · 10/10 done · 0 blocked · unverified 0]
+[P03 · Device firmware · 10/10 done · 0 blocked · unverified 1]
 
 ### Phase Progress (end of the previous session)
 | Phase | Done / Total | Progress | % |
@@ -23,17 +23,17 @@ You are continuing **classroom-heat-index-monitoring** (d:\System Documents\Docu
 | P03 Device firmware | 10 / 10 | ██████████ | 100% |
 | P04 Web app core | 13 / 13 | ██████████ | 100% |
 | P05 Admin, alerts and device health | 7 / 7 | ██████████ | 100% |
-| P06 Display and sharing extras | 0 / 5 | ░░░░░░░░░░ | 0% |
+| P06 Display and sharing extras | 2 / 5, 1 unverified | ████░░░░░░ | 40% |
 | P07 Field trial and hardening | 0 / 7 | ░░░░░░░░░░ | 0% |
 | P08 Over-the-air updates (optional) | 0 / 3 | ░░░░░░░░░░ | 0% |
-| **Whole project** | 57 / 72 | ████████░░ | **79%** |
+| **Whole project** | 59 / 72 | ████████░░ | **82%** |
 
 ### Recommended model for this session
 **Sonnet 5.5** for planning the next phase with the owner, small web changes, ticks and the paper. Use **Opus 5.5** for P07 (field trial, power and firmware problems) and P08 (OTA). Switch to **Opus 5.5** for the live rollout (migration, Vault, function secrets, CSP) or if the device does not pick up a new interval.
 
 ### Next concrete step
-0. **s34:** owner approves or changes `design/qr-kiosk/ref/*.png`, then build `#poster` and `#kiosk` test-first with UI gates (P06-01, P06-02). P06-04 CSV export may already be covered by F-24 (Readings CSV): confirm with the owner before ticking. Hardest in P06 is P06-05 Tagalog toggle (needs teacher review).
-1. Ask the phase-builder question (last answer: owner only, s34). **P04 and P05 are complete (13/13 and 7/7).** Nothing is queued: pick with the owner what comes next. Candidates (all need approval in FEATURES.md before design): **P06 display and sharing extras** (F-12/F-13 kiosk page, F-14 QR poster, F-15 advice; 0/5), **P07 field trial and hardening** (0/7; needs the device in a classroom, the power bank test over a school day, D-027), **P08 OTA** (optional, flash is ~77 % full). First check with the owner: (a) done: the owner reloaded the admin tab after s33 and "(COMING LATER)" is gone; (b) the calibration offsets on init-test are now temperature **-0.6 °C**, humidity **0** (owner, s33): decide whether to keep -0.6 (compared with a room thermometer reading 27.9 C, not a real accuracy check) or reset to 0 before any data used in the paper; (c) optional P05-03 leftovers: the 60-min reminder, an iPhone subscription.
+0. **s35 done:** `#kiosk` and `#poster` built, P06-04 ticked. Next: the owner scans the poster (then P06-02 is ticked for real), opens `#kiosk` on a TV or projector, and resets the temperature offset to 0 in `#admin`. P06-03 (advice text) is mostly covered by the `#heat` page, which waits for a teacher (D-034); P06-05 Tagalog toggle needs a teacher. A link to `#kiosk` or `#poster` from the app would change approved mocks: ask first.
+1. Ask the phase-builder question (last answer: owner only, s35). **P04 and P05 are complete (13/13 and 7/7).** Nothing is queued: pick with the owner what comes next. Candidates (all need approval in FEATURES.md before design): **P06 display and sharing extras** (F-12/F-13 kiosk page, F-14 QR poster, F-15 advice; 0/5), **P07 field trial and hardening** (0/7; needs the device in a classroom, the power bank test over a school day, D-027), **P08 OTA** (optional, flash is ~77 % full). First check with the owner: (a) done: the owner reloaded the admin tab after s33 and "(COMING LATER)" is gone; (b) the calibration offsets on init-test read temperature **-0.5 °C**, humidity **0** (checked s35); the owner chose to reset to 0 in `#admin` before any data goes into the paper (not done yet); (c) optional P05-03 leftovers: the 60-min reminder, an iPhone subscription.
    Live (later, after the device move, D-026): migration on live (SQL Editor), `node tools/vapid-keys.mjs live`, function secrets + deploy + Vault on live, **new ALERT secret** (the test one was shown in chat), `npm run config -- live` and the CSP host in `web/vercel.json`, `anon-probe` on live must give 28/28.
 2. **Research paper (rule 5), every session:** `node paper/build.mjs` rebuilds the `.docx` and `.pdf`. Chapter 4 is parked until the owner says so. Names are filled in (s29: three researchers, adviser Arvin C. Trangia, Abuno High School; the title page says Adviser, not Coach). Open: more references 2021 to 2026 (7 verified (s29: Kirkil 2025, Wardani 2023 added; Cen et al. 2024, Building and Environment, a Singapore secondary-school classroom heat and cognition study, was NOT added: ScienceDirect blocked my script, so I could not read it; try again from a browser copy); the ESP32 and DHT22 datasheets are used in Table 2 but not in References for lack of a confirmable date); add anything built to the paper; look at the Word file in Word once.
 3. **Teacher review (D-034):** the Reset sentence in the F-22 guide and the Readings table wording.

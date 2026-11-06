@@ -1,6 +1,6 @@
 # design/qr-kiosk/
 
-**PROPOSED, waiting for the owner's approval (P06-01 kiosk F-13, P06-02 QR poster F-14).** Mocks only; nothing is built in `web/` yet. Made-up readings and a made-up room (`Room 204`).
+**APPROVED by the owner (s35, 2026-11-06) and built** in `web/src/Kiosk.jsx` and `Poster.jsx` (routes `#kiosk`, `#poster`), gated by `tests/ui-gate-qr-kiosk.test.js` (0 differing pixels against `ref/`). Made-up readings and a made-up room (`Room 204`).
 
 | File | What |
 |---|---|

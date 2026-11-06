@@ -32,6 +32,14 @@ Supabase itself is the hosting (free tier); hosting may be a closed service (D-0
 
 Tabler (MIT) is only looked at: its demo pages are screenshotted for reference (`design/templates/`). No Tabler code is in the repo yet.
 
+## Web app extras (P06)
+
+| Library | Used for | Licence | Source of the licence |
+|---|---|---|---|
+| qrcode-generator 2.0.4 (npm, pinned in `web/package.json`, runs in the browser) | Draws the QR code on the poster `#poster` | MIT | `npm view qrcode-generator@2.0.4 license`, 2026-11-06 |
+
+jsQR 1.4.0 was used once from a scratch folder to read the poster's QR back; it is not in the repo.
+
 ## Notes
 - All are open source, so the D-010 condition is met. The ESP32 core is LGPL-2.1: fine for an open-source repo, and if firmware binaries are ever shared, the source (this repo) must be available.
 - The Node code in `src/` and `tests/` uses only Node built-ins (no packages).

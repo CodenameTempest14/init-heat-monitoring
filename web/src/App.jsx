@@ -11,6 +11,8 @@ import Admin from './Admin.jsx';
 import Guide from './Guide.jsx';
 import Heat from './Heat.jsx';
 import Alerts from './Alerts.jsx';
+import Kiosk from './Kiosk.jsx';
+import Poster from './Poster.jsx';
 
 const REFRESH_MS = 30000;
 
@@ -38,7 +40,7 @@ const STATUS_ICON = {
   wait: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
 };
 
-// The school-day view lives at #school, the admin view at #admin, the admin guide at #guide (or #guide/<part>) and the "what does this mean?" page at #heat (or #heat/<level>), on the same address (F-12, P05, F-22, F-15); no server change.
+// The school-day view lives at #school, the admin view at #admin, the admin guide at #guide (or #guide/<part>) and the "what does this mean?" page at #heat (or #heat/<level>), the kiosk at #kiosk and the QR poster at #poster, on the same address (F-12, P05, F-22, F-15, F-13, F-14); no server change.
 function useRoute() {
   const [hash, setHash] = useState(() => window.location.hash);
   useEffect(() => {
@@ -89,6 +91,10 @@ export default function App() {
     const timer = setInterval(refresh, REFRESH_MS);
     return () => { alive = false; clearInterval(timer); };
   }, []);
+
+  // #kiosk (F-13) and #poster (F-14) are whole pages of their own: no app header, no links.
+  if (route === '#kiosk') return <Kiosk view={view} status={status} failed={failed} />;
+  if (route === '#poster') return <Poster />;
 
   const cat = view.category;
   return (

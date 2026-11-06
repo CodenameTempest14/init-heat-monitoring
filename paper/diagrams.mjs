@@ -158,7 +158,7 @@ const db = (() => {
 
 // 6. Web app routes
 const routes = (() => {
-  const w = 900, h = 380;
+  const w = 900, h = 450;
   let s = '';
   s += box(330, 20, 240, 60, ['Home (#)', 'temperature, humidity, heat index,', 'PAGASA level, online/offline'], { bold: true, fs: 12 });
   s += box(20, 150, 190, 70, ['History', '24 h and 7 d charts + table'], { fs: 12 });
@@ -172,6 +172,8 @@ const routes = (() => {
   s += box(20, 270, 400, 60, ['Readings table (F-24): from-to calendar,', 'hourly averages, CSV; under the History charts'], { fs: 12 });
   s += box(440, 270, 190, 60, ['Heat alerts (#alerts)', 'turn phone alerts on or off'], { fs: 12 });
   s += line([[520, 80], [640, 112], [640, 245], [560, 268]], { arrow: true }); // through the gap between #heat and #admin
+  s += box(20, 370, 400, 60, ['Kiosk (#kiosk): whole-screen numbers', 'for a hallway TV or projector'], { fs: 12 });
+  s += box(440, 370, 190, 60, ['QR poster (#poster)', 'printable, for a door'], { fs: 12 });
   return { w, h, svg: wrap(w, h, s) };
 })();
 
