@@ -10,7 +10,7 @@
 | `build-mocks.mjs`, `capture.mjs` | Write the mocks and the screenshots |
 
 ## What is proposed
-- **The switch:** two buttons, English and Filipino, in one outlined pill at the top right of the header on every page (30 px tall, 12 px text; WCAG 2.2 minimum target is 24 px). The chosen one is filled and has a check mark, so colour is not the only signal. Choice kept on the phone (localStorage), default English; the page's `lang` attribute follows it.
+- **The switch:** two buttons, English and Filipino, in one outlined pill on the same line as "Room: ...", right-aligned (owner, s36) (30 px tall, 12 px text; WCAG 2.2 minimum target is 24 px). The chosen one is filled and has a check mark, so colour is not the only signal. Choice kept on the phone (localStorage), default English; the page's `lang` attribute follows it.
 - **Everything the app says** moves into one English list and one Filipino list. Not translated on purpose: the brand "Init", "heat index" (PAGASA uses the English term), units, and numbers.
 - **Not covered by the first version (say if you want them):** the `#heat` page paragraphs, the `#guide` pages, the admin view, alerts push text, the kiosk and the poster. The proposal is to do the home, school day, alerts page and status texts first; the long advice and guide pages after a teacher has reviewed the first set.
 

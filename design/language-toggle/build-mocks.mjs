@@ -17,13 +17,14 @@ const STATES = [
   // The longest strings: the widest Filipino level name and the offline line, at 360 px.
   { id: 'home-fil-longest', t: FIL, kind: 'offline', status: 'Offline: walang reading sa loob ng 12 min', cat: 'extreme-danger', catLabel: 'Matinding panganib', hi: '54', temp: '38.0 °C', rh: '60 %', hiLabel: 'Huling heat index', upd: 'huling reading 12 min na ang nakalipas' },
 ];
-// The switch: two 30 px buttons in one outlined pill, top right of the header. The chosen language has a filled background AND a check mark
+// The switch: two 30 px buttons in one outlined pill, right end of the Room line. The chosen language has a filled background AND a check mark
 // (colour is never the only signal). It is a <fieldset>-free pair of buttons with aria-pressed; the choice is kept on the phone (localStorage).
 const toggle = (lang) => `<div class="lang-switch" role="group" aria-label="Language / Wika">
     <button type="button" class="lang-btn" lang="en" aria-pressed="${lang === 'en'}">${lang === 'en' ? '<span aria-hidden="true">✓ </span>' : ''}English</button>
     <button type="button" class="lang-btn" lang="fil" aria-pressed="${lang === 'fil'}">${lang === 'fil' ? '<span aria-hidden="true">✓ </span>' : ''}Filipino</button></div>`;
 const css = `<style>
-.lang-switch{display:flex;justify-content:flex-end;margin:0 0 8px}
+.room-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.room-row .app-room{margin:0}
+.lang-switch{display:flex;flex:none}
 .lang-btn{min-height:30px;min-width:30px;padding:0 10px;font:600 12px/1 inherit;font-family:inherit;border:1.5px solid var(--tblr-body-color,#182433);background:transparent;color:inherit;cursor:pointer}
 .lang-btn:first-child{border-radius:999px 0 0 999px;border-right-width:.75px}.lang-btn:last-child{border-radius:0 999px 999px 0;border-left-width:.75px}
 .lang-btn[aria-pressed="true"]{background:var(--tblr-body-color,#182433);color:var(--tblr-body-bg,#fff)}
@@ -38,7 +39,7 @@ for (const s of STATES) {
 <link rel="stylesheet" href="../../web/src/tokens.css"><link rel="stylesheet" href="../../web/src/app.css"><link rel="stylesheet" href="../../web/src/school.css"><link rel="stylesheet" href="../../web/src/alerts.css">
 ${css}</head><body>
 <main class="app-wrap">
-  <header class="app-head">${toggle(t.lang)}${HEADER_TOP}<p class="text-secondary app-room">${t.room}</p>
+  <header class="app-head">${HEADER_TOP}<div class="room-row"><p class="text-secondary app-room">${t.room}</p>${toggle(t.lang)}</div>
     <p class="status status-${s.kind}" role="status"><svg viewBox="0 0 24 24" aria-hidden="true">${ICON[s.kind]}</svg>${s.status}</p></header>
   <section class="card heat heat-${s.cat}" aria-label="Heat index"><div class="card-body">
     <p class="app-label">${s.hiLabel ?? t.hiLabel}</p>
