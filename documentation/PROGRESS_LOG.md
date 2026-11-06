@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-06 · s36
+Owner only. **P06-02 verified:** the owner scanned the poster at `/#poster` on the hosted site with a phone and it worked (owner's word; a printed sheet not tried). UNVERIFIED removed, 60/72 (83 %). Temperature offset on init-test read back 0.0 / 0.0 (`db query --linked`). `#kiosk` not yet seen on a TV or projector. Paper: poster sentence, Table 7 (P06 3/5, 60/72) rebuilt. Secret scan clean.
+
 ## 2026-11-06 · s35
 Owner only. Owner approved the three QR/kiosk mocks. **P06-01 ticked** (`#kiosk`), **P06-04 ticked** (F-24 CSV covers F-16, owner's word), **P06-02 ticked UNVERIFIED** (`#poster`; not scanned with a phone, not on the hosted page). Test-first: `web-qr-kiosk.test.js` 7/7 (red first), `ui-gate-qr-kiosk.test.js` 12/12 against the approved images (one real defect found and fixed: a split text node). All older gates and web tests still green. Real init-test data seen on the local build. Paper: new paragraph, Figure 6 boxes, Table 7 59/72 (82 %). The init-test temperature offset reads -0.5, not -0.6; the owner is to reset it to 0 in `#admin`. P06 is 2 done + 1 unverified of 5.
 
