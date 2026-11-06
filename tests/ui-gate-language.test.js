@@ -200,3 +200,32 @@ test('history charts and readings table follow the choice (Filipino): titles, bu
     assert.deepEqual(problems, []);
   } finally { await ctx.close(); }
 });
+
+test('#heat and #guide follow the choice (Filipino): headings, level names, advice, tables; nothing scrolls sideways', async () => {
+  const { ctx, page, problems } = await open({ init: chooseFilipino, width: 360 });
+  try {
+    await page.goto(`${base}#heat`, { waitUntil: 'networkidle' });
+    await page.waitForSelector('.gd-sec');
+    let body = await page.textContent('body');
+    for (const word of ['Ano ang heat index?', 'Matinding pag-iingat', 'Heat index 52 °C pataas', 'Ano ang maaaring mangyari sa katawan', 'Mga palatandaan ng panganib', 'Mga live na reading']) {
+      assert.ok(body.includes(word), `#heat is missing "${word}"`);
+    }
+    for (const english of ['What is the heat index?', 'Warning signs', 'What to prepare and do', 'Live readings']) {
+      assert.ok(!body.includes(english), `#heat still has English: "${english}"`);
+    }
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, '#heat scrolls sideways');
+    assert.equal(await page.locator('.lang-switch').count(), 0, 'the switch is only on pages with the Room line');
+    await page.goto(`${base}#guide`, { waitUntil: 'networkidle' });
+    await page.waitForSelector('.gd-sec');
+    body = await page.textContent('body');
+    for (const word of ['Gabay para sa admin', 'Bago magsimula', 'Kalagayan ng device', 'Pagitan ng pag-uulat', 'Ano ang ginagawa nito', 'Kailan ito titingnan', 'Halimbawa', 'Matinding panganib']) {
+      assert.ok(body.includes(word), `#guide is missing "${word}"`);
+    }
+    for (const english of ['Before you start', 'Device health', 'What it does', 'When to look at it', 'If something looks wrong']) {
+      assert.ok(!body.includes(english), `#guide still has English: "${english}"`);
+    }
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, '#guide scrolls sideways');
+    assert.ok(await page.locator('.gd-sec strong').count() >= 10, 'bold pieces are drawn');
+    assert.deepEqual(problems, []);
+  } finally { await ctx.close(); }
+});

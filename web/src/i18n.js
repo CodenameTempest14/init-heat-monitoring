@@ -5,6 +5,8 @@
 // Not in this first version: the history charts, the readings table, #heat, #guide, #admin, the kiosk and the poster (still English).
 // A {name} in a text is filled from the values passed to translate(); **text** is shown in bold (see richParts).
 
+import { GUIDE_EN, GUIDE_FIL } from './i18n-guide.js';
+
 export const LANGS = ['en', 'fil'];
 export const STORAGE_KEY = 'init-lang';
 
@@ -123,6 +125,7 @@ export const STRINGS = {
     'alerts.blockedHelp': "To get alerts, allow notifications for this site in your browser's settings, then come back here.",
     'alerts.unsupported': 'This browser cannot receive heat alerts.',
     'alerts.unsupportedHelp': 'Try Chrome on Android, or on iPhone add Init to the Home Screen.',
+    ...GUIDE_EN,
   },
   fil: {
     'lang.group': 'Language / Wika',
@@ -238,6 +241,7 @@ export const STRINGS = {
     'alerts.blockedHelp': 'Para makatanggap ng babala, payagan ang mga abiso para sa site na ito sa settings ng iyong browser, saka bumalik dito.',
     'alerts.unsupported': 'Hindi makatanggap ng babala sa init ang browser na ito.',
     'alerts.unsupportedHelp': 'Subukan ang Chrome sa Android, o sa iPhone ay idagdag ang Init sa Home Screen.',
+    ...GUIDE_FIL,
   },
 };
 

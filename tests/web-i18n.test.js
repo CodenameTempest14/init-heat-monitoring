@@ -139,3 +139,21 @@ test('readings.js: range errors, time label and level in Filipino; English uncha
   assert.equal(rowView(row, 'fil').level, 'Mababa sa saklaw');
   assert.equal(rowView({ ...row, heat_index_c: 43 }, 'fil').level, 'Panganib');
 });
+
+// ---- stage 3 (s36): #heat advice texts ----
+import { LEVELS, levelsFor } from '../web/src/heatText.js';
+
+test('levelsFor: Filipino has the same levels, the same number of advice lines, and the same numbers as English', () => {
+  assert.deepEqual(levelsFor('en'), LEVELS);
+  assert.deepEqual(levelsFor('xx'), LEVELS);
+  const fil = levelsFor('fil');
+  assert.deepEqual(fil.map((l) => l.id), LEVELS.map((l) => l.id));
+  const digits = (s) => (s.match(/\d+/g) || []).join(',');
+  fil.forEach((l, i) => {
+    assert.equal(l.todo.length, LEVELS[i].todo.length, `${l.id}: advice lines differ`);
+    assert.equal(digits(l.range), digits(LEVELS[i].range), `${l.id}: range numbers differ`);
+    assert.equal(digits(l.todo.join(' ')), digits(LEVELS[i].todo.join(' ')), `${l.id}: numbers in the advice differ`);
+    assert.ok(l.body.trim() && l.todo.every((t) => t.trim()));
+    assert.notEqual(l.body, LEVELS[i].body);
+  });
+});
