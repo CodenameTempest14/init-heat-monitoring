@@ -2,6 +2,7 @@
 // They use the real stylesheet (web/src/app.css + tokens.css + Tabler), so an approved image can be matched by the built page.
 // Usage: node design/home-cards/build-mocks.mjs   (writes <state>.html next to this file)
 import { HEADER_TOP } from '../pwa/header.mjs';
+import { ROOM_ROW, LANG_CSS_LINK } from '../language-toggle/room-row.mjs';
 import { writeFileSync } from 'node:fs';
 
 const SHAPES = {
@@ -32,10 +33,11 @@ for (const s of STATES) {
 <link rel="stylesheet" href="../../web/src/charts.css">
 <link rel="stylesheet" href="../../web/src/school.css">
 <link rel="stylesheet" href="../../web/src/alerts.css">
+${LANG_CSS_LINK}
 </head>
 <body>
 <main class="app-wrap">
-  <header class="app-head">${HEADER_TOP}<p class="text-secondary app-room">Room: Room 204</p>
+  <header class="app-head">${HEADER_TOP}${ROOM_ROW(`Room: Room 204`)}
     <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>
   <section class="card heat heat-${s.id}" aria-label="Heat index"><div class="card-body">
     <p class="app-label">Heat index</p>

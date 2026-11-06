@@ -10,9 +10,11 @@ import './heat.css';
 import './readings.css';
 import './alerts.css';
 import './qr-kiosk.css';
+import './lang.css';
+import { LangProvider } from './Lang.jsx';
 import App from './App.jsx';
 
-createRoot(document.getElementById('root')).render(<App />);
+createRoot(document.getElementById('root')).render(<LangProvider><App /></LangProvider>);
 
 // Installable app (F-05): the worker keeps the page files only; readings are never kept (public/sw.js).
 if ('serviceWorker' in navigator && import.meta.env.PROD) {

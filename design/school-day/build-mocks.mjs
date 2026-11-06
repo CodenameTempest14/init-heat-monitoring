@@ -3,6 +3,7 @@
 // Usage: node design/school-day/build-mocks.mjs   (writes <state>.html next to this file)
 import { writeFileSync } from 'node:fs';
 import { HEADER_TOP } from '../pwa/header.mjs';
+import { ROOM_ROW, LANG_CSS_LINK } from '../language-toggle/room-row.mjs';
 
 const SHAPES = {
   'below-range': '<path d="M4 12h16"/>',
@@ -68,8 +69,9 @@ const head = (title) => `<!doctype html>
 <link rel="stylesheet" href="../../web/src/charts.css">
 <link rel="stylesheet" href="../../web/src/school.css">
 <link rel="stylesheet" href="../../web/src/alerts.css">
+${LANG_CSS_LINK}
 </head>`;
-const top = `<header class="app-head">${HEADER_TOP}<p class="text-secondary app-room">Room: Room 204</p>
+const top = `<header class="app-head">${HEADER_TOP}${ROOM_ROW(`Room: Room 204`)}
     <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>`;
 const page = (title, body) => `${head(title)}
 <body>

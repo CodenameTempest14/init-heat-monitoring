@@ -1,6 +1,7 @@
 // P05-03 (F-10): the logic of the #alerts view, kept apart from the page so tests can check it (tests/web-alerts.test.js).
 // Mock: design/alerts/ (approved s31). The page itself is Alerts.jsx.
-import { categoryOf, CATEGORY_LABEL } from './category.js';
+import { categoryOf } from './category.js';
+import { translate, categoryLabel } from './i18n.js';
 
 /**
  * Which state the page shows. iPhone or iPad in Safari (not opened from the Home Screen) has no web push at all,
@@ -38,13 +39,13 @@ export const unsubscribeBody = (sub) => ({ p_endpoint: sub.endpoint, p_auth: sub
 const number = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
 
 /** The rule text from the admin's settings (public values); the defaults of the database when there is no row. */
-export function ruleView(settings, room) {
+export function ruleView(settings, room, lang = 'en') {
   const hi = Number(settings?.alert_heat_index_c ?? 42);
   const quiet = Number(settings?.alert_quiet_min ?? 60);
   return {
     room,
     threshold: `${number(hi)} °C`,
-    level: CATEGORY_LABEL[categoryOf(hi)],
-    quiet: quiet >= 120 && quiet % 60 === 0 ? `${quiet / 60} hours` : `${quiet} minutes`,
+    level: categoryLabel(categoryOf(hi), lang),
+    quiet: quiet >= 120 && quiet % 60 === 0 ? translate(lang, 'alerts.quietHours', { n: quiet / 60 }) : translate(lang, 'alerts.quietMin', { n: quiet }),
   };
 }

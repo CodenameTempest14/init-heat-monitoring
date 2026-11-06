@@ -4,6 +4,7 @@
 // Usage: node design/alerts/build-mocks.mjs   (writes <state>.html next to this file)
 import { writeFileSync } from 'node:fs';
 import { HEADER_TOP } from '../pwa/header.mjs';
+import { ROOM_ROW, LANG_CSS_LINK } from '../language-toggle/room-row.mjs';
 
 const ICON = {
   bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
@@ -57,8 +58,9 @@ const head = (title) => `<!doctype html>
 <link rel="stylesheet" href="../../web/src/charts.css">
 <link rel="stylesheet" href="../../web/src/school.css">
 <link rel="stylesheet" href="../../web/src/alerts.css">
+${LANG_CSS_LINK}
 </head>`;
-const top = `<header class="app-head">${HEADER_TOP}<p class="text-secondary app-room">Room: Room 204</p>
+const top = `<header class="app-head">${HEADER_TOP}${ROOM_ROW(`Room: Room 204`)}
     <p class="status status-online" role="status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="dot" cx="12" cy="12" r="6"/></svg>Online</p></header>`;
 const page = (title, body) => `${head(title)}
 <body>

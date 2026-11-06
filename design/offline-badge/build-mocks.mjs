@@ -1,6 +1,7 @@
 // P04-03 design: mock pages of the online/offline badge (F-03), made-up readings. Same markup as the live page plus the badge.
 // Usage: node design/offline-badge/build-mocks.mjs   (writes <state>.html next to this file)
 import { HEADER_TOP } from '../pwa/header.mjs';
+import { ROOM_ROW, LANG_CSS_LINK } from '../language-toggle/room-row.mjs';
 import { writeFileSync } from 'node:fs';
 
 const ICON = {
@@ -29,10 +30,11 @@ for (const s of STATES) {
 <link rel="stylesheet" href="../../web/src/charts.css">
 <link rel="stylesheet" href="../../web/src/school.css">
 <link rel="stylesheet" href="../../web/src/alerts.css">
+${LANG_CSS_LINK}
 </head>
 <body>
 <main class="app-wrap">
-  <header class="app-head">${HEADER_TOP}<p class="text-secondary app-room">Room: ${s.room ?? 'Room 204'}</p>
+  <header class="app-head">${HEADER_TOP}${ROOM_ROW(`Room: ${s.room ?? 'Room 204'}`)}
     <p class="status status-${s.kind}" role="status"><svg viewBox="0 0 24 24" aria-hidden="true">${ICON[s.kind]}</svg>${s.text}</p></header>
   <section class="card heat${s.cat ? ` heat-${s.cat}` : ''}" aria-label="Heat index"><div class="card-body">
     <p class="app-label">${s.hiLabel}</p>

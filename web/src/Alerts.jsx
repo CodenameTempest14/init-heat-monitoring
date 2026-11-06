@@ -4,6 +4,7 @@
 // to the database (push_subscribe); nothing about the person.
 import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY, VAPID_PUBLIC_KEY } from './config.js';
+import { useLang, Rich } from './Lang.jsx';
 import { pushState, isIOS, keyToBytes, subscribeBody, unsubscribeBody, ruleView } from './alerts.js';
 
 const ICON = {
@@ -39,6 +40,7 @@ function browserNow() {
 }
 
 export default function Alerts({ deviceId, ready, room }) {
+  const { lang, t } = useLang();
   const [state, setState] = useState(null); // null until the browser has been checked
   const [settings, setSettings] = useState(undefined); // undefined = not loaded yet; null = no row (defaults)
   const [busy, setBusy] = useState(false);
@@ -97,44 +99,44 @@ export default function Alerts({ deviceId, ready, room }) {
     } finally { setBusy(false); }
   }
 
-  const r = settings === undefined ? null : ruleView(settings, room);
+  const r = settings === undefined ? null : ruleView(settings, room, lang);
   const rule = r && (
     <>
-      <p className="alerts-lead">Get a notification on this phone when the classroom gets dangerously hot.</p>
+      <p className="alerts-lead">{t('alerts.lead')}</p>
       <ul className="alerts-rule">
-        <li><span>When the heat index in <strong>{r.room}</strong> reaches <strong>{r.threshold}</strong> ({r.level}).</span></li>
-        <li><span>If it stays that hot, a reminder comes every <strong>{r.quiet}</strong>.</span></li>
+        <li><span><Rich text={t('alerts.rule1', { room: r.room, threshold: r.threshold, level: r.level })} /></span></li>
+        <li><span><Rich text={t('alerts.rule2', { quiet: r.quiet })} /></span></li>
       </ul>
     </>
   );
-  const fine = <p className="alerts-fine">No name or email is asked. Only this phone gets the alerts, and you can stop them at any time.</p>;
-  const failed = error && <p className="alerts-fine" role="alert">Could not change the alerts on this phone. Please try again.</p>;
+  const fine = <p className="alerts-fine">{t('alerts.fine')}</p>;
+  const failed = error && <p className="alerts-fine" role="alert">{t('alerts.failed')}</p>;
   const said = (icon, text, live = true) => <p className="alerts-state" role={live ? 'status' : undefined}><Icon name={icon} /><span>{text}</span></p>;
 
-  let body = <p className="viz-empty">Loading…</p>;
+  let body = <p className="viz-empty">{t('loading')}</p>;
   if (rule && state === 'off') {
-    body = <>{rule}<button type="button" className="btn btn-primary alerts-btn" disabled={busy} onClick={start}><Icon name="bell" /><span>Send me heat alerts</span></button>{failed}{fine}</>;
+    body = <>{rule}<button type="button" className="btn btn-primary alerts-btn" disabled={busy} onClick={start}><Icon name="bell" /><span>{t('alerts.start')}</span></button>{failed}{fine}</>;
   } else if (rule && state === 'on') {
-    body = <>{said('check', 'Heat alerts are on for this phone.')}{rule}<button type="button" className="btn alerts-btn" disabled={busy} onClick={stop}>Stop alerts</button>{failed}{fine}</>;
+    body = <>{said('check', t('alerts.on'))}{rule}<button type="button" className="btn alerts-btn" disabled={busy} onClick={stop}>{t('alerts.stop')}</button>{failed}{fine}</>;
   } else if (rule && state === 'iphone') {
     body = (
       <>
         {rule}
-        {said('phone', 'On iPhone, add Init to your Home Screen first, then open it from there.', false)}
-        <ol className="alerts-steps"><li>Tap the Share button <span aria-hidden="true">(□↑)</span>.</li><li>Tap <strong>Add to Home Screen</strong>.</li><li>Open <strong>Init</strong> from the Home Screen and come back here.</li></ol>
+        {said('phone', t('alerts.iphone'), false)}
+        <ol className="alerts-steps"><li><Rich text={t('alerts.step1')} /></li><li><Rich text={t('alerts.step2')} /></li><li><Rich text={t('alerts.step3')} /></li></ol>
       </>
     );
   } else if (rule && state === 'blocked') {
-    body = <>{said('off', 'Notifications are blocked for Init on this phone.')}{rule}<p className="alerts-lead">To get alerts, allow notifications for this site in your browser's settings, then come back here.</p></>;
+    body = <>{said('off', t('alerts.blocked'))}{rule}<p className="alerts-lead">{t('alerts.blockedHelp')}</p></>;
   } else if (rule && state === 'unsupported') {
-    body = <>{said('off', 'This browser cannot receive heat alerts.')}{rule}<p className="alerts-lead">Try Chrome on Android, or on iPhone add Init to the Home Screen.</p></>;
+    body = <>{said('off', t('alerts.unsupported'))}{rule}<p className="alerts-lead">{t('alerts.unsupportedHelp')}</p></>;
   }
 
   return (
     <>
-      <a className="school-back" href="#">‹ Live readings</a>
-      <section className="viz-wrap" aria-label="Heat alerts">
-        <h2 className="viz-section">Heat alerts</h2>
+      <a className="school-back" href="#">{t('back')}</a>
+      <section className="viz-wrap" aria-label={t('alerts.title')}>
+        <h2 className="viz-section">{t('alerts.title')}</h2>
         <div className="card viz-card"><div className="card-body" data-alerts-ready={rule && state ? '' : undefined}>
           {body}
         </div></div>

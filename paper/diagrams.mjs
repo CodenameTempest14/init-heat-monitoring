@@ -174,6 +174,7 @@ const routes = (() => {
   s += line([[520, 80], [640, 112], [640, 245], [560, 268]], { arrow: true }); // through the gap between #heat and #admin
   s += box(20, 370, 400, 60, ['Kiosk (#kiosk): whole-screen numbers', 'for a hallway TV or projector'], { fs: 12 });
   s += box(440, 370, 190, 60, ['QR poster (#poster)', 'printable, for a door'], { fs: 12 });
+  s += box(650, 370, 230, 60, ['English / Filipino switch', 'on the Room line (home, school, alerts)'], { fs: 12 });
   return { w, h, svg: wrap(w, h, s) };
 })();
 

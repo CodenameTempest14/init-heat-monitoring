@@ -22,13 +22,7 @@ const STATES = [
 const toggle = (lang) => `<div class="lang-switch" role="group" aria-label="Language / Wika">
     <button type="button" class="lang-btn" lang="en" aria-pressed="${lang === 'en'}">${lang === 'en' ? '<span aria-hidden="true">✓ </span>' : ''}English</button>
     <button type="button" class="lang-btn" lang="fil" aria-pressed="${lang === 'fil'}">${lang === 'fil' ? '<span aria-hidden="true">✓ </span>' : ''}Filipino</button></div>`;
-const css = `<style>
-.room-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.room-row .app-room{margin:0}
-.lang-switch{display:flex;flex:none}
-.lang-btn{min-height:30px;min-width:30px;padding:0 10px;font:600 12px/1 inherit;font-family:inherit;border:1.5px solid var(--tblr-body-color,#182433);background:transparent;color:inherit;cursor:pointer}
-.lang-btn:first-child{border-radius:999px 0 0 999px;border-right-width:.75px}.lang-btn:last-child{border-radius:0 999px 999px 0;border-left-width:.75px}
-.lang-btn[aria-pressed="true"]{background:var(--tblr-body-color,#182433);color:var(--tblr-body-bg,#fff)}
-</style>`;
+const css = '<link rel="stylesheet" href="../../web/src/lang.css">'; // the real stylesheet, so the built page can be matched exactly
 
 for (const s of STATES) {
   const t = s.t;
@@ -36,7 +30,7 @@ for (const s of STATES) {
 <html lang="${t.lang === 'fil' ? 'fil' : 'en'}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Init: mock ${s.id}</title>
 <link rel="stylesheet" href="../../web/node_modules/@tabler/core/dist/css/tabler.min.css">
-<link rel="stylesheet" href="../../web/src/tokens.css"><link rel="stylesheet" href="../../web/src/app.css"><link rel="stylesheet" href="../../web/src/school.css"><link rel="stylesheet" href="../../web/src/alerts.css">
+<link rel="stylesheet" href="../../web/src/tokens.css"><link rel="stylesheet" href="../../web/src/app.css"><link rel="stylesheet" href="../../web/src/charts.css"><link rel="stylesheet" href="../../web/src/school.css"><link rel="stylesheet" href="../../web/src/alerts.css">
 ${css}</head><body>
 <main class="app-wrap">
   <header class="app-head">${HEADER_TOP}<div class="room-row"><p class="text-secondary app-room">${t.room}</p>${toggle(t.lang)}</div>

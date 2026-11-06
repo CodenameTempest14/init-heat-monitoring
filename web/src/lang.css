@@ -1,0 +1,8 @@
+/* P06-05 (F-18): the English / Filipino switch on the Room line. Matches design/language-toggle/ (owner approved, s36). */
+.room-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+.room-row .app-room { margin: 0; }
+.lang-switch { display: flex; flex: none; }
+.lang-btn { min-height: 30px; min-width: 30px; padding: 0 10px; font: 600 12px/1 inherit; font-family: inherit; border: 1.5px solid var(--tblr-body-color, #182433); background: transparent; color: inherit; cursor: pointer; }
+.lang-btn:first-child { border-radius: 999px 0 0 999px; border-right-width: .75px; }
+.lang-btn:last-child { border-radius: 0 999px 999px 0; border-left-width: .75px; }
+.lang-btn[aria-pressed="true"] { background: var(--tblr-body-color, #182433); color: var(--tblr-body-bg, #fff); }

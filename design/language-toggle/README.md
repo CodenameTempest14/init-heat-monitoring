@@ -1,12 +1,13 @@
 # design/language-toggle/
 
-**PROPOSED, waiting for the owner's approval. Nothing is built** (P06-05, F-18: English / Filipino toggle). The Filipino words are a **DRAFT written by the assistant**; a teacher or fluent speaker must review every one before it goes live (D-034).
+**APPROVED by the owner (s36, 2026-11-06) and built** in `web/src/Lang.jsx`, `i18n.js`, `lang.css` (P06-05, F-18: English / Filipino toggle), gated by `tests/ui-gate-language.test.js` (0 differing pixels against `ref/`). The Filipino words are a **DRAFT written by the assistant**; a teacher or fluent speaker must review every one before it goes live (D-034).
 
 | File | What |
 |---|---|
 | `home-en.html`, `home-fil.html` | The home page with the switch, in English and in Filipino (made-up room and readings) |
 | `home-fil-longest.html` | Stress case at 360 px: the longest Filipino texts (offline line, "Matinding panganib", "Huling heat index") |
 | `ref/*.png` | Light and dark screenshots made by `capture.mjs` (it sets `data-bs-theme` the way the app does) |
+| `room-row.mjs` | The Room line with the switch, shared by the home, badge, history, school-day and alerts mock builders |
 | `build-mocks.mjs`, `capture.mjs` | Write the mocks and the screenshots |
 
 ## What is proposed

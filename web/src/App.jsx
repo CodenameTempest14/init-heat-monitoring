@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 import { readingView, deviceStatus } from './lib.js';
-import { CATEGORY_LABEL } from './category.js';
+import { categoryLabel } from './i18n.js';
+import { LangSwitch, useLang } from './Lang.jsx';
 import History from './History.jsx';
 import Readings from './Readings.jsx';
 import School from './School.jsx';
@@ -64,6 +65,7 @@ function useColorScheme() {
 
 export default function App() {
   useColorScheme();
+  const { lang, t } = useLang();
   const route = useRoute();
   const schoolRoute = route === '#school';
   const adminRoute = route === '#admin';
@@ -71,8 +73,10 @@ export default function App() {
   const heatRoute = route === '#heat' || route.startsWith('#heat/');
   const alertsRoute = route === '#alerts'; // P05-03 heat alerts (F-10): keeps the room and status line, like #school
   const quietHeader = adminRoute || guideRoute || heatRoute; // these pages have no room or status line
-  const [view, setView] = useState({ ...readingView(undefined, Date.now()), updated: 'loading…' });
-  const [status, setStatus] = useState(null); // null until the first answer, so no badge flashes before we know
+  // The newest row and the moment we read it; the words are made from these on every render, so the language switch takes effect at once.
+  const [latest, setLatest] = useState(null); // null until the first answer, so no badge flashes before we know
+  const view = latest ? readingView(latest.row, latest.now, lang) : { ...readingView(undefined, Date.now(), lang), updated: t('home.loading') };
+  const status = latest ? deviceStatus(latest.row, latest.now, lang) : null;
   const [failed, setFailed] = useState(false);
   const [deviceId, setDeviceId] = useState(null); // the device of the newest reading: the history charts show this one
 
@@ -82,7 +86,7 @@ export default function App() {
       try {
         const row = await latestReading();
         const now = Date.now();
-        if (alive) { setView(readingView(row, now)); setStatus(deviceStatus(row, now)); setDeviceId(row ? row.device_id : null); setFailed(false); }
+        if (alive) { setLatest({ row, now }); setDeviceId(row ? row.device_id : null); setFailed(false); }
       } catch {
         if (alive) setFailed(true);
       }
@@ -93,7 +97,8 @@ export default function App() {
   }, []);
 
   // #kiosk (F-13) and #poster (F-14) are whole pages of their own: no app header, no links.
-  if (route === '#kiosk') return <Kiosk view={view} status={status} failed={failed} />;
+  // (the kiosk and the poster stay English in this first version of the language switch)
+  if (route === '#kiosk') return <Kiosk view={latest ? readingView(latest.row, latest.now) : { ...readingView(undefined, Date.now()), updated: 'loading…' }} status={latest ? deviceStatus(latest.row, latest.now) : null} failed={failed} />;
   if (route === '#poster') return <Poster />;
 
   const cat = view.category;
@@ -105,7 +110,7 @@ export default function App() {
           <img src="/logo-light.svg" width="110" height="40" alt="" />
         </picture>
         <h1 className="app-fullname">Init: Indoor Heat Index Tracker</h1>
-        {!quietHeader && <p className="text-secondary app-room">{`Room: ${view.room}`}</p>}
+        {!quietHeader && <div className="room-row"><p className="text-secondary app-room">{t('home.room', { room: view.room })}</p><LangSwitch /></div>}
         {status && !quietHeader && (
           <p className={`status status-${status.kind}`} role="status">
             <svg viewBox="0 0 24 24" aria-hidden="true">{STATUS_ICON[status.kind]}</svg>{status.text}
@@ -120,19 +125,19 @@ export default function App() {
             <p className="heat-num">{view.heatIndex}{view.heatIndex !== '—' && <span className="heat-unit">°C</span>}</p>
             {cat && (
               <p className="heat-cat">
-                <svg viewBox="0 0 24 24" aria-hidden="true">{SHAPES[cat]}</svg>{CATEGORY_LABEL[cat]}
+                <svg viewBox="0 0 24 24" aria-hidden="true">{SHAPES[cat]}</svg>{categoryLabel(cat, lang)}
               </p>
             )}
-            {cat && cat !== 'below-range' && <a className="heat-more" href={`#heat/${cat}`}>What does this mean? ›</a>}
+            {cat && cat !== 'below-range' && <a className="heat-more" href={`#heat/${cat}`}>{`${t('home.more')} ›`}</a>}
           </div>
         </section>
         <div className="app-pair">
-          <section className="card" aria-label="Temperature"><div className="card-body"><p className="app-label">Temperature</p><p className="stat">{view.temp}</p></div></section>
-          <section className="card" aria-label="Humidity"><div className="card-body"><p className="app-label">Humidity</p><p className="stat">{view.rh}</p></div></section>
+          <section className="card" aria-label={t('home.temperature')}><div className="card-body"><p className="app-label">{t('home.temperature')}</p><p className="stat">{view.temp}</p></div></section>
+          <section className="card" aria-label={t('home.humidity')}><div className="card-body"><p className="app-label">{t('home.humidity')}</p><p className="stat">{view.rh}</p></div></section>
         </div>
-        <p className="text-secondary app-updated">{failed ? 'Could not load the readings. Will try again.' : view.updated}</p>
-        <a className="school-link" href="#school"><span>School day summary</span><span aria-hidden="true">›</span></a>
-        <a className="school-link alerts-link" href="#alerts"><span>Heat alerts</span><span aria-hidden="true">›</span></a>
+        <p className="text-secondary app-updated">{failed ? t('home.loadFailed') : view.updated}</p>
+        <a className="school-link" href="#school"><span>{t('home.school')}</span><span aria-hidden="true">›</span></a>
+        <a className="school-link alerts-link" href="#alerts"><span>{t('home.alerts')}</span><span aria-hidden="true">›</span></a>
         {deviceId && <History deviceId={deviceId} />}
         {deviceId && <Readings deviceId={deviceId} />}
         </>

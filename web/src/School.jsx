@@ -3,6 +3,7 @@
 // The numbers come from the database function school_day(); the words and the bar are made in school.js.
 import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import { useLang } from './Lang.jsx';
 import { manilaDay, prevSchoolDay, nextSchoolDay, startDay, dayLabel, windowText, statsView, bandsView, barSegments } from './school.js';
 
 const REFRESH_MS = 30000;
@@ -31,6 +32,7 @@ async function fetchSchoolDay(deviceId, day) {
 
 // `ready` is false until the home page knows which device it shows; `deviceId` stays null if there are no readings at all.
 export default function School({ deviceId, ready }) {
+  const { lang, t } = useLang();
   const [start] = useState(() => startDay(Date.now()));
   const [day, setDay] = useState(start.day);
   const [body, setBody] = useState(null); // null until the first answer for this day
@@ -60,44 +62,44 @@ export default function School({ deviceId, ready }) {
   const next = nextSchoolDay(day, today);
   const note = (
     <p className="viz-note">
-      {start.weekend && day === start.day && <>No school on weekends. Showing the last school day.<br /></>}
-      <strong>{dayLabel(day, today)}</strong>{shown ? ` · ${windowText(shown)}` : ''}
+      {start.weekend && day === start.day && <>{t('school.weekend')}<br /></>}
+      <strong>{dayLabel(day, today, lang)}</strong>{shown ? ` · ${windowText(shown, lang)}` : ''}
     </p>
   );
   const nav = (
-    <div className="school-nav" role="group" aria-label="Choose a school day">
-      <button type="button" className="btn viz-range" disabled={!prev} onClick={() => setDay(prev)}>{prev ? `‹ ${dayLabel(prev, today)}` : '‹ Previous'}</button>
-      <button type="button" className="btn viz-range" disabled={!next} onClick={() => setDay(next)}>{next ? `${dayLabel(next, today)} ›` : 'Next ›'}</button>
+    <div className="school-nav" role="group" aria-label={t('school.choose')}>
+      <button type="button" className="btn viz-range" disabled={!prev} onClick={() => setDay(prev)}>{prev ? `‹ ${dayLabel(prev, today, lang)}` : `‹ ${t('school.prev')}`}</button>
+      <button type="button" className="btn viz-range" disabled={!next} onClick={() => setDay(next)}>{next ? `${dayLabel(next, today, lang)} ›` : `${t('school.next')} ›`}</button>
     </div>
   );
   const card = (children) => <div className="card viz-card"><div className="card-body">{children}</div></div>;
 
   let content;
-  if (ready && !deviceId) content = card(<p className="viz-empty">No readings yet.</p>);
-  else if (failed) content = card(<p className="viz-empty">Could not load this day. Will try again.</p>);
-  else if (!shown) content = card(<p className="viz-empty">Loading…</p>);
-  else if (shown.readings === 0) content = card(<p className="viz-empty">No readings during school hours on this day.</p>);
+  if (ready && !deviceId) content = card(<p className="viz-empty">{t('school.noDevice')}</p>);
+  else if (failed) content = card(<p className="viz-empty">{t('school.failed')}</p>);
+  else if (!shown) content = card(<p className="viz-empty">{t('loading')}</p>);
+  else if (shown.readings === 0) content = card(<p className="viz-empty">{t('school.noHours')}</p>);
   else {
-    const stats = statsView(shown);
+    const stats = statsView(shown, lang);
     const segs = barSegments(shown.levels, BAR_W);
-    const bands = bandsView(shown.levels);
+    const bands = bandsView(shown.levels, lang);
     content = (
       <>
         {card(
           <>
             <dl className="school-stats">
-              {[['Highest', stats.highest], ['Hottest hour', stats.hour], ['Lowest', stats.lowest], ['Average', stats.average]].map(([name, [value, small]]) => (
-                <div className="school-stat" key={name}><dt>{name}</dt><dd>{value}{small && <small>{small}</small>}</dd></div>
+              {[['highest', stats.highest], ['hottestHour', stats.hour], ['lowest', stats.lowest], ['average', stats.average]].map(([name, [value, small]]) => (
+                <div className="school-stat" key={name}><dt>{t(`school.${name}`)}</dt><dd>{value}{small && <small>{small}</small>}</dd></div>
               ))}
             </dl>
-            <p className="viz-caption">Heat index. Moments below its calculation range (about 27 °C) are left out of these four.</p>
+            <p className="viz-caption">{t('school.caption')}</p>
           </>,
         )}
         {card(
           <>
-            <h3 className="viz-title">Time in each level</h3>
+            <h3 className="viz-title">{t('school.barTitle')}</h3>
             <svg className="school-bar" viewBox={`0 0 ${BAR_W} 24`} role="img"
-              aria-label={`Time in each level, as a bar: ${bands.filter((b) => b.seconds).map((b) => `${b.name} ${b.text}`).join(', ')}`}>
+              aria-label={t('school.barAria', { list: bands.filter((b) => b.seconds).map((b) => `${b.name} ${b.text}`).join(', ') })}>
               {segs.map((s) => <rect key={s.key} className={`sb-${cls(s.key)}`} x={s.x.toFixed(1)} y="1" width={s.w.toFixed(1)} height="22" rx="3" />)}
             </svg>
             <ul className="school-bands">
@@ -116,9 +118,9 @@ export default function School({ deviceId, ready }) {
 
   return (
     <>
-      <a className="school-back" href="#">‹ Live readings</a>
-      <section className="viz-wrap" aria-label="School day">
-        <h2 className="viz-section">School day</h2>
+      <a className="school-back" href="#">{t('back')}</a>
+      <section className="viz-wrap" aria-label={t('school.title')}>
+        <h2 className="viz-section">{t('school.title')}</h2>
         {note}
         {nav}
         {content}
