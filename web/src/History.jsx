@@ -2,20 +2,22 @@
 // Markup and classes match design/history-charts/*.html (the approved design). The maths is in history.js.
 import { useEffect, useState } from 'react';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
+import { useLang } from './Lang.jsx';
+import { categoryLabel } from './i18n.js';
 import { RANGES, niceScale, buildSeries, linePath, xTicks, pointLabel, nearestIndex, latestWith, loneBuckets } from './history.js';
 
 const REFRESH_MS = 30000;
 const H = 156;
 const M = { l: 34, r: 10, t: 10, b: 28 };
 // PAGASA lines (D-019), drawn only when inside the chart's range.
-const LINES = [{ v: 33, cat: 'extreme-caution', name: 'Extreme caution' }, { v: 42, cat: 'danger', name: 'Danger' }];
+const LINES = [{ v: 33, cat: 'extreme-caution' }, { v: 42, cat: 'danger' }];
 
 const whole = (v) => String(Math.round(v));
 const oneDecimal = (v) => (Number.isInteger(v) ? String(v) : v.toFixed(1));
 const CHARTS = [
-  { key: 'hi', cls: 's-hi', title: 'Heat index', unit: '°C', fmt: whole, lines: true },
-  { key: 'temp', cls: 's-temp', title: 'Temperature', unit: '°C', fmt: oneDecimal },
-  { key: 'rh', cls: 's-rh', title: 'Humidity', unit: '%', fmt: whole },
+  { key: 'hi', cls: 's-hi', title: 'home.heatIndex', unit: '°C', fmt: whole, lines: true },
+  { key: 'temp', cls: 's-temp', title: 'home.temperature', unit: '°C', fmt: oneDecimal },
+  { key: 'rh', cls: 's-rh', title: 'home.humidity', unit: '%', fmt: whole },
 ];
 
 async function fetchHistory(deviceId, range) {
@@ -42,6 +44,9 @@ function useChartWidth() {
 }
 
 function Chart({ series, spec, W, hover, onHover }) {
+  const { lang, t } = useLang();
+  const title = t(spec.title);
+  const words = t(`history.words${series.range === '24h' ? '24' : '7'}`);
   const { pts, hours, stepMs, range, startMs } = series;
   const vals = pts.map((p) => p[spec.key]).filter((v) => v !== null);
   const last = latestWith(pts, spec.key);
@@ -64,14 +69,14 @@ function Chart({ series, spec, W, hover, onHover }) {
   };
 
   return (
-    <section className="card viz-card" aria-label={spec.title}>
+    <section className="card viz-card" aria-label={title}>
       <div className="card-body">
         <div className="viz-head">
-          <h2 className="viz-title">{`${spec.title} `}<span className="viz-unit">{spec.unit}</span></h2>
-          <p className="viz-now"><span className={`viz-key ${spec.cls}`} />{last ? `${spec.fmt(last[spec.key])}${spec.unit === '%' ? ' %' : ' °C'} now` : '—'}</p>
+          <h2 className="viz-title">{`${title} `}<span className="viz-unit">{spec.unit}</span></h2>
+          <p className="viz-now"><span className={`viz-key ${spec.cls}`} />{last ? t('history.now', { value: `${spec.fmt(last[spec.key])}${spec.unit === '%' ? ' %' : ' °C'}` }) : '—'}</p>
         </div>
         <svg className="viz-svg" viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" tabIndex={0}
-          aria-label={`${spec.title}, ${RANGES[range].words}; arrow keys move through the times; the table below has every value`}
+          aria-label={t('history.aria', { title, words })}
           onPointerMove={pointer} onPointerDown={(e) => { e.currentTarget.dataset.touched = '1'; pointer(e); }} onKeyDown={(e) => { delete e.currentTarget.dataset.touched; key(e); }}
           onBlur={(e) => { delete e.currentTarget.dataset.touched; }}
           onPointerLeave={(e) => { if (e.pointerType === 'mouse') onHover(null); }}>
@@ -81,13 +86,13 @@ function Chart({ series, spec, W, hover, onHover }) {
               <text className="viz-tick" x={M.l - 6} y={y(v) + 4} textAnchor="end">{spec.fmt(v)}</text>
             </g>
           ))}
-          {xTicks(range, startMs + hours * 3_600_000).map((k) => (
+          {xTicks(range, startMs + hours * 3_600_000, lang).map((k) => (
             <text key={k.t} className="viz-tick" x={x(k.t)} y={H - 10} textAnchor="middle">{k.label}</text>
           ))}
           {spec.lines && LINES.filter((L) => L.v > lo && L.v < hi).map((L) => (
             <g key={L.v}>
               <line className={`viz-ref viz-ref-${L.cat}`} x1={M.l} x2={W - M.r} y1={y(L.v)} y2={y(L.v)} />
-              <text className="viz-reflabel" x={M.l + 4} y={y(L.v) - 4}>{`${L.name} ${L.v}`}</text>
+              <text className="viz-reflabel" x={M.l + 4} y={y(L.v) - 4}>{`${categoryLabel(L.cat, lang)} ${L.v}`}</text>
             </g>
           ))}
           <path className={`viz-line ${spec.cls}`} d={linePath(pts, spec.key, x, y, stepMs)} />
@@ -96,36 +101,38 @@ function Chart({ series, spec, W, hover, onHover }) {
           {hp && <line className="viz-cross" x1={x(hp.t)} x2={x(hp.t)} y1={M.t} y2={H - M.b} />}
           {hp && hp[spec.key] !== null && <circle className={`viz-dot ${spec.cls}`} cx={x(hp.t)} cy={y(hp[spec.key])} r="4" />}
         </svg>
-        {spec.lines && <p className="viz-caption">No line where the heat index is below its calculation range (about 27 °C).</p>}
+        {spec.lines && <p className="viz-caption">{t('history.caption')}</p>}
       </div>
     </section>
   );
 }
 
 function Readout({ series, hover }) {
-  if (hover === null) return <div className="viz-tip" role="status"><p className="viz-hint">Touch or hover a chart to read the values at that time.</p></div>;
+  const { lang, t } = useLang();
+  if (hover === null) return <div className="viz-tip" role="status"><p className="viz-hint">{t('history.hint')}</p></div>;
   const p = series.pts[hover];
   return (
     <div className="viz-tip" role="status">
-      <p className="viz-tip-time">{pointLabel(p.ms, series.range)}</p>
-      <p><span className="viz-key s-hi" /><strong>{`${p.hi === null ? '—' : Math.round(p.hi)} °C`}</strong> <span>Heat index</span></p>
-      <p><span className="viz-key s-temp" /><strong>{`${p.temp === null ? '—' : p.temp} °C`}</strong> <span>Temperature</span></p>
-      <p><span className="viz-key s-rh" /><strong>{`${p.rh === null ? '—' : p.rh} %`}</strong> <span>Humidity</span></p>
+      <p className="viz-tip-time">{pointLabel(p.ms, series.range, lang)}</p>
+      <p><span className="viz-key s-hi" /><strong>{`${p.hi === null ? '—' : Math.round(p.hi)} °C`}</strong> <span>{t('home.heatIndex')}</span></p>
+      <p><span className="viz-key s-temp" /><strong>{`${p.temp === null ? '—' : p.temp} °C`}</strong> <span>{t('home.temperature')}</span></p>
+      <p><span className="viz-key s-rh" /><strong>{`${p.rh === null ? '—' : p.rh} %`}</strong> <span>{t('home.humidity')}</span></p>
     </div>
   );
 }
 
 function TableTwin({ series }) {
+  const { lang, t } = useLang();
   const rows = series.pts.slice().reverse();
   return (
     <details className="viz-tablebox">
-      <summary>Show as table</summary>
+      <summary>{t('history.showTable')}</summary>
       <div className="viz-tablescroll">
         <table className="table table-sm viz-table">
-          <thead><tr><th>{series.range === '24h' ? 'Time' : 'Day and hour'}</th><th>Heat index °C</th><th>Temp °C</th><th>Humidity %</th></tr></thead>
+          <thead><tr><th>{series.range === '24h' ? t('history.colTime') : t('history.colDay')}</th><th>{t('history.colHi')}</th><th>{t('history.colTemp')}</th><th>{t('history.colRh')}</th></tr></thead>
           <tbody>
             {rows.map((p) => (
-              <tr key={p.ms}><td>{pointLabel(p.ms, series.range)}</td><td>{p.hi === null ? '—' : Math.round(p.hi)}</td><td>{p.temp ?? '—'}</td><td>{p.rh ?? '—'}</td></tr>
+              <tr key={p.ms}><td>{pointLabel(p.ms, series.range, lang)}</td><td>{p.hi === null ? '—' : Math.round(p.hi)}</td><td>{p.temp ?? '—'}</td><td>{p.rh ?? '—'}</td></tr>
             ))}
           </tbody>
         </table>
@@ -135,6 +142,7 @@ function TableTwin({ series }) {
 }
 
 export default function History({ deviceId }) {
+  const { t } = useLang();
   const W = useChartWidth();
   const [range, setRange] = useState('24h');
   const [data, setData] = useState(null); // { range, rows, at }: the last answer; kept while the next one loads
@@ -161,15 +169,15 @@ export default function History({ deviceId }) {
   const loading = !data || data.range !== range;
 
   return (
-    <section className="viz-wrap" aria-label="History">
-      <h2 className="viz-section">History</h2>
-      <div className="viz-filter" role="group" aria-label="Time range">
-        <button type="button" className="btn viz-range" aria-pressed={range === '24h'} onClick={() => pick('24h')}>Last 24 hours</button>
-        <button type="button" className="btn viz-range" aria-pressed={range === '7d'} onClick={() => pick('7d')}>Last 7 days</button>
+    <section className="viz-wrap" aria-label={t('history.title')}>
+      <h2 className="viz-section">{t('history.title')}</h2>
+      <div className="viz-filter" role="group" aria-label={t('history.range')}>
+        <button type="button" className="btn viz-range" aria-pressed={range === '24h'} onClick={() => pick('24h')}>{t('history.last24')}</button>
+        <button type="button" className="btn viz-range" aria-pressed={range === '7d'} onClick={() => pick('7d')}>{t('history.last7')}</button>
       </div>
-      {failed && <p className="text-secondary">Could not load the history. Will try again.</p>}
+      {failed && <p className="text-secondary">{t('history.failed')}</p>}
       {series && series.pts.length === 0 && (
-        <div className="card viz-card"><div className="card-body"><p className="viz-empty">{`No readings in the ${RANGES[series.range].words} yet.`}</p></div></div>
+        <div className="card viz-card"><div className="card-body"><p className="viz-empty">{t('history.empty', { words: t(`history.words${series.range === '24h' ? '24' : '7'}`) })}</p></div></div>
       )}
       {series && series.pts.length > 0 && (
         <div className={loading ? 'viz-loading' : undefined}>

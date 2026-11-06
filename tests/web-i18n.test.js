@@ -110,3 +110,32 @@ test('ruleView in Filipino: level name and the reminder gap', () => {
   assert.equal(ruleView({ alert_heat_index_c: 42, alert_quiet_min: 45 }, 'Room 204', 'fil').quiet, '45 minuto');
   assert.equal(ruleView({ alert_heat_index_c: 42, alert_quiet_min: 120 }, 'Room 204').quiet, '2 hours');
 });
+
+// ---- stage 2 (s36): history charts and readings table ----
+import { xTicks, pointLabel } from '../web/src/history.js';
+import { checkRange, timeLabel, rowView } from '../web/src/readings.js';
+
+test('history.js: day names follow the language; English unchanged', () => {
+  const sunday = new Date(2026, 10, 1, 13, 5).getTime(); // 1 Nov 2026 is a Sunday, viewer's clock
+  assert.equal(pointLabel(sunday, '7d'), 'Sun 13:05');
+  assert.equal(pointLabel(sunday, '7d', 'fil'), 'Lin 13:05');
+  assert.equal(pointLabel(sunday, '24h', 'fil'), '13:05');
+  const now = new Date(2026, 10, 4, 12, 0).getTime();
+  assert.deepEqual(xTicks('7d', now).map((t) => t.label), xTicks('7d', now, 'en').map((t) => t.label));
+  assert.ok(xTicks('7d', now, 'fil').every((t) => ['Lin', 'Lun', 'Mar', 'Miy', 'Huw', 'Biy', 'Sab'].includes(t.label)));
+});
+
+test('readings.js: range errors, time label and level in Filipino; English unchanged', () => {
+  const days = { min: '2026-11-01', max: '2026-11-05' };
+  assert.equal(checkRange('2026-11-03', '2026-11-02', days).error, 'The To day must not be before the From day.');
+  assert.equal(checkRange('2026-11-03', '2026-11-02', days, 'fil').error, 'Hindi dapat mas maaga ang araw ng Hanggang kaysa sa araw ng Mula.');
+  assert.equal(checkRange('', '', days, 'fil').error, 'Pumili ng dalawang araw.');
+  assert.equal(checkRange('2026-10-01', '2026-11-02', days, 'fil').error, 'May mga reading mula 2026-11-01 hanggang 2026-11-05.');
+  assert.equal(checkRange('2026-11-01', '2026-11-02', null, 'fil').error, 'Wala pang reading.');
+  assert.equal(timeLabel('2026-11-03T08:00:00Z'), '3 Nov, 16:00');
+  assert.equal(timeLabel('2026-11-03T08:00:00Z', 'fil'), '3 Nob, 16:00');
+  const row = { hour: '2026-11-03T08:00:00Z', room: 'Room 1', temp_c: 30, rh_pct: 60, heat_index_c: null, n: 3 };
+  assert.equal(rowView(row).level, 'Below range');
+  assert.equal(rowView(row, 'fil').level, 'Mababa sa saklaw');
+  assert.equal(rowView({ ...row, heat_index_c: 43 }, 'fil').level, 'Panganib');
+});

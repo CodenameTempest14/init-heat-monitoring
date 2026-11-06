@@ -167,3 +167,36 @@ test('a blocked browser store means English and no error', async () => {
     assert.deepEqual(problems, []);
   } finally { await ctx.close(); }
 });
+
+test('history charts and readings table follow the choice (Filipino): titles, buttons, table heads, level names, no stray English', async () => {
+  const { ctx, page, problems } = await open({ init: chooseFilipino });
+  try {
+    const now = Date.now();
+    const hourAgo = new Date(now - 3_600_000).toISOString();
+    await page.route('**/rest/v1/readings*', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify([{ device_id: 'dev-1', recorded_at: new Date(now).toISOString(), received_at: new Date(now).toISOString(), temp_c: '32.5', rh_pct: '66.0', heat_index_c: '43.0', room: 'Room 204' }]) }));
+    await page.route('**/rest/v1/rpc/history', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify([
+      { bucket: new Date(now - 7_200_000).toISOString(), temp_c: 31, rh_pct: 60, heat_index_c: 38 },
+      { bucket: hourAgo, temp_c: 32, rh_pct: 63, heat_index_c: 41 },
+      { bucket: new Date(now - 60_000).toISOString(), temp_c: 32.5, rh_pct: 66, heat_index_c: 43 },
+    ]) }));
+    await page.route('**/rest/v1/rpc/readings_span', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ first_at: hourAgo, last_at: new Date(now).toISOString() }) }));
+    await page.route('**/rest/v1/rpc/readings_hourly', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify([
+      { hour: hourAgo, room: 'Room 204', temp_c: 32, rh_pct: 63, heat_index_c: 43, n: 60 },
+      { hour: new Date(now - 7_200_000).toISOString(), room: 'Room 204', temp_c: 25, rh_pct: 50, heat_index_c: null, n: 60 },
+    ]) }));
+    await page.goto(base, { waitUntil: 'networkidle' });
+    await page.waitForSelector('.viz-charts');
+    await page.waitForSelector('.rr-table');
+    const body = await page.textContent('body');
+    for (const word of ['Kasaysayan', 'Huling 24 oras', 'Huling 7 araw', 'Ipakita bilang talahanayan', 'Talahanayan ng mga reading', 'Mula', 'Hanggang', 'I-download ang CSV', 'Panganib', 'Mababa sa saklaw', 'Halumigmig']) {
+      assert.ok(body.includes(word), `missing "${word}"`);
+    }
+    for (const english of ['History', 'Last 24 hours', 'Show as table', 'Readings table', 'Download CSV', 'Below range']) {
+      assert.ok(!body.includes(english), `English text left: "${english}"`);
+    }
+    assert.match(await page.textContent('.rr-count[role="status"]'), /oras ang ipinapakita/);
+    await page.click('.lang-btn[lang="en"]');
+    assert.ok((await page.textContent('body')).includes('Readings table'));
+    assert.deepEqual(problems, []);
+  } finally { await ctx.close(); }
+});

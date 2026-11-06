@@ -1,12 +1,13 @@
 // P04-04 history charts (F-04): the maths, kept apart from the page so tests can check it (tests/web-history.test.js).
 // The server gives one row per bucket (24 h: 15 minutes, 7 d: 1 hour; see supabase/migrations/20261103120000_history.sql).
 
+import { listOf } from './i18n.js';
+
 export const RANGES = {
   '24h': { hours: 24, stepMs: 15 * 60_000, words: 'last 24 hours' },
   '7d': { hours: 168, stepMs: 3_600_000, words: 'last 7 days' },
 };
 const HOUR_MS = 3_600_000;
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const pad = (n) => String(n).padStart(2, '0');
 const num = (v) => (v === null || v === undefined || v === '' || Number.isNaN(Number(v)) ? null : Number(v));
 
@@ -59,7 +60,7 @@ export function loneBuckets(pts, key, stepMs) {
 }
 
 /** Time labels along the bottom: every 6 h (24 h chart) or every local midnight (7 d chart), on the viewer's clock. */
-export function xTicks(range, nowMs) {
+export function xTicks(range, nowMs, lang = 'en') {
   const { hours } = RANGES[range];
   const startMs = nowMs - hours * HOUR_MS;
   const d = new Date(startMs);
@@ -68,17 +69,17 @@ export function xTicks(range, nowMs) {
   for (; d.getTime() <= nowMs; d.setHours(d.getHours() + 1)) {
     const h = d.getHours();
     if (range === '24h' ? h % 6 === 0 : h === 0) {
-      ticks.push({ t: (d.getTime() - startMs) / HOUR_MS, label: range === '24h' ? `${pad(h)}:00` : DAYS[d.getDay()] });
+      ticks.push({ t: (d.getTime() - startMs) / HOUR_MS, label: range === '24h' ? `${pad(h)}:00` : listOf(lang, 'weekdays')[d.getDay()] });
     }
   }
   return ticks;
 }
 
 /** The time of a bucket as shown in the readout and the table (viewer's local time). */
-export function pointLabel(ms, range) {
+export function pointLabel(ms, range, lang = 'en') {
   const d = new Date(ms);
   const clock = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  return range === '24h' ? clock : `${DAYS[d.getDay()]} ${clock}`;
+  return range === '24h' ? clock : `${listOf(lang, 'weekdays')[d.getDay()]} ${clock}`;
 }
 
 /** Index of the point closest in time to t (hours from the window start); -1 when there are no points. */

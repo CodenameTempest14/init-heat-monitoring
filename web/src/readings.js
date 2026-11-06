@@ -2,10 +2,10 @@
 // No browser or network code, so tests/web-readings.test.js can run them. The data comes from the database function
 // readings_hourly (hourly averages, newest first, 500 rows per call) and readings_span (first and last reading).
 import { categoryOf, CATEGORY_LABEL } from './category.js';
+import { translate, categoryLabel, listOf } from './i18n.js';
 
 export const PAGE_SIZE = 500; // the database caps a call at 500 rows too
 const MANILA_MS = 8 * 3_600_000; // UTC+8, no daylight saving
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const pad = (n) => String(n).padStart(2, '0');
 
 /** 'YYYY-MM-DD' of a moment in Philippine time. */
@@ -19,30 +19,30 @@ export function spanDays(span) {
 
 export const defaultRange = (days) => ({ from: days.max, to: days.max });
 
-export function checkRange(from, to, days) {
-  if (!days) return { ok: false, error: 'There are no readings yet.' };
-  if (!from || !to) return { ok: false, error: 'Pick both days.' };
-  if (to < from) return { ok: false, error: 'The To day must not be before the From day.' };
-  if (from < days.min || to > days.max) return { ok: false, error: `Readings exist from ${days.min} to ${days.max}.` };
+export function checkRange(from, to, days, lang = 'en') {
+  if (!days) return { ok: false, error: translate(lang, 'readings.errNone') };
+  if (!from || !to) return { ok: false, error: translate(lang, 'readings.errBoth') };
+  if (to < from) return { ok: false, error: translate(lang, 'readings.errOrder') };
+  if (from < days.min || to > days.max) return { ok: false, error: translate(lang, 'readings.errSpan', { a: days.min, b: days.max }) };
   return { ok: true };
 }
 
 /** '3 Nov, 16:00' in Philippine time. */
-export function timeLabel(iso) {
+export function timeLabel(iso, lang = 'en') {
   const d = new Date(Date.parse(iso) + MANILA_MS);
-  return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}, ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
+  return `${d.getUTCDate()} ${listOf(lang, 'months')[d.getUTCMonth()]}, ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
 }
 
-export function rowView(r) {
+export function rowView(r, lang = 'en') {
   const levelKey = categoryOf(r.heat_index_c);
   return {
     key: `${r.hour}|${r.room}`,
-    time: timeLabel(r.hour),
+    time: timeLabel(r.hour, lang),
     room: r.room,
     temp: `${Number(r.temp_c).toFixed(1)} °C`,
     rh: `${Number(r.rh_pct).toFixed(1)} %`,
     hi: r.heat_index_c === null ? '—' : `${Math.round(r.heat_index_c)} °C`,
-    level: levelKey === 'below-range' ? 'Below range' : CATEGORY_LABEL[levelKey],
+    level: levelKey === 'below-range' ? translate(lang, 'readings.belowRange') : categoryLabel(levelKey, lang),
     levelKey,
   };
 }
