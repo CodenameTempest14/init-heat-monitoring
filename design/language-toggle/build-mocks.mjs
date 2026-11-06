@@ -17,15 +17,15 @@ const STATES = [
   // The longest strings: the widest Filipino level name and the offline line, at 360 px.
   { id: 'home-fil-longest', t: FIL, kind: 'offline', status: 'Offline: walang reading sa loob ng 12 min', cat: 'extreme-danger', catLabel: 'Matinding panganib', hi: '54', temp: '38.0 °C', rh: '60 %', hiLabel: 'Huling heat index', upd: 'huling reading 12 min na ang nakalipas' },
 ];
-// The switch: two 44 px buttons in one outlined pill, top right of the header. The chosen language has a filled background AND a check mark
+// The switch: two 30 px buttons in one outlined pill, top right of the header. The chosen language has a filled background AND a check mark
 // (colour is never the only signal). It is a <fieldset>-free pair of buttons with aria-pressed; the choice is kept on the phone (localStorage).
 const toggle = (lang) => `<div class="lang-switch" role="group" aria-label="Language / Wika">
     <button type="button" class="lang-btn" lang="en" aria-pressed="${lang === 'en'}">${lang === 'en' ? '<span aria-hidden="true">✓ </span>' : ''}English</button>
     <button type="button" class="lang-btn" lang="fil" aria-pressed="${lang === 'fil'}">${lang === 'fil' ? '<span aria-hidden="true">✓ </span>' : ''}Filipino</button></div>`;
 const css = `<style>
 .lang-switch{display:flex;justify-content:flex-end;margin:0 0 8px}
-.lang-btn{min-height:44px;min-width:44px;padding:0 14px;font:600 14px/1 inherit;font-family:inherit;border:2px solid var(--tblr-body-color,#182433);background:transparent;color:inherit;cursor:pointer}
-.lang-btn:first-child{border-radius:999px 0 0 999px;border-right-width:1px}.lang-btn:last-child{border-radius:0 999px 999px 0;border-left-width:1px}
+.lang-btn{min-height:30px;min-width:30px;padding:0 10px;font:600 12px/1 inherit;font-family:inherit;border:1.5px solid var(--tblr-body-color,#182433);background:transparent;color:inherit;cursor:pointer}
+.lang-btn:first-child{border-radius:999px 0 0 999px;border-right-width:.75px}.lang-btn:last-child{border-radius:0 999px 999px 0;border-left-width:.75px}
 .lang-btn[aria-pressed="true"]{background:var(--tblr-body-color,#182433);color:var(--tblr-body-bg,#fff)}
 </style>`;
 
