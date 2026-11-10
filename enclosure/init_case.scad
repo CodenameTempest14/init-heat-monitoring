@@ -1,4 +1,4 @@
-// Init case, DRAFT 3 (D-038, option A). All sizes in mm. X = length (port end at x = 0), Y = width, Z = up.
+// Init case, DRAFT 4 (D-038, option A). All sizes in mm. X = length (port end at x = 0), Y = width, Z = up.
 // Values marked PLACEHOLDER are not measured yet. Change a number here and re-render; nothing else needs redrawing.
 // part = "assembly" | "base" | "lid" | "cover" | "pod"
 part = "assembly";
@@ -45,6 +45,13 @@ $fn = 40;
 
 module box(x, y, z, p=[0,0,0]) { translate(p) cube([x, y, z]); }
 
+// countersunk screw hole for the owner's DIN965 flat-head screws (M3: head about 6 mm, 1.7 mm deep). t = plate thickness, hole goes up through z = 0..t
+csk_head = 6.4; csk_depth = 1.7; thru_d = 3.2;
+module csk(t) { translate([0, 0, -1]) cylinder(d=thru_d, h=t + 2); translate([0, 0, t - csk_depth]) cylinder(d1=thru_d, d2=csk_head, h=csk_depth + 0.01); translate([0, 0, t]) cylinder(d=csk_head, h=1); }
+// four cover posts inside the bay (insert and screw down from the cover): x offsets from the bay inner start, y offset from the walls
+cover_post_x = [18, bay_x - 18];
+cover_post_y = [6, inner_y - 6];
+
 module base() {
   difference() {
     box(outer[0], outer[1], base_h);
@@ -75,6 +82,9 @@ module lid() {
         cube([bay_x0 - wall - 2, ch_w + 2*ch_wall, ch_h + ch_wall]);
         translate([0, ch_wall, -1]) cube([bay_x0 - wall - 2 + 1, ch_w, ch_h + 1]);
       }
+      // four posts for the cover screws
+      for (px = cover_post_x) for (py = cover_post_y)
+        translate([bay_x0 + wall + px, wall + py, lid_t]) cylinder(d=7, h=bay_h);
       // electronics bay walls
       translate([bay_x0, 0, lid_t]) difference() {
         cube([bay_x + 2*wall, outer[1], bay_h]);
@@ -97,7 +107,10 @@ module lid() {
     for (i = [0:7]) translate([bay_x0 + 2*wall + bay_x - wall - 1, outer[1]/2 - 28 + i*8, lid_t + 4]) cube([wall + 2, 2, 14]);
     // screw holes matching the base posts
     for (px = [wall + inner_x - 5, wall + 5]) for (py = [wall + 5, wall + inner_y - 5])
-      translate([px, py, -1]) cylinder(d=3.2, h=lid_t + 2);
+      translate([px, py, 0]) csk(lid_t);
+    // cover post pilot holes (blind, for the heat-set inserts), from the top of each post
+    for (px = cover_post_x) for (py = cover_post_y)
+      translate([bay_x0 + wall + px, wall + py, lid_t + bay_h - 8]) cylinder(d=screw_d, h=9);
   }
 }
 
@@ -106,6 +119,7 @@ module cover() {
   difference() {
     box(bay_x + 2*wall, outer[1], lid_t);
     for (dy = [-12, 12]) translate([wall + 12, outer[1]/2 + dy, -1]) cylinder(d=boot_d, h=lid_t + 2);
+    for (px = cover_post_x) for (py = cover_post_y) translate([wall + px, wall + py, 0]) csk(lid_t);
   }
 }
 
@@ -119,7 +133,7 @@ module arm() {
       translate([arm_out - 1, -pod[1]/2, -pod[2]/2 + 2]) pod_body();
     }
     translate([-1, -wire_in[0]/2, -wire_in[1]/2]) cube([arm_out + 4, wire_in[0], wire_in[1]]);
-    for (dy = [-12, 12]) translate([-1, dy, 0]) rotate([0, 90, 0]) cylinder(d=3.2, h=foot[0] + 2);
+    for (dy = [-12, 12]) translate([foot[0], dy, 0]) rotate([0, -90, 0]) csk(foot[0]);
   }
 }
 

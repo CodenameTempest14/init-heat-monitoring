@@ -27,3 +27,7 @@ Draft 3 (owner's request, 2026-11-11): a **sensor arm** (`part = "arm"`): a holl
 so heat rises away from it. The jumper wires run inside: from the ESP32 bay down through a hole in the lid plate, through the rear space, out through a hole
 in the rear end wall and along the tube to the pod. The arm's foot plate screws to two bosses inside the rear end wall. The electronics bay now sits flush
 with the rear end (above the rear space). With the arm the device is about 312 mm long. The wires must be longer than 150 mm (about 20 to 30 cm; to confirm).
+
+Draft 4 (owner, 2026-11-11): everything is held by **screws**. Lid to base: four M3 screws (posts in the base). Cover to the electronics bay: four M3 screws into
+four 30 mm posts inside the bay (keep the PCB clear of them). Arm to the rear end wall: two M3 screws. All screw holes in the plates are **countersunk** for the
+owner's DIN965 flat-head screws (head about 6.4 mm, 1.7 mm deep). The posts are drilled 2.8 mm as a PLACEHOLDER: the real hole depends on the heat-set insert's data sheet.
