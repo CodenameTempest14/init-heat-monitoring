@@ -1,0 +1,72 @@
+# Measurement sheet (all in mm)
+
+Use calipers if you have them. Measure each number **twice** and write the larger one.
+Where a number is hard to read, add a phone photo of the part next to a ruler.
+Axes used below: **L** = long side, **W** = short side, **H** = height (thickness).
+
+## 1. ESP32 38-pin dev board (with Type-C port)
+| # | What | mm |
+|---|---|---|
+| 1.1 | Board length (L), PCB only | |
+| 1.2 | Board width (W), PCB only | |
+| 1.3 | PCB thickness | |
+| 1.4 | Total height with pin headers soldered or fitted (underside to highest point) | |
+| 1.5 | How far the pins stick out below the PCB | |
+| 1.6 | Distance between the two pin rows (hole to hole) | |
+| 1.7 | USB-C port: width x height of the opening | |
+| 1.8 | USB-C port: how far it sticks out past the PCB edge | |
+| 1.9 | USB-C port: height of its centre above the PCB top | |
+| 1.10 | BOOT and EN buttons: distance from the USB end and from the side edge (each) | |
+| 1.11 | BOOT and EN button height above the PCB | |
+| 1.12 | Mounting holes? Yes / No. If yes: diameter and positions | |
+| 1.13 | Antenna end: any metal or keep-out area (note which end) | |
+
+## 2. OLED module (SSD1306 128x64, 4-pin: GND, VCC, SCL, SDA)
+| # | What | mm |
+|---|---|---|
+| 2.1 | Board length x width | |
+| 2.2 | Board thickness (PCB only) | |
+| 2.3 | Total thickness including the glass | |
+| 2.4 | Glass area: length x width of the whole glass | |
+| 2.5 | **Active display area** (the lit pixels only): length x width | |
+| 2.6 | Active area position: distance from the left, right, top and bottom board edges | |
+| 2.7 | Mounting holes: diameter, and distance between them (L and W) | |
+| 2.8 | Pin header: position from the board edge, height above the board, and the wires' plug size | |
+
+## 3. DHT22 temperature and humidity sensor (4-pin)
+| # | What | mm |
+|---|---|---|
+| 3.1 | Body length x width x thickness | |
+| 3.2 | Leg length and the gap between two legs | |
+| 3.3 | Is it the bare 4-pin sensor, or on a small board (3-pin module)? | |
+| 3.4 | Grille side: which face has the slots (note it) | |
+| 3.5 | Mounting hole on the body? Diameter and position | |
+
+## 4. ROMOSS Sense 8P+ power bank (30 000 mAh)
+| # | What | mm |
+|---|---|---|
+| 4.1 | Length x width x thickness (at the thickest point) | |
+| 4.2 | Corner radius (roughly) | |
+| 4.3 | USB output port used for Init: which edge, distance from the end, port size | |
+| 4.4 | Any button, LED or display: position on the face | |
+| 4.5 | The bank's own USB-A or USB-C input port: which edge (so the case does not block charging) | |
+| 4.6 | Weight (grams), for the mounting | |
+
+## 5. Cables and plugs
+| # | What | mm |
+|---|---|---|
+| 5.1 | USB cable plug to the ESP32 (USB-C): length of the plug body, width, height | |
+| 5.2 | Cable diameter right behind the plug | |
+| 5.3 | Cable from the bank to the ESP32: length (m) | |
+| 5.4 | Sensor cable (DHT22 to ESP32): diameter, and how long you want it (cm) | |
+
+## 6. Extras (only if you add them)
+| # | What | mm |
+|---|---|---|
+| 6.1 | Status LED or switch: body size and panel hole | |
+| 6.2 | Screws: M3 length you have, and the brass heat-set insert's brand, length and outer diameter | |
+| 6.3 | Where the case will sit: wall or shelf, and the surface it needs to clear | |
+
+## 7. Your answers to the open choices
+Power bank inside or outside the case? Mounting (wall screws, tabletop stand, both)? Lid (screwed or snap-fit)?
+USB-C slot and BOOT hole (yes / no)? Pod cable length (cm)? Which PETG do you have (brand and type)?
