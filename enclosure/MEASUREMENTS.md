@@ -88,3 +88,11 @@ Owner's wish: the power bank's screen stays visible (battery percentage) and its
 => The bank goes **inside the case** (answers choice 1 in section 7, to confirm); needs windows or cut-outs for its screen and ports.
 Still missing: bank screen position and size, bank port positions and corner radius; DHT22 legs and grille side; ESP32 pins below the PCB,
 row spacing, port height, button positions; OLED lit area, holes, header height; plug and cable sizes; inserts; the other choices.
+
+### Read from the owner's photos, 2026-11-10 (NOT measured: to confirm)
+Screws: box "B-965-02", black zinc-plated carbon steel DIN965 **flat (countersunk) head** machine screws, 50 each of M2x4/5/6/8, M2.5x4/5/6/8, M3x4/5.
+ESP32 (38-pin, CP2102, USB-C): antenna module at one end, USB-C at the other; the two buttons (IO0 / EN) sit beside the USB-C port at the USB end; pin headers fitted with the plastic body under the board.
+OLED (SSD1306, 4 pins GND VDD SCK SDA along one short edge): four corner holes, glass flex cable folded at the edge opposite the pins.
+DHT22: bare 4-pin sensor, 4 straight legs on one short end, grille slots on the big face, one mounting hole in a tab at the other end.
+ROMOSS: the black display window is on the TOP face near one short end; all four ports (USB-C with a micro/Lightning-style icon, USB-C "fit+", USB-A "fit+", USB-A fast charge) are on that short end;
+a round power button sits on the long side near that end. Port end and display end look like the same end: to confirm.
