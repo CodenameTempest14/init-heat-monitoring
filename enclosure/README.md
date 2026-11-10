@@ -8,6 +8,7 @@ end. The ESP32 custom PCB goes in a raised electronics bay on the lid (30 mm cle
 the DHT22 sits in a vented pod on 150 mm jumper wires.
 
 Files:
+- `draw-measure-guide.mjs`: draws `preview/measure_guide.png`, a sketch of where to measure each missing number (draft, not to scale).
 - `MEASURE_NEXT.md`: the checklist of what is still to measure, with instructions (2026-11-12).
 - `MEASUREMENTS.md`: the owner's measurements and the photo notes (what is still missing is listed at the bottom).
 - `init_case.scad`: the parametric model (OpenSCAD). `part` = assembly, base, lid, cover or pod. Values marked PLACEHOLDER are not measured.
