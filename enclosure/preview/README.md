@@ -1,0 +1,1 @@
+- preview/ and stl/ hold generated files only.
