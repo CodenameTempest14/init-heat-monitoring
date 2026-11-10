@@ -70,3 +70,13 @@ Axes used below: **L** = long side, **W** = short side, **H** = height (thicknes
 ## 7. Your answers to the open choices
 Power bank inside or outside the case? Mounting (wall screws, tabletop stand, both)? Lid (screwed or snap-fit)?
 USB-C slot and BOOT hole (yes / no)? Pod cable length (cm)? Which PETG do you have (brand and type)?
+
+---
+## Received from the owner, 2026-11-10 (s37). To be checked, not yet used in a design
+
+ESP32 38-pin: PCB 48.05 x 25.30 mm; total height including the pins 12.45 mm; PCB length with the Type-C port 50 mm
+(so the port sticks out about 1.95 mm); Type-C opening 8.30 x 2.45 mm; "edge to edge 9cm" (almost certainly 9 mm: to confirm).
+OLED: PCB 24.40 x 24.40 mm; height including the pins 11.00 mm; glass 24.40 x 16.10 x 2.20 mm; screws M2.5 x 6 (four corners).
+
+Still missing: ESP32 PCB thickness, pin length below the PCB, row spacing, port height above the PCB, BOOT/EN button positions;
+OLED active (lit) area and its position, hole diameter and spacing, pin header height; all of sections 3 to 7.
