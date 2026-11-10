@@ -7,7 +7,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const wall = 2.4, floor = 2.4, lid = 2.4, gap = 0.6, rear = 12, bayH = 30, vest = 30, chW = 7.5, chWall = 1.6;
 const bank = [167, 80, 33.3], screen = [22, 67.2], scrFrom = 9.8, bayX = 48.05 + 60, innerY = 86, step = 6;
 const innerX = vest + bank[0] + 2 * gap + rear, outX = innerX + 2 * wall, outY = innerY + 2 * wall;
-const baseH = floor + bank[2] + 2 * gap, bay0 = wall + vest + gap + scrFrom + screen[0] + step, bayOut = bayX + 2 * wall;
+const baseH = floor + bank[2] + 2 * gap, bayOut = bayX + 2 * wall, bay0 = outX - bayOut, armOut = 60, podL = 38, podW = 26, armZ = 18, tubeW = 14.2, tubeH = 7.7;
 const totalH = baseH + lid + bayH + lid;
 const S = 4.6, M = 120;                         // px per mm, margin
 const f = (n) => (Math.round(n * 10) / 10).toString();
@@ -17,7 +17,7 @@ const dimH = (x1, x2, y, label, off = 0) => `<g class="d"><line x1="${x1}" y1="$
 const dimV = (y1, y2, x, label) => `<g class="d"><line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}"/><line x1="${x - 6}" y1="${y1}" x2="${x + 6}" y2="${y1}"/><line x1="${x - 6}" y1="${y2}" x2="${x + 6}" y2="${y2}"/><text x="${x - 8}" y="${(y1 + y2) / 2}" text-anchor="end" dominant-baseline="middle">${label}</text></g>`;
 // ---- TOP VIEW (port end on the left) ----
 const T = { x: M, y: 150 };
-svg += `<text x="${M}" y="36" class="h">DRAFT 2 TOP VIEW (lid on). Port end on the left. mm</text>`;
+svg += `<text x="${M}" y="36" class="h">DRAFT 3 TOP VIEW (lid on). Port end on the left. mm</text>`;
 svg += rect(T.x, T.y, outX * S, outY * S, 'class="body"');
 svg += rect(T.x + (wall + vest + gap) * S, T.y + (outY - bank[1]) / 2 * S, bank[0] * S, bank[1] * S, 'class="bank"');
 svg += rect(T.x + (wall + vest + gap + scrFrom - 0.5) * S, T.y + (outY - screen[1] - 1) / 2 * S, (screen[0] + 1) * S, (screen[1] + 1) * S, 'class="win"');
@@ -35,10 +35,14 @@ svg += dimH(T.x + (wall + vest + gap + scrFrom - 0.5) * S, T.x + (wall + vest + 
 svg += dimH(T.x + (wall + vest + gap) * S, T.x + (wall + vest + gap + scrFrom) * S, T.y + outY * S + 54, `${f(scrFrom)} (bank end to screen)`);
 svg += dimV(T.y, T.y + outY * S, T.x - 14, `width ${f(outY)}`);
 svg += `<text x="${T.x - 6}" y="${T.y - 85}" class="note">grey = bank (167 x 80), blue = electronics bay walls, white = bank screen window</text>`;
+svg += rect(T.x + outX * S, T.y + (outY - tubeW) / 2 * S, armOut * S, tubeW * S, 'class="ch"');
+svg += rect(T.x + (outX + armOut - 1) * S, T.y + (outY - podW) / 2 * S, podL * S, podW * S, 'class="ch"');
+svg += `<text x="${T.x + (outX + 4) * S}" y="${T.y + outY / 2 * S + 40}" class="lbl">sensor arm (hollow, wires inside) ${armOut} + pod ${podL} x ${podW}</text>`;
+svg += dimH(T.x, T.x + (outX + armOut + podL - 1) * S, T.y - 74, `overall length with arm ${f(outX + armOut + podL - 1)}`);
 // ---- SIDE VIEW ----
 const Y0 = T.y + outY * S + 150, D = { x: M, y: Y0 };
 const zy = (z) => D.y + (totalH - z) * S;
-svg += `<text x="${M}" y="${Y0 - 20}" class="h">DRAFT 2 SIDE VIEW. Port end on the left. mm</text>`;
+svg += `<text x="${M}" y="${Y0 - 20}" class="h">DRAFT 3 SIDE VIEW. Port end on the left. mm</text>`;
 svg += rect(D.x, zy(baseH), outX * S, baseH * S, 'class="body"');
 svg += rect(D.x, zy(baseH + lid), outX * S, lid * S, 'class="lidc"');
 svg += rect(D.x + bay0 * S, zy(baseH + lid + bayH), bayOut * S, bayH * S, 'class="bay"');
@@ -46,17 +50,20 @@ svg += rect(D.x + bay0 * S, zy(totalH), bayOut * S, lid * S, 'class="cover"');
 svg += rect(D.x + (wall + vest + gap) * S, zy(floor + gap + bank[2]), bank[0] * S, bank[2] * S, 'class="bank"');
 svg += `<text x="${D.x + (wall + vest + gap + 83) * S}" y="${zy(floor + gap + bank[2] / 2)}" text-anchor="middle" class="lbl">ROMOSS bank 167 x 80 x 33.3</text>`;
 svg += `<text x="${D.x + (bay0 + bayOut / 2) * S}" y="${zy(baseH + lid + bayH / 2)}" text-anchor="middle" class="lbl">electronics bay, ${f(bayH)} high inside</text>`;
+svg += rect(D.x + outX * S, zy(armZ + tubeH / 2), armOut * S, tubeH * S, 'class="ch"');
+svg += rect(D.x + (outX + armOut - 1) * S, zy(armZ - 6 + 16), podL * S, 16 * S, 'class="ch"');
+svg += `<text x="${D.x + (outX + 2) * S}" y="${zy(armZ) + 36}" class="lbl">arm low (18 above the floor): heat rises away from the pod</text>`;
 svg += dimV(zy(totalH), zy(0), D.x - 14, `total ${f(totalH)}`);
 svg += dimV(zy(baseH), zy(0), D.x + outX * S + 60, `base ${f(baseH)}`);
 svg += dimH(D.x, D.x + outX * S, zy(0) + 30, `outer length ${f(outX)}`);
-svg += `<text x="${M}" y="${zy(0) + 70}" class="note">Walls ${wall}, floor ${floor}, lid ${lid}, clearance around the bank ${gap} each side. Pod (DHT22): 38 x 26 x 16. Overall: ${f(outX)} x ${f(outY)} x ${f(totalH)}.</text>`;
+svg += `<text x="${M}" y="${zy(0) + 70}" class="note">Walls ${wall}, floor ${floor}, lid ${lid}, clearance around the bank ${gap} each side. Pod (DHT22) 38 x 26 x 16 on a 60 mm hollow arm. Case: ${f(outX)} x ${f(outY)} x ${f(totalH)}.</text>`;
 svg += `<text x="${M}" y="${zy(0) + 92}" class="note">PLACEHOLDERS (not measured): bank port opening 66 x 16, BOOT/EN holes 4 dia, OLED window 22 x 11, vents 2 wide, insert hole sizes.</text>`;
-const W = Math.round(M * 2 + (outX + 24) * S), H = Math.round(zy(0) + 120);
+const W = Math.round(M * 2 + (outX + armOut + podL + 24) * S), H = Math.round(zy(0) + 120);
 const html = `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#fff;font-family:Arial,sans-serif}
 .body{fill:#e6e6e6;stroke:#333;stroke-width:1.5}.bank{fill:#bdbdbd;stroke:#555;stroke-width:1;opacity:.9}.win{fill:#fff;stroke:#c33;stroke-width:1.5}
 .bay{fill:#cde8ff;stroke:#246;stroke-width:1.5;opacity:.85}.ch{fill:#ffe9b0;stroke:#a60;stroke-width:1.2}.lidc{fill:#f4f4f4;stroke:#333}.cover{fill:#9cc8ee;stroke:#246}
 .d line{stroke:#c33;stroke-width:1.2}.d text{fill:#c33;font-size:15px}.h{font-size:20px;font-weight:bold}.lbl{font-size:14px;fill:#123}.note{font-size:14px;fill:#333}</style>
 <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">${svg}</svg>`;
 const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: W, height: H } });
-await p.setContent(html); await p.screenshot({ path: join(here, 'preview', 'draft2_dimensions.png'), fullPage: true }); await b.close();
-console.log('saved preview/draft2_dimensions.png', W, H, 'overall', f(outX), f(outY), f(totalH));
+await p.setContent(html); await p.screenshot({ path: join(here, 'preview', 'draft3_dimensions.png'), fullPage: true }); await b.close();
+console.log('saved preview/draft3_dimensions.png', W, H, 'overall', f(outX), f(outY), f(totalH));
