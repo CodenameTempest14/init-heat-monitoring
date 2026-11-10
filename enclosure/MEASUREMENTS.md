@@ -80,3 +80,11 @@ OLED: PCB 24.40 x 24.40 mm; height including the pins 11.00 mm; glass 24.40 x 16
 
 Still missing: ESP32 PCB thickness, pin length below the PCB, row spacing, port height above the PCB, BOOT/EN button positions;
 OLED active (lit) area and its position, hole diameter and spacing, pin header height; all of sections 3 to 7.
+
+### Received 2026-11-10 (second batch)
+DHT22: 25 x 15 x 6.10 mm body. ESP32 PCB thickness 1.10 mm. OLED PCB thickness 1 mm.
+ROMOSS Sense 8P+: 167 x 80 x 33.30 mm. Jumper wires (male to female): 150 mm.
+Owner's wish: the power bank's screen stays visible (battery percentage) and its ports stay open for charging.
+=> The bank goes **inside the case** (answers choice 1 in section 7, to confirm); needs windows or cut-outs for its screen and ports.
+Still missing: bank screen position and size, bank port positions and corner radius; DHT22 legs and grille side; ESP32 pins below the PCB,
+row spacing, port height, button positions; OLED lit area, holes, header height; plug and cable sizes; inserts; the other choices.
