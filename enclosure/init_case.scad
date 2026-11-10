@@ -1,4 +1,4 @@
-// Init case, DRAFT 1 (D-038, option A). All sizes in mm. X = length (port end at x = 0), Y = width, Z = up.
+// Init case, DRAFT 2 (D-038, option A). All sizes in mm. X = length (port end at x = 0), Y = width, Z = up.
 // Values marked PLACEHOLDER are not measured yet. Change a number here and re-render; nothing else needs redrawing.
 // part = "assembly" | "base" | "lid" | "cover" | "pod"
 part = "assembly";
@@ -18,22 +18,24 @@ floor_t = 2.4;
 lid_t = 2.4;
 gap = 0.6;                     // clearance each side of the bank
 rear_space = 12;               // spare room behind the bank for the pod cable and screw posts
+vest = 30;                     // port vestibule: room in front of the bank ports for plugs and the hidden USB cable
+ch_w = 7.5; ch_h = 7.5; ch_wall = 1.6;   // hidden USB cable channel on the lid (inner width, inner height, wall)
 bay_h = 30;                    // inner height of the electronics bay (PLACEHOLDER)
 bay_x = esp_pcb[0] + 2*esp_clear;   // 108.05
 bay_y = esp_pcb[1] + 2*esp_clear;   // 85.3
 inner_y = 86;                  // inner width (>= bay_y, bank has gap + 2.4 each side)
 step_gap = 6;                  // bank screen window end to the electronics bay
-port_open = [66, 14];          // PLACEHOLDER width x height of the bank port opening
-usb_slot = [14, 8];            // PLACEHOLDER width x height for the ESP32 USB-C plug body
+port_open = [66, 16];          // PLACEHOLDER width x height of the bank port opening
+usb_slot = [14, 8];            // (not used in draft 2: the USB-C slot is replaced by the hidden channel)
 boot_d = 4;                    // PLACEHOLDER BOOT / EN pin hole
 oled_win = [22, 11];           // PLACEHOLDER (lit area not measured)
 screw_d = 2.8;                 // M3 insert pilot is set by the insert data sheet (PLACEHOLDER)
 pod = [38, 26, 16];            // DHT22 pod outer size (DHT22 body is 25 x 15 x 6.1)
 
-inner_x = bank[0] + 2*gap + rear_space;
+inner_x = vest + bank[0] + 2*gap + rear_space;
 outer = [inner_x + 2*wall, inner_y + 2*wall];
 base_h = floor_t + bank[2] + 2*gap;           // top edge of the base walls
-bay_x0 = wall + gap + screen_from_port_end + screen_w_along + step_gap;   // outer face of bay front wall
+bay_x0 = wall + vest + gap + screen_from_port_end + screen_w_along + step_gap;   // outer face of bay front wall
 $fn = 40;
 
 module box(x, y, z, p=[0,0,0]) { translate(p) cube([x, y, z]); }
@@ -56,6 +58,11 @@ module lid() {
   difference() {
     union() {
       box(outer[0], outer[1], lid_t);                                    // plate
+      // hidden USB cable channel (roofed) along the back edge, from the vestibule to the bay
+      translate([wall + 2, outer[1] - ch_w - 2*ch_wall - 2.4, lid_t]) difference() {
+        cube([bay_x0 - wall - 2, ch_w + 2*ch_wall, ch_h + ch_wall]);
+        translate([0, ch_wall, -1]) cube([bay_x0 - wall - 2 + 1, ch_w, ch_h + 1]);
+      }
       // electronics bay walls
       translate([bay_x0, 0, lid_t]) difference() {
         cube([bay_x + 2*wall, outer[1], bay_h]);
@@ -63,10 +70,17 @@ module lid() {
       }
     }
     // window over the bank screen
-    translate([wall + gap + screen_from_port_end - 0.5, outer[1]/2 - (screen_len_across + 1)/2, -1])
+    translate([wall + vest + gap + screen_from_port_end - 0.5, outer[1]/2 - (screen_len_across + 1)/2, -1])
       cube([screen_w_along + 1, screen_len_across + 1, lid_t + 2]);
-    // USB-C slot in the bay wall that faces the port end
-    translate([bay_x0 - 1, outer[1]/2 - usb_slot[0]/2, lid_t + 6]) cube([wall + 2, usb_slot[0], usb_slot[1]]);
+    // hole for the USB cable to rise from the vestibule into the channel
+    translate([wall + 6, outer[1] - ch_w - ch_wall - 2.4, -1]) cube([12, ch_w, lid_t + 2]);
+    // cable passes from the channel into the bay
+    translate([bay_x0 - 1, outer[1] - ch_w - ch_wall - 2.4, lid_t + 0.5]) cube([wall + 2, ch_w, ch_h - 1]);
+    // OLED window in the FRONT wall of the bay (front = y = 0)
+    translate([bay_x0 + wall + bay_x/2 - oled_win[0]/2, -1, lid_t + bay_h/2 - oled_win[1]/2]) cube([oled_win[0], wall + 2, oled_win[1]]);
+    // vents: 2 mm slots, high on the back wall (hot air out), low on the far end wall (air in)
+    for (i = [0:11]) translate([bay_x0 + wall + 12 + i*7, outer[1] - wall - 1, lid_t + bay_h - 20]) cube([2, wall + 2, 16]);
+    for (i = [0:7]) translate([bay_x0 + 2*wall + bay_x - wall - 1, outer[1]/2 - 28 + i*8, lid_t + 4]) cube([wall + 2, 2, 14]);
     // screw holes matching the base posts
     for (px = [wall + inner_x - 5, wall + 5]) for (py = [wall + 5, wall + inner_y - 5])
       translate([px, py, -1]) cylinder(d=3.2, h=lid_t + 2);
@@ -74,11 +88,10 @@ module lid() {
 }
 
 module cover() {
-  // roof of the electronics bay: BOOT / EN holes and the OLED window (positions are placeholders)
+  // roof of the electronics bay: BOOT / EN holes (positions are placeholders)
   difference() {
     box(bay_x + 2*wall, outer[1], lid_t);
     for (dy = [-12, 12]) translate([wall + 12, outer[1]/2 + dy, -1]) cylinder(d=boot_d, h=lid_t + 2);
-    translate([wall + bay_x - oled_win[0] - 14, outer[1]/2 - oled_win[1]/2, -1]) cube([oled_win[0], oled_win[1], lid_t + 2]);
   }
 }
 
@@ -101,5 +114,5 @@ else {
   color("#f2f2f2") translate([0, 0, base_h]) lid();
   color("#c8e6ff") translate([bay_x0, 0, base_h + lid_t + bay_h]) cover();
   color("#ffd9a0") translate([outer[0] + 15, 0, 0]) pod();
-  color("#ffffff", 0.9) translate([wall + gap, wall + (inner_y - bank[1])/2, floor_t + gap]) cube(bank);   // the bank itself
+  color("#ffffff", 0.9) translate([wall + vest + gap, wall + (inner_y - bank[1])/2, floor_t + gap]) cube(bank);   // the bank itself
 }
