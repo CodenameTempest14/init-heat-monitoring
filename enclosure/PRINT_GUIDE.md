@@ -1,4 +1,4 @@
-# PRINT_GUIDE (draft 6, 2026-11-11). Not final: the owner reviews the draft first.
+# PRINT_GUIDE (draft 7, 2026-11-11). Not final: the owner reviews the draft first.
 
 Every value is marked **[Bambu profile]** (take what Bambu Studio sets for the printer and filament you choose; I did not type a number from memory)
 or **[estimate]** (my guess from the model; check it on a test print). Printer: Bambu Lab A1 (bed 256 x 256 mm).
@@ -16,7 +16,7 @@ Each fits the 256 mm bed. The base and the lid are the long ones (215): leave ro
 ## 2. Filament and settings
 - Final case: **PETG** (not bought yet; the guide will say which one once you have it). Fit tests: PLA (D-040).
 - Nozzle 0.4 mm, **[Bambu profile]** for layer height, speeds and temperatures of the chosen filament. Do not change them for the first print.
-- Walls: the model is built for 3 perimeters (2.4 mm) **[estimate]**. Infill 15 % to 20 % **[estimate]**; the plates and posts are mostly walls anyway.
+- Walls: the model walls and floor are 3.2 mm (D-046) = 4 perimeters of a 0.4 mm nozzle **[estimate]**; lid, cover and pod walls are 2.4 mm = 3 perimeters. Infill 15 % to 20 % **[estimate]**; the plates and posts are mostly walls anyway.
 - Posts and screw pilots: the 2.1 mm pilot holes are small, so print them with at least 4 perimeters around the post **[estimate]** so the screw does not split it.
 - Orientation of the vent slots (2 mm) and the cable channel roof is a bridge: check the preview in Studio.
 
@@ -39,3 +39,6 @@ the OLED hole orientation and the lit-area length; the ESP32 row spacing (not us
 ## 6. Logo and paint (D-045)
 - The logo is **engraved** 0.8 mm [estimate] into the front wall of the base, 66 x 24 mm. Print the base floor down so the front wall stands up: the engraving faces sideways, so test on the PLA slice first (the thin icon outline is only 1 mm wide: if it prints poorly, the icon can be made bolder).
 - Paint: water-based **acrylic** paint (a paint pen with a 1 to 2 mm tip fills a 3 mm channel easily). Lightly scuff the engraving with fine sandpaper first (PETG is slippery), paint it, then wipe the excess off the flat wall with a damp cloth or a plastic card before it dries. [estimate; confirm on the test print]
+
+## 7. Drop test (D-046; the bank weighs about 670 g)
+After the PLA fit pieces fit: put the real bank in the PLA slice with the stops, then drop it from about 30 cm onto a floor mat or carpet, then 60 cm, checking the end walls, the arm foot and the screw posts after each drop. Stop at the first crack and tell me where: that decides what to thicken next. This is a rough check, not a rated test; it does not prove the final PETG case survives a hard fall onto concrete. The foam shim goes in before the test.

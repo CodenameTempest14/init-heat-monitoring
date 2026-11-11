@@ -48,3 +48,6 @@ Draft 6 (owner, 2026-11-11, D-042 and D-044): built from the owner's measurement
 - Pod 40 x 26 x 16 with a post for the DHT22 tab and a press-fit lid (`podlid`).
 Conflicts in the measurements are listed in MEASUREMENTS.md; each guess is marked EST in the .scad. Print order and settings: `PRINT_GUIDE.md`.
 - **Logo (D-045):** the Init logo is engraved 0.8 mm deep on the front wall of the base (66 x 24 mm, drawn in OpenSCAD from `design/brand`) to be filled with paint; `part="logo"` shows it alone (`preview/draft6_logo.png`).
+
+Draft 7 (owner, 2026-11-11, D-046): the 670 g bank is now held. **Bank stops:** two small blocks beside the port panel (the ports stay free) and two blocks behind the rear end, 20 mm high, 0.3 mm clearance; lower the bank in with the lid off; add a foam or rubber shim if it still rattles.
+Walls and floor 3.2 mm (lid and cover stay 2.4 so the screws keep their grip), 3 mm rounded outside corners, arm tube wall 2.4 mm, a bigger arm foot (36 x 24 x 3) and four gussets. Overall about 217 x 93 x 73 mm without the arm. Previews: `preview/draft7_*.png`.

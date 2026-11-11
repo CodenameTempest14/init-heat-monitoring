@@ -1,4 +1,4 @@
-// Init case, DRAFT 6 (D-038 option A, D-042 pod low, D-044 screws from the owner's box only). All sizes in mm.
+// Init case, DRAFT 7 (D-038 option A, D-042 pod low, D-044 screws from the owner's box only, D-046 bank stops and tougher walls). All sizes in mm.
 // X = length (port end at x = 0), Y = width (y = 0 is the FRONT, where the OLED is), Z = up.
 // Values marked EST are estimates, not measured. Change a number here and re-render; nothing else needs redrawing.
 // part = "assembly" | "base" | "lid" | "cover" | "arm" | "podlid" | "logo"
@@ -39,7 +39,9 @@ logo_k = 0.2;                  // mm per logo unit => 66 x 24 mm
 logo_depth = 0.8;              // engraving depth (EST); the wall keeps 1.6 mm
 
 // ---- design choices -------------------------------------------------------
-wall = 2.4; floor_t = 2.4; lid_t = 2.4;
+wall = 3.2; floor_t = 3.2; lid_t = 2.4;   // D-046: walls and floor 3.2 (was 2.4); lid and cover stay 2.4 so the M2.5 x 8 screws keep about 5.6 mm in the posts
+r_out = 3;                     // radius of the rounded vertical outside corners
+stop_h = 20;                   // height of the bank stops above the floor
 gap = 0.6;
 rear_space = 12;
 vest = 30;
@@ -57,8 +59,8 @@ pod = [40, 26, 16];            // DHT22 pod outer size
 arm_out = 70;                  // tube length beyond the rear end
 arm_z = 18;                    // tube axis height above the base bottom: LOW, so the pod stays out of the warm air (D-042)
 wire_in = [wire_plug[0] + 1.7, wire_plug[1] + 2.5];   // bore width x height: 13.5 x 4.5
-arm_wall = 1.6;
-foot = [2.4, 34, 20];          // plate against the rear end wall (thickness, width, height)
+arm_wall = 2.4;                // arm tube wall (was 1.6)
+foot = [3, 36, 24];          // plate against the rear end wall (thickness, width, height)
 arm_screw_dy = 12;
 
 inner_x = vest + bank[0] + 2*gap + rear_space;
@@ -90,6 +92,7 @@ module logo2d() {
     translate([48,96-72]) circle(r=12+2.5, $fn=40);
   }
 }
+module rbox(x, y, z, r=r_out) { hull() for (px = [r, x - r]) for (py = [r, y - r]) translate([px, py, 0]) cylinder(r=r, h=z, $fn=32); }
 module box(x, y, z, p=[0,0,0]) { translate(p) cube([x, y, z]); }
 // countersunk hole: plate thickness t, hole runs up through z = 0..t, head on the top face
 module csk(t) { translate([0,0,-1]) cylinder(d=thru_d, h=t+2); translate([0,0,t-csk_depth]) cylinder(d1=thru_d, d2=csk_head, h=csk_depth+0.01); translate([0,0,t]) cylinder(d=csk_head, h=1); }
@@ -101,7 +104,7 @@ wire_hole_x = wall + inner_x - 4;     // vertical wire hole in the lid plate, in
 module base() {
   difference() {
     union() {
-      box(outer[0], outer[1], base_h);
+      rbox(outer[0], outer[1], base_h);
       // pads inside the rear wall for the arm screws (wall 2.4 + pad 4 = 6.4)
       for (dy = [-arm_screw_dy, arm_screw_dy]) translate([outer[0] - wall - 4, outer[1]/2 + dy, arm_z]) rotate([0,90,0]) cylinder(d=post_d + 1, h=4.01);
     }
@@ -117,6 +120,11 @@ module base() {
     // arm screw pilots from the outer face
     for (dy = [-arm_screw_dy, arm_screw_dy]) translate([outer[0] - pilot_depth + 0.01, outer[1]/2 + dy, arm_z]) rotate([0,90,0]) cylinder(d=pilot_d, h=pilot_depth + 1);
   }
+  // bank stops (D-046): the bank can no longer slide along its length. Blocks sit beside the port panel (the ports stay free) and behind the rear end.
+  // 0.3 mm clearance; the bank is lowered in from above with the lid off; a foam or rubber shim can be added for the last bit of play.
+  x_b0 = wall + vest + gap; x_b1 = x_b0 + bank[0]; y_b0 = wall + (inner_y - bank[1])/2;
+  for (yy = [wall - 0.01, y_b0 + bank[1] - 5]) translate([x_b0 - 8, yy, floor_t - 0.01]) cube([7.7, (yy < 10 ? y_b0 + 5 - wall + 0.01 : wall + inner_y - (y_b0 + bank[1] - 5) + 0.01), stop_h]);
+  for (yy = [wall + 11, wall + inner_y - 11 - 14]) translate([x_b1 + 0.3, yy, floor_t - 0.01]) cube([wall + inner_x - x_b1 - 0.3 + 0.01, 14, stop_h]);
   // four lid screw posts
   for (px = [wall + inner_x - 5, wall + 5]) for (py = [wall + 5, wall + inner_y - 5])
     translate([px, py, floor_t]) difference() { cylinder(d=post_d, h=bank[2] + 2*gap); translate([0,0,bank[2] + 2*gap - pilot_depth]) cylinder(d=pilot_d, h=pilot_depth + 1); }
@@ -125,7 +133,7 @@ module base() {
 module lid() {
   difference() {
     union() {
-      box(outer[0], outer[1], lid_t);
+      rbox(outer[0], outer[1], lid_t);
       translate([wall + 2, outer[1] - ch_w - 2*ch_wall - 2.4, lid_t]) difference() {
         cube([bay_x0 - wall - 2, ch_w + 2*ch_wall, ch_h + ch_wall]);
         translate([0, ch_wall, -1]) cube([bay_x0 - wall - 2 + 1, ch_w, ch_h + 1]);
@@ -134,7 +142,7 @@ module lid() {
       for (px = cover_post_x) for (py = cover_post_y) translate([bay_x0 + wall + px, wall + py, lid_t]) cylinder(d=post_d, h=bay_h);
       // electronics bay walls
       translate([bay_x0, 0, lid_t]) difference() {
-        cube([bay_x + 2*wall, outer[1], bay_h]);
+        rbox(bay_x + 2*wall, outer[1], bay_h);
         translate([wall, wall, -1]) cube([bay_x, inner_y, bay_h + 2]);
       }
       // OLED standoffs on the inside of the front wall of the bay
@@ -165,7 +173,7 @@ module lid() {
 
 module cover() {
   difference() {
-    box(bay_x + 2*wall, outer[1], lid_t);
+    rbox(bay_x + 2*wall, outer[1], lid_t);
     // BOOT / EN holes over the buttons (PCB centred in the bay, USB end toward the port end)
     for (py = [esp_btn[1], esp_pcb[1] - esp_btn[1]]) translate([wall + esp_x0 + esp_btn[0], wall + esp_y0 + py, -1]) cylinder(d=boot_d, h=lid_t + 2);
     for (px = cover_post_x) for (py = cover_post_y) translate([wall + px, wall + py, 0]) csk(lid_t);
@@ -206,6 +214,8 @@ module arm() {
       translate([0, -foot[1]/2, -foot[2]/2]) cube(foot);
       translate([0, -tw/2, -th/2]) cube([arm_out, tw, th]);
       translate([arm_out - 1, -pod[1]/2, -pod[2]/2 + 2]) pod_body();
+      // four gussets between the foot plate and the tube (the arm is the lever that breaks in a fall)
+      for (sy = [-1, 1]) for (sz = [-1, 1]) translate([0, sy*(tw/2 - 3) + 1.5, 0]) rotate([90,0,0]) linear_extrude(3) polygon([[0, sz*th/2 - sz*0.01], [0, sz*foot[2]/2], [18, sz*th/2 - sz*0.01]]);
     }
     translate([-1, -wire_in[0]/2, -wire_in[1]/2]) cube([arm_out + 5, wire_in[0], wire_in[1]]);
     for (dy = [-arm_screw_dy, arm_screw_dy]) translate([0, dy, 0]) rotate([0,90,0]) csk(foot[0]);

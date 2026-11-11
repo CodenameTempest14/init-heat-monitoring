@@ -111,3 +111,5 @@ D DHT22: mount hole dia 3, centre 7.5 [from which edge?]; grille 15 x 14 [? body
 E screws/inserts, F placement and PETG: not yet received (M3 x 5 only, PETG not bought: D-042).
 
 Owner, s38: "just go with the measurements, adjust them based on what you know, I'll review them on the draft" => draft 6 uses them with the guesses marked EST in init_case.scad and listed in PRINT_GUIDE.md section 5. No screws or inserts are to be bought (D-044).
+
+Owner, s38: ROMOSS bank weighs about 670 g (approximate). Used for the drop-strength question: the bank is the heavy part and is NOT yet held in place along its length (30 mm of free travel toward the port end, 12.6 mm toward the rear).
