@@ -96,3 +96,18 @@ OLED (SSD1306, 4 pins GND VDD SCK SDA along one short edge): four corner holes, 
 DHT22: bare 4-pin sensor, 4 straight legs on one short end, grille slots on the big face, one mounting hole in a tab at the other end.
 ROMOSS: the black display window is on the TOP face near one short end; all four ports (USB-C with a micro/Lightning-style icon, USB-C "fit+", USB-A "fit+", USB-A fast charge) are on that short end;
 a round power button sits on the long side near that end. Port end and display end look like the same end: to confirm.
+
+### Received 2026-11-11 (s38), numbered as in preview/measure_guide.png. Raw values; my reading is in brackets; "?" = to confirm
+A1 port end face: panel width 68; panel height 11; bottom face to ports 7 [?: to the port bottom or the panel bottom]; left edge to port 1: 40 [?: port 1 is the left-most in the sketch, 40 looks like a middle port]; opening height 6.
+   Missing: positions of the other 3 ports, which port feeds the ESP32 (4), thickness at 3 points (9).
+A2 top face: screen 6.30 from each long edge [so about 67.4 wide]; port end to screen 9.90. Missing: flush/raised/recessed (6), corner radius (8).
+A2.1 power button, on the long side near the screen end: 13.30 / 13.30 [read as from the top and bottom faces: 13.3 + 5.5 + 13.3 = 32.1, about the 33.3 thickness];
+   14 from the end [?]; width 5.5 [across the side]; length 11 [along the bank]. Missing: which long side, how far it sticks out.
+B ESP32: row spacing 25 [? the PCB is 25.30 wide, so this is probably the board width, not hole to hole]; BOOT/EN 7 from the USB end, 5 from the long edge; antenna strip ends 7 before the PCB edge.
+   Missing: header body and pin length (10), USB shell height (12), button height (13).
+C OLED: lit area 24.50 x 14.15 [? 24.50 is longer than the 24.40 board]; top edge to lit 5; hole spacing 15.30 one way and 18.25 the other [? "14" was replaced by 18.25?].
+   Missing: lit area left/right/bottom offsets, hole diameter, header height (18), glass + flex thickness (19).
+D DHT22: mount hole dia 3, centre 7.5 [from which edge?]; grille 15 x 14 [? body is 25 x 15]; jumper plug width 11.8, thickness 2 [received later in s38; a single-pin housing is usually about 2.5, so it may be a thin 4-pin block: to confirm]. jumper wire length 22 cm (owner, s38; replaces the 150 mm given on 2026-11-10; the 22 cm is the whole wire, not the plug). plug housing length: NOT measured, owner asked me to decide: design value 14 mm (estimate; a standard Dupont female housing is about 14 mm; allow 20 mm clearance behind the legs for the plug and the wire bend). Missing: jumper length to buy (23).
+E screws/inserts, F placement and PETG: not yet received (M3 x 5 only, PETG not bought: D-042).
+
+Owner, s38: "just go with the measurements, adjust them based on what you know, I'll review them on the draft" => draft 6 uses them with the guesses marked EST in init_case.scad and listed in PRINT_GUIDE.md section 5. No screws or inserts are to be bought (D-044).

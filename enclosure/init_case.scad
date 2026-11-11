@@ -1,172 +1,227 @@
-// Init case, DRAFT 5 (D-038, option A). All sizes in mm. X = length (port end at x = 0), Y = width, Z = up.
-// Values marked PLACEHOLDER are not measured yet. Change a number here and re-render; nothing else needs redrawing.
-// part = "assembly" | "base" | "lid" | "cover" | "pod"
+// Init case, DRAFT 6 (D-038 option A, D-042 pod low, D-044 screws from the owner's box only). All sizes in mm.
+// X = length (port end at x = 0), Y = width (y = 0 is the FRONT, where the OLED is), Z = up.
+// Values marked EST are estimates, not measured. Change a number here and re-render; nothing else needs redrawing.
+// part = "assembly" | "base" | "lid" | "cover" | "arm" | "podlid" | "logo"
 part = "assembly";
 
-// ---- measured by the owner -------------------------------------------------
+// ---- measured by the owner (2026-11-10 / 11) ------------------------------
 bank = [167, 80, 33.3];        // ROMOSS Sense 8P+ (length, width, thickness)
-screen_len_across = 67.2;      // screen runs ACROSS the bank width (assumed from the photo)
-screen_w_along = 22;           // and is 22 mm along the bank length
-screen_from_port_end = 9.8;    // screen edge to the port end of the bank
+port_panel = [68, 11];         // recessed port panel (width, height)
+port_z = 10;                   // bank bottom face up to the CENTRE of the ports (7 + 6/2); owner's "7" may mean the panel bottom: the opening below covers both
+port_open = [70, 14];          // opening in the end wall: panel width + 2, tall enough for cable plugs (EST)
+screen_side = 6.30;            // bank edge to screen end, both sides
+screen_across = bank[1] - 2*screen_side;   // 67.4
+screen_along = 22;             // along the bank (EST from the first photo, not re-measured)
+screen_from_port_end = 9.9;
+btn_from_end = 14; btn_len = 11; btn_w = 5.5;   // bank power button on the long side near the port end; side = BACK wall (y = outer width), moved from the front at the owner's request in s38
 esp_pcb = [48.05, 25.30];      // ESP32 PCB only
-esp_clear = 30;                // owner: 30 mm clearance on all sides (custom PCB will carry the ESP32)
-oled_glass = [24.4, 16.1];     // glass only (lit area still to measure)
+esp_btn = [7, 5];              // BOOT/EN: 7 from the USB end, 5 from the long edge
+esp_clear = 30;                // owner: 30 mm clearance on all sides
+oled_board = 24.4;             // square board
+oled_lit = [24.0, 14.7];       // lit area as measured 24.50 x 14.15; length capped under the 24.4 board (EST), width +0.5
+oled_holes = [15.30, 18.25];   // across, up-down (assumed: the 18.25 runs away from the lit area; to confirm). EST
+oled_glass_t = 2.2;
+dht = [25, 15, 6.1];           // DHT22 body
+dht_hole_d = 3; dht_hole_from_end = 4;   // hole d3 measured; distance from the tab end EST (7.5 is across the width)
+wire_plug = [11.8, 2];         // jumper plug width x thickness (measured); plug length 14 EST
+wire_len = 220;                // jumper length (owner)
 
-// ---- design choices (draft) -----------------------------------------------
-wall = 2.4;                    // 3 perimeters of a 0.4 mm nozzle
-floor_t = 2.4;
-lid_t = 2.4;
-gap = 0.6;                     // clearance each side of the bank
-rear_space = 12;               // spare room behind the bank for the pod cable and screw posts
-vest = 30;                     // port vestibule: room in front of the bank ports for plugs and the hidden USB cable
-ch_w = 7.5; ch_h = 7.5; ch_wall = 1.6;   // hidden USB cable channel on the lid (inner width, inner height, wall)
-bay_h = 30;                    // inner height of the electronics bay (PLACEHOLDER)
-bay_x = esp_pcb[0] + 2*esp_clear;   // 108.05
-bay_y = esp_pcb[1] + 2*esp_clear;   // 85.3
-inner_y = 86;                  // inner width (>= bay_y, bank has gap + 2.4 each side)
-step_gap = 6;                  // bank screen window end to the electronics bay
-port_open = [66, 16];          // PLACEHOLDER width x height of the bank port opening
-usb_slot = [14, 8];            // (not used in draft 2: the USB-C slot is replaced by the hidden channel)
-boot_d = 4;                    // PLACEHOLDER BOOT / EN pin hole
-oled_win = [22, 11];           // PLACEHOLDER (lit area not measured)
-screw_d = 2.8;                 // M3 insert pilot is set by the insert data sheet (PLACEHOLDER)
-pod = [38, 26, 16];            // DHT22 pod outer size (DHT22 body is 25 x 15 x 6.1)
-arm_out = 70;                  // how far the pod is held beyond the case end (draft 3: the sensor arm)
-arm_post_x = bay_x - 8;        // draft 5: the arm sits ON TOP of the cover; its two posts are 8 mm from the bay's rear inner wall
-arm_wire_x = arm_post_x - 16;  // where the wires rise through the cover (x from the bay's inner start)
-wire_in = [11, 4.5];           // bore for the jumper plug (width x height); a 4-pin Dupont housing is about 10 x 2.5
+// ---- screws: ONLY what is in the owner's box (D-044): DIN965 flat head, M2.5 x 8 for the case, M3 x 5 for the DHT22, M2.5 x 5 for the OLED
+// They bite straight into printed PETG (no inserts). Pilot holes are for self-tapping; the through holes are countersunk.
+pilot_d = 2.1;                 // EST for M2.5 into PETG
+thru_d = 2.7;
+csk_head = 5.2; csk_depth = 1.5;   // M2.5 DIN965 head about 5 mm (EST: owner to measure one)
+post_d = 7;
+pilot_depth = 6.5;             // M2.5 x 8 through a 2.4 plate leaves 5.6 mm in the post
+
+// ---- logo (D-045): engraved on the FRONT wall of the base, filled with paint afterwards. Drawn from design/brand/init-logo-light.svg (viewBox 330 x 120)
+logo_k = 0.2;                  // mm per logo unit => 66 x 24 mm
+logo_depth = 0.8;              // engraving depth (EST); the wall keeps 1.6 mm
+
+// ---- design choices -------------------------------------------------------
+wall = 2.4; floor_t = 2.4; lid_t = 2.4;
+gap = 0.6;
+rear_space = 12;
+vest = 30;
+ch_w = 7.5; ch_h = 7.5; ch_wall = 1.6;
+bay_h = 30;
+bay_x = esp_pcb[0] + 2*esp_clear;
+bay_y = esp_pcb[1] + 2*esp_clear;
+inner_y = 86;
+boot_d = 4;
+esp_x0 = (bay_x - esp_pcb[0])/2;       // PCB placed in the middle of the bay, USB end toward the port end
+esp_y0 = (inner_y - esp_pcb[1])/2;
+oled_stand = oled_glass_t + 0.3;
+oled_pilot_depth = 4.2;
+pod = [40, 26, 16];            // DHT22 pod outer size
+arm_out = 70;                  // tube length beyond the rear end
+arm_z = 18;                    // tube axis height above the base bottom: LOW, so the pod stays out of the warm air (D-042)
+wire_in = [wire_plug[0] + 1.7, wire_plug[1] + 2.5];   // bore width x height: 13.5 x 4.5
 arm_wall = 1.6;
-foot = [18, 34, 3];            // plate lying on the cover (length, width, thickness)            // plate on the outside of the end wall (thickness, width, height)
+foot = [2.4, 34, 20];          // plate against the rear end wall (thickness, width, height)
+arm_screw_dy = 12;
 
 inner_x = vest + bank[0] + 2*gap + rear_space;
 outer = [inner_x + 2*wall, inner_y + 2*wall];
-base_h = floor_t + bank[2] + 2*gap;           // top edge of the base walls
-bay_x0 = outer[0] - (bay_x + 2*wall);   // draft 3: the bay is flush with the rear end, above the rear space (wires drop through the lid there)
+base_h = floor_t + bank[2] + 2*gap;
+bay_x0 = outer[0] - (bay_x + 2*wall);
 $fn = 40;
 
-module box(x, y, z, p=[0,0,0]) { translate(p) cube([x, y, z]); }
 
-// countersunk screw hole for the owner's DIN965 flat-head screws (M3: head about 6 mm, 1.7 mm deep). t = plate thickness, hole goes up through z = 0..t
-csk_head = 6.4; csk_depth = 1.7; thru_d = 3.2;
-module csk(t) { translate([0, 0, -1]) cylinder(d=thru_d, h=t + 2); translate([0, 0, t - csk_depth]) cylinder(d1=thru_d, d2=csk_head, h=csk_depth + 0.01); translate([0, 0, t]) cylinder(d=csk_head, h=1); }
-// four cover posts inside the bay (insert and screw down from the cover): x offsets from the bay inner start, y offset from the walls
+// ---- logo helpers: strokes are hulls of two circles (round caps), like the SVG strokes ----
+module seg(a, b, w) { hull() { translate(a) circle(d=w, $fn=24); translate(b) circle(d=w, $fn=24); } }
+module poly(pts, w) { for (i = [0:len(pts)-2]) seg(pts[i], pts[i+1], w); }
+function arc(c, r, a0, a1, n=16) = [for (i = [0:n]) [c[0] + r*cos(a0 + (a1-a0)*i/n), c[1] + r*sin(a0 + (a1-a0)*i/n)]];
+// logo in SVG units, y UP (SVG y is flipped by 120 - y). Wordmark "init" and the thermometer icon.
+module logo2d() {
+  w = 16;                                                     // wordmark stroke
+  ox = 122;
+  seg([ox+20,120-52],[ox+20,120-100],w);                      // i
+  poly(concat(arc([ox+76,120-76],24,180,0), [[ox+100,120-100]]), w);   // n: arch and right leg
+  seg([ox+52,120-52],[ox+52,120-100],w);                      // n left leg
+  seg([ox+132,120-52],[ox+132,120-100],w);                    // i
+  poly(concat([[ox+164,120-30],[ox+164,120-84]], arc([ox+180,120-84],16,180,270,8), [[ox+188,120-100]]), w);   // t
+  seg([ox+150,120-52],[ox+188,120-52],w);                     // t crossbar
+  for (cx = [ox+20, ox+132]) translate([cx,120-24]) circle(r=10, $fn=32);   // the two heat dots
+  // icon: thermometer outline, bulb, mercury and top dot (the rounded square frame is left out)
+  translate([4,12]) {
+    translate([48,96-20]) circle(r=8, $fn=32);
+    difference() { hull() { translate([39+9,96-34-9]) circle(r=9,$fn=32); translate([39+9,96-74+9]) circle(r=9,$fn=32); } offset(delta=-5) hull() { translate([48,96-43]) circle(r=9,$fn=32); translate([48,96-65]) circle(r=9,$fn=32); } }
+    translate([48,96-72]) circle(r=12+2.5, $fn=40);
+  }
+}
+module box(x, y, z, p=[0,0,0]) { translate(p) cube([x, y, z]); }
+// countersunk hole: plate thickness t, hole runs up through z = 0..t, head on the top face
+module csk(t) { translate([0,0,-1]) cylinder(d=thru_d, h=t+2); translate([0,0,t-csk_depth]) cylinder(d1=thru_d, d2=csk_head, h=csk_depth+0.01); translate([0,0,t]) cylinder(d=csk_head, h=1); }
+
 cover_post_x = [18, bay_x - 18];
 cover_post_y = [6, inner_y - 6];
+wire_hole_x = wall + inner_x - 4;     // vertical wire hole in the lid plate, in the rear space
 
 module base() {
   difference() {
-    box(outer[0], outer[1], base_h);
-    // cavity
+    union() {
+      box(outer[0], outer[1], base_h);
+      // pads inside the rear wall for the arm screws (wall 2.4 + pad 4 = 6.4)
+      for (dy = [-arm_screw_dy, arm_screw_dy]) translate([outer[0] - wall - 4, outer[1]/2 + dy, arm_z]) rotate([0,90,0]) cylinder(d=post_d + 1, h=4.01);
+    }
     translate([wall, wall, floor_t]) cube([inner_x, inner_y, base_h]);
-    // opening for the four bank ports (port end), centred on the bank thickness
-    translate([-1, outer[1]/2 - port_open[0]/2, floor_t + gap + bank[2]/2 - port_open[1]/2])
-      cube([wall + 2, port_open[0], port_open[1]]);
+    // port opening in the end wall
+    translate([-1, outer[1]/2 - port_open[0]/2, floor_t + gap + port_z - port_open[1]/2]) cube([wall + 2, port_open[0], port_open[1]]);
+    // finger window for the bank power button (back wall)
+    translate([wall + vest + gap + btn_from_end - 1, outer[1] - wall - 1, floor_t + gap + bank[2]/2 - (btn_w + 2.5)/2]) cube([btn_len + 2, wall + 2, btn_w + 2.5]);
+    // engraved logo on the front wall (y = 0), centred on the wall; text reads left to right seen from the front
+    translate([outer[0]/2 - 330*logo_k/2, 0, (base_h - 120*logo_k)/2]) rotate([90,0,0]) translate([0,0,-logo_depth]) linear_extrude(logo_depth + 0.1) scale(logo_k) logo2d();
+    // wire bore through the rear wall
+    translate([outer[0] - wall - 1, outer[1]/2 - wire_in[0]/2, arm_z - wire_in[1]/2]) cube([wall + 2, wire_in[0], wire_in[1]]);
+    // arm screw pilots from the outer face
+    for (dy = [-arm_screw_dy, arm_screw_dy]) translate([outer[0] - pilot_depth + 0.01, outer[1]/2 + dy, arm_z]) rotate([0,90,0]) cylinder(d=pilot_d, h=pilot_depth + 1);
   }
-  // four screw posts at the corners of the rear space and the port end
+  // four lid screw posts
   for (px = [wall + inner_x - 5, wall + 5]) for (py = [wall + 5, wall + inner_y - 5])
-    translate([px, py, floor_t]) difference() { cylinder(d=7, h=bank[2] + 2*gap); translate([0,0,3]) cylinder(d=screw_d, h=bank[2] + 2*gap); }
+    translate([px, py, floor_t]) difference() { cylinder(d=post_d, h=bank[2] + 2*gap); translate([0,0,bank[2] + 2*gap - pilot_depth]) cylinder(d=pilot_d, h=pilot_depth + 1); }
 }
 
 module lid() {
   difference() {
     union() {
-      box(outer[0], outer[1], lid_t);                                    // plate
-      // hidden USB cable channel (roofed) along the back edge, from the vestibule to the bay
+      box(outer[0], outer[1], lid_t);
       translate([wall + 2, outer[1] - ch_w - 2*ch_wall - 2.4, lid_t]) difference() {
         cube([bay_x0 - wall - 2, ch_w + 2*ch_wall, ch_h + ch_wall]);
         translate([0, ch_wall, -1]) cube([bay_x0 - wall - 2 + 1, ch_w, ch_h + 1]);
       }
-      // two extra posts at the rear of the bay: the sensor arm's foot screws go through the cover into them
-      for (dy = [-12, 12]) translate([bay_x0 + wall + arm_post_x, outer[1]/2 + dy, lid_t]) cylinder(d=7, h=bay_h);
       // four posts for the cover screws
-      for (px = cover_post_x) for (py = cover_post_y)
-        translate([bay_x0 + wall + px, wall + py, lid_t]) cylinder(d=7, h=bay_h);
+      for (px = cover_post_x) for (py = cover_post_y) translate([bay_x0 + wall + px, wall + py, lid_t]) cylinder(d=post_d, h=bay_h);
       // electronics bay walls
       translate([bay_x0, 0, lid_t]) difference() {
         cube([bay_x + 2*wall, outer[1], bay_h]);
         translate([wall, wall, -1]) cube([bay_x, inner_y, bay_h + 2]);
       }
+      // OLED standoffs on the inside of the front wall of the bay
+      for (sx = [-1, 1]) for (sz = [-1, 1])
+        translate([bay_x0 + wall + bay_x/2 + sx*oled_holes[0]/2, wall - 0.01, lid_t + bay_h/2 + sz*oled_holes[1]/2]) rotate([-90,0,0]) cylinder(d=5, h=oled_stand + 0.01);
     }
     // window over the bank screen
-    translate([wall + vest + gap + screen_from_port_end - 0.5, outer[1]/2 - (screen_len_across + 1)/2, -1])
-      cube([screen_w_along + 1, screen_len_across + 1, lid_t + 2]);
-    // pilot holes (blind) in the tops of the two arm posts
-    for (dy = [-12, 12]) translate([bay_x0 + wall + arm_post_x, outer[1]/2 + dy, lid_t + bay_h - 8]) cylinder(d=screw_d, h=9);
-    // hole for the USB cable to rise from the vestibule into the channel
+    translate([wall + vest + gap + screen_from_port_end - 0.5, outer[1]/2 - (screen_across + 1)/2, -1]) cube([screen_along + 1, screen_across + 1, lid_t + 2]);
+    // wire hole (vertical) in the rear space: the jumper rises from the arm to the ESP32
+    translate([wire_hole_x - (wire_in[1] + 1)/2, outer[1]/2 - (wire_in[0] + 1)/2, -1]) cube([wire_in[1] + 1, wire_in[0] + 1, lid_t + 2]);
+    // USB cable up into the channel, and from the channel into the bay
     translate([wall + 6, outer[1] - ch_w - ch_wall - 2.4, -1]) cube([12, ch_w, lid_t + 2]);
-    // cable passes from the channel into the bay
     translate([bay_x0 - 1, outer[1] - ch_w - ch_wall - 2.4, lid_t + 0.5]) cube([wall + 2, ch_w, ch_h - 1]);
-    // OLED window in the FRONT wall of the bay (front = y = 0)
-    translate([bay_x0 + wall + bay_x/2 - oled_win[0]/2, -1, lid_t + bay_h/2 - oled_win[1]/2]) cube([oled_win[0], wall + 2, oled_win[1]]);
-    // vents: 2 mm slots, high on the back wall (hot air out), low on the far end wall (air in)
+    // OLED window in the FRONT wall of the bay
+    translate([bay_x0 + wall + bay_x/2 - oled_lit[0]/2, -1, lid_t + bay_h/2 - oled_lit[1]/2]) cube([oled_lit[0], wall + 2, oled_lit[1]]);
+    // OLED screw pilots (blind), from the standoff tops toward the front wall
+    for (sx = [-1, 1]) for (sz = [-1, 1])
+      translate([bay_x0 + wall + bay_x/2 + sx*oled_holes[0]/2, wall + oled_stand - oled_pilot_depth, lid_t + bay_h/2 + sz*oled_holes[1]/2]) rotate([-90,0,0]) cylinder(d=pilot_d, h=oled_pilot_depth + 1);
+    // vents
     for (i = [0:11]) translate([bay_x0 + wall + 12 + i*7, outer[1] - wall - 1, lid_t + bay_h - 20]) cube([2, wall + 2, 16]);
     for (i = [0:7]) translate([bay_x0 + 2*wall + bay_x - wall - 1, outer[1]/2 - 28 + i*8, lid_t + 4]) cube([wall + 2, 2, 14]);
-    // screw holes matching the base posts
-    for (px = [wall + inner_x - 5, wall + 5]) for (py = [wall + 5, wall + inner_y - 5])
-      translate([px, py, 0]) csk(lid_t);
-    // cover post pilot holes (blind, for the heat-set inserts), from the top of each post
-    for (px = cover_post_x) for (py = cover_post_y)
-      translate([bay_x0 + wall + px, wall + py, lid_t + bay_h - 8]) cylinder(d=screw_d, h=9);
+    // lid-to-base screws (countersunk)
+    for (px = [wall + inner_x - 5, wall + 5]) for (py = [wall + 5, wall + inner_y - 5]) translate([px, py, 0]) csk(lid_t);
+    // cover post pilots (blind) in the tops of the posts
+    for (px = cover_post_x) for (py = cover_post_y) translate([bay_x0 + wall + px, wall + py, lid_t + bay_h - pilot_depth]) cylinder(d=pilot_d, h=pilot_depth + 1);
   }
 }
 
 module cover() {
-  // roof of the electronics bay: BOOT / EN holes (positions are placeholders)
   difference() {
     box(bay_x + 2*wall, outer[1], lid_t);
-    for (dy = [-12, 12]) translate([wall + 12, outer[1]/2 + dy, -1]) cylinder(d=boot_d, h=lid_t + 2);
+    // BOOT / EN holes over the buttons (PCB centred in the bay, USB end toward the port end)
+    for (py = [esp_btn[1], esp_pcb[1] - esp_btn[1]]) translate([wall + esp_x0 + esp_btn[0], wall + esp_y0 + py, -1]) cylinder(d=boot_d, h=lid_t + 2);
     for (px = cover_post_x) for (py = cover_post_y) translate([wall + px, wall + py, 0]) csk(lid_t);
-    // wire hole (wires rise from the bay into the arm) and two plain holes for the arm screws
-    translate([wall + arm_wire_x - (wire_in[1] + 1)/2, outer[1]/2 - (wire_in[0] + 1)/2, -1]) cube([wire_in[1] + 1, wire_in[0] + 1, lid_t + 2]);
-    for (dy = [-12, 12]) translate([wall + arm_post_x, outer[1]/2 + dy, -1]) cylinder(d=thru_d, h=lid_t + 2);
-  }
-}
-
-module arm() {
-  // Local origin: the rear end of the case (x = 0), the tube axis (y = 0, z = 0). The foot plate lies on the cover; the tube runs from just
-  // before the wire hole out past the case end; the wires rise through the cover, enter the tube from below and run out to the pod.
-  th = wire_in[1] + 2*arm_wall; tw = wire_in[0] + 2*arm_wall;
-  px = bay_x0 + wall + arm_post_x - outer[0];                  // arm post x relative to the case end (negative)
-  wx = bay_x0 + wall + arm_wire_x - outer[0];                  // wire hole centre, same frame
-  difference() {
-    union() {
-      translate([px - foot[0]/2, -foot[1]/2, -th/2]) cube(foot);
-      translate([wx - 8, -tw/2, -th/2]) cube([arm_out - wx + 8, tw, th]);
-      translate([arm_out - 1, -pod[1]/2, -pod[2]/2 + 2]) pod_body();
-    }
-    translate([wx - 7, -wire_in[0]/2, -wire_in[1]/2]) cube([arm_out - wx + 11, wire_in[0], wire_in[1]]);   // bore
-    translate([wx - (wire_in[1] + 1)/2, -(wire_in[0] + 1)/2, -th/2 - 1]) cube([wire_in[1] + 1, wire_in[0] + 1, arm_wall + 1.5]);   // opening in the floor over the hole
-    for (dy = [-12, 12]) translate([px, dy, -th/2]) csk(foot[2]);
   }
 }
 
 module pod_body() {
   difference() {
-    box(pod[0], pod[1], pod[2]);
-    translate([wall, wall, wall]) cube([pod[0] - 2*wall, pod[1] - 2*wall, pod[2]]);
-    for (i = [0:4]) translate([6 + i*6, -1, wall + 2]) cube([2, pod[1] + 2, pod[2] - wall - 4]);
+    union() {
+      difference() {
+        box(pod[0], pod[1], pod[2]);
+        translate([wall, wall, wall]) cube([pod[0] - 2*wall, pod[1] - 2*wall, pod[2]]);
+        for (i = [0:4]) translate([6 + i*6, -1, wall + 2]) cube([2, pod[1] + 2, pod[2] - wall - 4]);   // side vent slots
+      }
+      // post for the DHT22 mounting tab (M3 x 5 into the post)
+      translate([pod[0] - wall - 3 - dht_hole_from_end, pod[1]/2, wall - 0.01]) cylinder(d=6, h=4);
+    }
+    translate([pod[0] - wall - 3 - dht_hole_from_end, pod[1]/2, wall + 4 - 4.5]) cylinder(d=2.5, h=5);
   }
 }
 
-module pod() {
-  // DHT22 pod: open back for the jumper wires, slotted front and sides for air
+module podlid() {
+  // press-fit lid: plate with a lip; slots over the DHT22 grille (the sensor lies under the lid, grille up)
   difference() {
-    box(pod[0], pod[1], pod[2]);
-    translate([wall, wall, wall]) cube([pod[0] - 2*wall, pod[1] - 2*wall, pod[2]]);
-    for (i = [0:4]) translate([6 + i*6, -1, wall + 2]) cube([2, pod[1] + 2, pod[2] - wall - 4]);  // 2 mm vent slots
-    translate([pod[0] - wall - 1, pod[1]/2 - 5, wall + 1]) cube([wall + 2, 10, 6]);               // wire exit
+    union() {
+      box(pod[0], pod[1], lid_t);
+      translate([wall + 0.25, wall + 0.25, lid_t]) cube([pod[0] - 2*wall - 0.5, pod[1] - 2*wall - 0.5, 3]);
+    }
+    for (i = [0:3]) translate([14 + i*5, pod[1]/2 - 6, -1]) cube([2, 12, lid_t + 5]);
+  }
+}
+
+module arm() {
+  // Local origin: rear end outer face (x = 0), tube axis (y = 0, z = 0). The foot plate is screwed to the rear end wall with 2 x M2.5 x 8.
+  tw = wire_in[0] + 2*arm_wall; th = wire_in[1] + 2*arm_wall;
+  difference() {
+    union() {
+      translate([0, -foot[1]/2, -foot[2]/2]) cube(foot);
+      translate([0, -tw/2, -th/2]) cube([arm_out, tw, th]);
+      translate([arm_out - 1, -pod[1]/2, -pod[2]/2 + 2]) pod_body();
+    }
+    translate([-1, -wire_in[0]/2, -wire_in[1]/2]) cube([arm_out + 5, wire_in[0], wire_in[1]]);
+    for (dy = [-arm_screw_dy, arm_screw_dy]) translate([0, dy, 0]) rotate([0,90,0]) csk(foot[0]);
   }
 }
 
 if (part == "base") base();
 else if (part == "lid") lid();
 else if (part == "cover") cover();
-else if (part == "pod") pod();
 else if (part == "arm") arm();
+else if (part == "podlid") podlid();
+else if (part == "logo") linear_extrude(1) logo2d();
 else {
   color("#d8d8d8") base();
   color("#f2f2f2") translate([0, 0, base_h]) lid();
   color("#c8e6ff") translate([bay_x0, 0, base_h + lid_t + bay_h]) cover();
-  color("#ffd9a0") translate([outer[0], outer[1]/2, base_h + lid_t + bay_h + lid_t + (wire_in[1] + 2*arm_wall)/2]) arm();
-  color("#ffffff", 0.9) translate([wall + vest + gap, wall + (inner_y - bank[1])/2, floor_t + gap]) cube(bank);   // the bank itself
+  color("#ffd9a0") translate([outer[0], outer[1]/2, arm_z]) arm();
+  color("#ffffff", 0.9) translate([wall + vest + gap, wall + (inner_y - bank[1])/2, floor_t + gap]) cube(bank);
 }
