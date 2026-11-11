@@ -1,7 +1,7 @@
 # enclosure/
 
 The 3D printed case for the Init device (P07-01, decision D-038): **Option A**, a two-part case plus a sensor pod.
-Printed on a Bambu Lab A1 in PETG. **Status: DRAFT 6 (2026-11-11); draft 2 approved as the basis (D-040), draft 6 not yet reviewed, nothing printed.**
+Printed on a Bambu Lab A1 in PETG. **Status: DRAFT 7 (2026-11-11), approved by the owner as the design for the PLA test print (D-047); nothing printed yet.**
 
 The ROMOSS bank sits inside the base tray; its screen shows through a window in the lid; its four ports are on the open
 end. The ESP32 custom PCB goes in a raised electronics bay on the lid (30 mm clearance on all sides, the owner's choice);
@@ -14,7 +14,7 @@ Files:
 - `init_case.scad`: the parametric model (OpenSCAD). `part` = assembly, base, lid, cover, arm or podlid. Values marked PLACEHOLDER are not measured.
 - `draw-dimensions.mjs`: draws the dimensioned top and side views from the same numbers (`node enclosure/draw-dimensions.mjs`).
 - `preview/`: draft images (3D views and `draft5_dimensions.png`).
-- `stl/`: draft STL files, for a look in Bambu Studio only. **Do not print draft 6 before the owner reviews it.**
+- `stl/`: draft STL files, for a look in Bambu Studio only. Draft 7 is approved for the **PLA test print only**; the final PETG print waits for the test (fit, screws, stops, drop test).
 
 Render by hand: `"C:\Program Files\OpenSCAD (Nightly)\openscad.exe" -D "part=\"base\"" -o stl/base.stl init_case.scad`
 (OpenSCAD Nightly 2026.10.31; it is on the owner's user PATH, so `openscad` works in a new terminal.)

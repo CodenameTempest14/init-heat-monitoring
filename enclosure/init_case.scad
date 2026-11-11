@@ -1,4 +1,4 @@
-// Init case, DRAFT 7 (D-038 option A, D-042 pod low, D-044 screws from the owner's box only, D-046 bank stops and tougher walls). All sizes in mm.
+// Init case, DRAFT 7 (approved by the owner for the PLA test, D-047) (D-038 option A, D-042 pod low, D-044 screws from the owner's box only, D-046 bank stops and tougher walls). All sizes in mm.
 // X = length (port end at x = 0), Y = width (y = 0 is the FRONT, where the OLED is), Z = up.
 // Values marked EST are estimates, not measured. Change a number here and re-render; nothing else needs redrawing.
 // part = "assembly" | "base" | "lid" | "cover" | "arm" | "podlid" | "logo"
