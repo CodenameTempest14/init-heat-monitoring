@@ -238,7 +238,16 @@ module testslice() {
   translate([-70 + 5, outer[1] + 10, 0]) intersection() { base(); translate([70, -1, -1]) cube([76, 13, base_h + 2]); }
 }
 
+// ---- lid-screw fit test (s39): the first test plate cut the posts at 26 mm, so the lid could not be screwed. Here two base corners keep the FULL height and posts,
+// and two lid corners go with them: the plain front corner and the back corner under the cable channel (screwdriver access is the doubt).
+lf = 26;                       // corner block size (x and y)
+module lidfit() {
+  for (c = [[0, 0], [0, outer[1] - lf]]) translate([c[0], c[1], 0]) intersection() { translate([-c[0], -c[1], 0]) base(); cube([lf, lf, base_h]); }
+  for (c = [[0, 0], [0, outer[1] - lf]]) translate([lf + 12 + c[0], c[1] + (c[1] > 0 ? 0 : 0), 0]) intersection() { translate([-c[0], -c[1], 0]) lid(); cube([lf, lf, lid_t + ch_h + ch_wall + 1]); }
+}
+
 if (part == "base") base();
+else if (part == "lidfit") lidfit();
 else if (part == "testslice") testslice();
 else if (part == "lid") lid();
 else if (part == "cover") cover();
