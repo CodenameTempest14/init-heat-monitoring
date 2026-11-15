@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-15 · s39
+Owner only. First test plate for the enclosure (`part=testslice`, five cut-outs, sliced in Bambu Studio with the owner: A1, 0.4 mm nozzle, PETG Basic white, textured PEI plate, 2 h 58 min, 89.4 g) printed and photographed: port-opening bridge flat, button window and screen window line up, logo and thin icon outline clear, M2.5 x 8 screws fit the arm pads perfectly; bank had a lot of sideways play; lid screws could not be tried because my 26 mm cut removed the posts. Decisions D-048 (PETG for the test), D-049 (side rails, replaced) and **D-050 draft 8 cable pathway** (owner idea: bank against the back wall, front strip as the USB cable path, channel removed). New `lidfit.stl`; arm, cover and pod lid sent to print at the close (their results unknown). Print guide sections 8 to 12; paper in step (rebuilt). All six STLs re-exported and matched to the model. P07 still 0/7. Nothing pushed (six local commits).
+
 ## 2026-11-11 · s38
 Owner only (assumed). Measurements received and recorded (conflicts flagged); **enclosure draft 6** from them: pod low again on a separate arm, no inserts (only box screws: M2.5 x 8, D-044), port opening, button window on the back wall, BOOT/EN holes, OLED standoffs, pod post and lid; `PRINT_GUIDE.md`; the Init logo engraved on the front wall (D-045); paper updated. Nothing printed. Pushed `2077ffc` to `codenametempest14` and `main`. Waiting for the owner to buy PETG and paint and to review the draft. **Addendum (session kept open):** drop strength question (bank 670 g): the bank was loose along its length, so **draft 7** adds bank stops, 3.2 mm walls, rounded corners, a stronger arm foot (D-046) and a drop test in the print guide; nothing tested.
 
