@@ -42,6 +42,9 @@ logo_depth = 0.8;              // engraving depth (EST); the wall keeps 1.6 mm
 wall = 3.2; floor_t = 3.2; lid_t = 2.4;   // D-046: walls and floor 3.2 (was 2.4); lid and cover stay 2.4 so the M2.5 x 8 screws keep about 5.6 mm in the posts
 r_out = 3;                     // radius of the rounded vertical outside corners
 stop_h = 20;                   // height of the bank stops above the floor
+rail_clear = 0.5;              // draft 8 (owner: bank slid about 10 mm sideways): side rails leave this much each side of the bank; the bank still lifts out from above
+rail_x = [[70, 30], [150, 30]];   // x start (from the port end) and length of each rail pair; clear of the button window (x about 48 to 59)
+rail_chamfer = 1.5;            // the inner top edge is chamfered so the bank drops in without aiming
 gap = 0.6;
 rear_space = 12;
 vest = 30;
@@ -125,6 +128,15 @@ module base() {
   x_b0 = wall + vest + gap; x_b1 = x_b0 + bank[0]; y_b0 = wall + (inner_y - bank[1])/2;
   for (yy = [wall - 0.01, y_b0 + bank[1] - 5]) translate([x_b0 - 8, yy, floor_t - 0.01]) cube([7.7, (yy < 10 ? y_b0 + 5 - wall + 0.01 : wall + inner_y - (y_b0 + bank[1] - 5) + 0.01), stop_h]);
   for (yy = [wall + 11, wall + inner_y - 11 - 14]) translate([x_b1 + 0.3, yy, floor_t - 0.01]) cube([wall + inner_x - x_b1 - 0.3 + 0.01, 14, stop_h]);
+  // side rails (draft 8): hold the bank sideways, 0.5 mm clearance each side, chamfered lead-in
+  for (r = rail_x) for (side = [0, 1]) {
+    ry0 = side == 0 ? wall - 0.01 : y_b0 + bank[1] + rail_clear;          // outer edge of the rail (at the wall)
+    rw  = side == 0 ? y_b0 - rail_clear - wall + 0.01 : wall + inner_y - (y_b0 + bank[1] + rail_clear) + 0.01;
+    hull() {
+      translate([r[0], ry0, floor_t - 0.01]) cube([r[1], rw, stop_h - rail_chamfer]);
+      translate([r[0], side == 0 ? ry0 : ry0 + rail_chamfer, floor_t - 0.01]) cube([r[1], rw - rail_chamfer, stop_h]);
+    }
+  }
   // four lid screw posts
   for (px = [wall + inner_x - 5, wall + 5]) for (py = [wall + 5, wall + inner_y - 5])
     translate([px, py, floor_t]) difference() { cylinder(d=post_d, h=bank[2] + 2*gap); translate([0,0,bank[2] + 2*gap - pilot_depth]) cylinder(d=pilot_d, h=pilot_depth + 1); }
@@ -243,6 +255,8 @@ module testslice() {
 lf = 26;                       // corner block size (x and y)
 module lidfit() {
   for (c = [[0, 0], [0, outer[1] - lf]]) translate([c[0], c[1], 0]) intersection() { translate([-c[0], -c[1], 0]) base(); cube([lf, lf, base_h]); }
+  // rail block: a 26 mm high cut of the base through the first rail pair and the logo, to try the real bank between the rails
+  translate([lf + 12 + lf + 12, 0, 0]) intersection() { translate([-rail_x[0][0] + 6, 0, 0]) base(); cube([rail_x[0][1] + 12, outer[1], test_h]); }
   for (c = [[0, 0], [0, outer[1] - lf]]) translate([lf + 12 + c[0], c[1] + (c[1] > 0 ? 0 : 0), 0]) intersection() { translate([-c[0], -c[1], 0]) lid(); cube([lf, lf, lid_t + ch_h + ch_wall + 1]); }
 }
 
