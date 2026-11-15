@@ -70,8 +70,8 @@ arm_screw_dy = 12;
 
 y_b0g = wall + inner_y - back_clear - bank[1];   // bank front edge (y), pushed to the back wall
 bank_cy = y_b0g + bank[1]/2;                      // bank centre line (y): port opening and screen window follow it
-cab_hole = [10, 5];            // cable hole in the lid plate (x, y) where the cable rises into the bay
-cab_hole_x = 107;              // x of that hole: inside the bay, before the first cover post
+cab_hole = [12.5, 7.5];         // cable hole in the lid plate (x, y): the USB-C plug head (11.3 x 6.5, measured s40) must pass through it, so plug + 1.2 / 1.0 mm clearance
+cab_hole_x = 106.2;            // x of that hole: inside the bay (wall at 105.35), 1.15 mm before the first cover post
 inner_x = vest + bank[0] + 2*gap + rear_space;
 outer = [inner_x + 2*wall, inner_y + 2*wall];
 base_h = floor_t + bank[2] + 2*gap;
