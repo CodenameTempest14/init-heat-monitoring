@@ -254,7 +254,9 @@ module testslice() {
 // and two lid corners go with them: the plain front corner and the back corner under the cable channel (screwdriver access is the doubt).
 lf = 26;                       // corner block size (x and y)
 module lidfit() {
-  for (c = [[0, 0], [0, outer[1] - lf]]) translate([c[0], c[1], 0]) intersection() { translate([-c[0], -c[1], 0]) base(); cube([lf, lf, base_h]); }
+  // base corners stop where the port opening starts (y = 11.2 from each side): a longer cut would leave the wall above the opening hanging free (Studio: floating cantilever)
+  lf_y = outer[1]/2 - port_open[0]/2;
+  for (c = [[0, 0], [0, outer[1] - lf_y]]) translate([c[0], c[1], 0]) intersection() { translate([-c[0], -c[1], 0]) base(); cube([lf, lf_y, base_h]); }
   // rail block: a 26 mm high cut of the base through the first rail pair and the logo, to try the real bank between the rails
   translate([lf + 12 + lf + 12, 0, 0]) intersection() { translate([-rail_x[0][0] + 6, 0, 0]) base(); cube([rail_x[0][1] + 12, outer[1], test_h]); }
   for (c = [[0, 0], [0, outer[1] - lf]]) translate([lf + 12 + c[0], c[1] + (c[1] > 0 ? 0 : 0), 0]) intersection() { translate([-c[0], -c[1], 0]) lid(); cube([lf, lf, lid_t + ch_h + ch_wall + 1]); }
