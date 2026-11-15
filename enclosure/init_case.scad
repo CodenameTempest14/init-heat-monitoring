@@ -1,7 +1,7 @@
 // Init case, DRAFT 7 (approved by the owner for the PLA test, D-047) (D-038 option A, D-042 pod low, D-044 screws from the owner's box only, D-046 bank stops and tougher walls). All sizes in mm.
 // X = length (port end at x = 0), Y = width (y = 0 is the FRONT, where the OLED is), Z = up.
 // Values marked EST are estimates, not measured. Change a number here and re-render; nothing else needs redrawing.
-// part = "assembly" | "base" | "lid" | "cover" | "arm" | "podlid" | "logo"
+// part = "assembly" | "base" | "lid" | "cover" | "arm" | "podlid" | "logo" | "testslice"
 part = "assembly";
 
 // ---- measured by the owner (2026-11-10 / 11) ------------------------------
@@ -222,7 +222,24 @@ module arm() {
   }
 }
 
+// ---- PLA test plate (D-047): small cut-outs of the real parts, laid out on one plate, each in its print orientation ----
+// 1 port-end block of the base (port opening, button window, bank stops, two lid-screw posts)   2 lid corner (countersinks, screen window, cable channel)
+// 3 rear-end block of the base (arm screw pads, wire bore, rear bank stops)   4 arm foot stub (foot, gussets, 30 mm of tube; printed foot down)   5 front-wall strip with the engraved logo
+test_len = 70;                 // port-end block and lid corner length
+test_rear = 27;                // rear-end block length
+test_h = 26;                   // height of the two base blocks (full base is 37): the opening tops out near 21, the button window near 25, stops 20. The lid-screw posts are cut off, so the screw pilots are tested in the arm pads instead
+module testslice() {
+  intersection() { base(); cube([test_len, outer[1], test_h]); }
+  translate([test_len + 10, 0, 0]) intersection() { lid(); cube([test_len, outer[1], lid_t + ch_h + ch_wall + 1]); }
+  translate([2*test_len + 20 - (outer[0] - test_rear), 0, 0]) intersection() { base(); translate([outer[0] - test_rear, -1, -1]) cube([test_rear + 1, outer[1] + 2, test_h + 1]); }
+  // arm stub: the foot plate lies on the bed, the tube stands up (x of the arm becomes z)
+  translate([2*test_len + test_rear + 30 + 15, outer[1]/2, 0]) rotate([0,-90,0]) intersection() { arm(); translate([-1, -30, -20]) cube([31, 60, 40]); }
+  // logo strip: front wall plus 12 mm of floor, standing as in the real print
+  translate([-70 + 5, outer[1] + 10, 0]) intersection() { base(); translate([70, -1, -1]) cube([76, 13, base_h + 2]); }
+}
+
 if (part == "base") base();
+else if (part == "testslice") testslice();
 else if (part == "lid") lid();
 else if (part == "cover") cover();
 else if (part == "arm") arm();

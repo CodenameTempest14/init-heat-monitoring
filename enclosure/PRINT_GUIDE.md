@@ -29,7 +29,7 @@ Each fits the 256 mm bed. The base and the lid are the long ones (215): leave ro
 Screw in slowly the first time; the thread cuts its own groove in the plastic. Do not over-tighten PETG.
 
 ## 4. Print order (short test first)
-1. **PLA test (about 1 hour):** a slice of the base that holds the port opening and the button window, plus the arm foot. Check: the bank's end fits the opening, a charging plug fits, the power button can be pressed, the screws bite and the countersinks sit flush.
+1. **Test plate, printed in PETG Basic (D-048; PLA was the first plan) (`part = "testslice"`, `stl/testslice.stl`, 224 x 114 x 38 mm, one plate; see section 8 for the Studio settings):** five cut-outs of the real parts: (a) port-end block of the base (port opening, button window, bank stops; both base blocks are cut at 26 mm high, so the lid-screw posts are not in the test), (b) lid corner (countersinks, screen window, cable channel), (c) rear-end block (arm screw pads, wire bore, rear bank stops), (d) arm foot stub, (e) front-wall strip with the engraved logo. Preview: `preview/draft7_testslice_top.png` and `draft7_testslice_iso.png`. Check: the bank's end fits the opening, a charging plug fits, the power button can be pressed, the screws bite and the countersinks sit flush.
 2. **PLA fit pieces:** the pod and podlid with your real DHT22 (leg plug 11.8 x 2 mm, 22 cm jumper); then the cover with the ESP32 board below it (BOOT/EN holes line up?).
 3. **Final PETG:** base, lid, cover, arm, podlid.
 
@@ -42,3 +42,30 @@ the OLED hole orientation and the lit-area length; the ESP32 row spacing (not us
 
 ## 7. Drop test (D-046; the bank weighs about 670 g)
 After the PLA fit pieces fit: put the real bank in the PLA slice with the stops, then drop it from about 30 cm onto a floor mat or carpet, then 60 cm, checking the end walls, the arm foot and the screw posts after each drop. Stop at the first crack and tell me where: that decides what to thicken next. This is a rough check, not a rated test; it does not prove the final PETG case survives a hard fall onto concrete. The foam shim goes in before the test.
+
+## 8. Bambu Studio settings for the PLA test plate
+Open `stl/testslice.stl` (Studio asks "single object or multiple parts": answer **single object**; it is one file with five separate pieces, so it stays one plate). Do not scale it: the file is in millimetres. I could not open Studio here, so menu names may differ a little in your version. Anything marked [Bambu profile] is what the preset sets; I did not type a number from memory.
+
+| Setting | Choose | Status |
+|---|---|---|
+| Printer | Bambu Lab A1, 0.4 mm nozzle | [Bambu profile] |
+| Filament | **Bambu PETG Basic (white)**, the roll for the final case (D-048). Studio sets the PETG temperatures and speeds itself. Check which plate and whether glue stick Studio advises for PETG | [Bambu profile] |
+| Plate type | the one that matches the plate on the printer (Studio shows it at the top of the plate view) | [Bambu profile] |
+| Process preset | the standard 0.20 mm preset for the A1 ("0.20mm Standard @BBL A1") | [Bambu profile] |
+| Wall loops (Strength tab) | **4** | [estimate] (3.2 mm model walls) |
+| Sparse infill density | 15 % | [estimate] |
+| Support | **Off** at first; then look at the preview (see below) | [estimate] |
+| Brim and skirt | leave the preset (seen s39: skirt loops 0, brim type Auto; Studio adds a brim only where it wants one, peel it off after). Print sequence "By layer"; fuzzy skin None; prime tower is on but unused with one filament | [Bambu profile] |
+| Temperatures, speeds, fan, flow | leave all as the preset sets them | [Bambu profile] |
+
+**Orientation:** leave every piece as loaded. Studio will lay the plate out as the model has it (floor and plate down). The arm foot stub stands with its foot plate on the bed and the tube pointing up: that is on purpose, so the countersinks face up and the bore needs no support.
+
+**What to look for in the Studio preview before you print (scrub the layer slider):**
+1. **Port opening, 70 mm wide in the end wall of the port-end block.** Its top edge is a 70 mm horizontal bridge, which is long. If the preview shows bridging over the opening, expect it to sag: that is the first thing this test answers. If it sags, tell me; the fix is a flat top edge cut as an arch or a support under it in draft 8.
+2. **Lid corner channel roof** (7.5 mm bridge) and **button window** (11 mm): short, normally fine.
+3. **Logo strip:** the engraving faces the front, standing up. Check the thin icon outline (about 1 mm) is not skipped by the slicer. If Studio's preview shows gaps, the icon needs a bolder outline in draft 8.
+4. If the Support option, once switched to Auto, adds supports in the bore of the arm stub or the lid cut-outs, tell me and I will tell you which to keep.
+
+**Time (sliced by the owner in s39, 0.4 mm nozzle, PETG Basic, 0.20mm Standard @BBL A1, 4 wall loops, 15 % infill, no support):** first slice (blocks 37 mm high): total 3 h 20 min, about 107 g. After cutting both base blocks to 26 mm: **total 2 h 58 min (model 2 h 47 min), 89.4 g**. My first guess of 1 to 2 hours was too low.
+
+**Known doubt (not a setting):** the lid screw at the corner next to the cable channel sits under the channel roof (channel interior 7.5 mm tall). The lid-corner piece will show whether a screwdriver reaches it. Try it with the real screw and driver.
