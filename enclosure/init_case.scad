@@ -42,7 +42,9 @@ logo_depth = 0.8;              // engraving depth (EST); the wall keeps 1.6 mm
 wall = 3.2; floor_t = 3.2; lid_t = 2.4;   // D-046: walls and floor 3.2 (was 2.4); lid and cover stay 2.4 so the M2.5 x 8 screws keep about 5.6 mm in the posts
 r_out = 3;                     // radius of the rounded vertical outside corners
 stop_h = 20;                   // height of the bank stops above the floor
+back_clear = 0.6;              // draft 8 (owner): the bank sits against the BACK wall (button side) with this clearance; the front strip beside it is the USB cable pathway
 rail_clear = 0.5;              // draft 8 (owner: bank slid about 10 mm sideways): side rails leave this much each side of the bank; the bank still lifts out from above
+rail_h = 12;                   // the front stop blocks are low so the cable can drape over them
 rail_x = [[70, 30], [150, 30]];   // x start (from the port end) and length of each rail pair; clear of the button window (x about 48 to 59)
 rail_chamfer = 1.5;            // the inner top edge is chamfered so the bank drops in without aiming
 gap = 0.6;
@@ -66,6 +68,10 @@ arm_wall = 2.4;                // arm tube wall (was 1.6)
 foot = [3, 36, 24];          // plate against the rear end wall (thickness, width, height)
 arm_screw_dy = 12;
 
+y_b0g = wall + inner_y - back_clear - bank[1];   // bank front edge (y), pushed to the back wall
+bank_cy = y_b0g + bank[1]/2;                      // bank centre line (y): port opening and screen window follow it
+cab_hole = [10, 5];            // cable hole in the lid plate (x, y) where the cable rises into the bay
+cab_hole_x = 107;              // x of that hole: inside the bay, before the first cover post
 inner_x = vest + bank[0] + 2*gap + rear_space;
 outer = [inner_x + 2*wall, inner_y + 2*wall];
 base_h = floor_t + bank[2] + 2*gap;
@@ -113,7 +119,7 @@ module base() {
     }
     translate([wall, wall, floor_t]) cube([inner_x, inner_y, base_h]);
     // port opening in the end wall
-    translate([-1, outer[1]/2 - port_open[0]/2, floor_t + gap + port_z - port_open[1]/2]) cube([wall + 2, port_open[0], port_open[1]]);
+    translate([-1, bank_cy - port_open[0]/2, floor_t + gap + port_z - port_open[1]/2]) cube([wall + 2, port_open[0], port_open[1]]);
     // finger window for the bank power button (back wall)
     translate([wall + vest + gap + btn_from_end - 1, outer[1] - wall - 1, floor_t + gap + bank[2]/2 - (btn_w + 2.5)/2]) cube([btn_len + 2, wall + 2, btn_w + 2.5]);
     // engraved logo on the front wall (y = 0), centred on the wall; text reads left to right seen from the front
@@ -125,16 +131,18 @@ module base() {
   }
   // bank stops (D-046): the bank can no longer slide along its length. Blocks sit beside the port panel (the ports stay free) and behind the rear end.
   // 0.3 mm clearance; the bank is lowered in from above with the lid off; a foam or rubber shim can be added for the last bit of play.
-  x_b0 = wall + vest + gap; x_b1 = x_b0 + bank[0]; y_b0 = wall + (inner_y - bank[1])/2;
-  for (yy = [wall - 0.01, y_b0 + bank[1] - 5]) translate([x_b0 - 8, yy, floor_t - 0.01]) cube([7.7, (yy < 10 ? y_b0 + 5 - wall + 0.01 : wall + inner_y - (y_b0 + bank[1] - 5) + 0.01), stop_h]);
+  x_b0 = wall + vest + gap; x_b1 = x_b0 + bank[0]; y_b0 = y_b0g;
+  for (yy = [wall - 0.01, y_b0 + bank[1] - 5]) translate([x_b0 - 8, yy, floor_t - 0.01]) difference() {
+    cube([7.7, (yy < 10 ? y_b0 + 5 - wall + 0.01 : wall + inner_y - (y_b0 + bank[1] - 5) + 0.01), stop_h]);
+    if (yy < 10) translate([-1, 1.2, -1]) cube([7.7 + 2, 4, 6]);     // cable tunnel through the front stop
+  }
   for (yy = [wall + 11, wall + inner_y - 11 - 14]) translate([x_b1 + 0.3, yy, floor_t - 0.01]) cube([wall + inner_x - x_b1 - 0.3 + 0.01, 14, stop_h]);
-  // side rails (draft 8): hold the bank sideways, 0.5 mm clearance each side, chamfered lead-in
-  for (r = rail_x) for (side = [0, 1]) {
-    ry0 = side == 0 ? wall - 0.01 : y_b0 + bank[1] + rail_clear;          // outer edge of the rail (at the wall)
-    rw  = side == 0 ? y_b0 - rail_clear - wall + 0.01 : wall + inner_y - (y_b0 + bank[1] + rail_clear) + 0.01;
+  // front stop blocks (draft 8): low blocks on the cable-pathway side. The cable lies in the strip between the front wall and the bank and drapes over them.
+  for (r = rail_x) {
+    rw = y_b0 - rail_clear - wall + 0.01;
     hull() {
-      translate([r[0], ry0, floor_t - 0.01]) cube([r[1], rw, stop_h - rail_chamfer]);
-      translate([r[0], side == 0 ? ry0 : ry0 + rail_chamfer, floor_t - 0.01]) cube([r[1], rw - rail_chamfer, stop_h]);
+      translate([r[0], wall - 0.01, floor_t - 0.01]) cube([r[1], rw, rail_h - rail_chamfer]);
+      translate([r[0], wall - 0.01, floor_t - 0.01]) cube([r[1], rw - rail_chamfer, rail_h]);
     }
   }
   // four lid screw posts
@@ -146,10 +154,6 @@ module lid() {
   difference() {
     union() {
       rbox(outer[0], outer[1], lid_t);
-      translate([wall + 2, outer[1] - ch_w - 2*ch_wall - 2.4, lid_t]) difference() {
-        cube([bay_x0 - wall - 2, ch_w + 2*ch_wall, ch_h + ch_wall]);
-        translate([0, ch_wall, -1]) cube([bay_x0 - wall - 2 + 1, ch_w, ch_h + 1]);
-      }
       // four posts for the cover screws
       for (px = cover_post_x) for (py = cover_post_y) translate([bay_x0 + wall + px, wall + py, lid_t]) cylinder(d=post_d, h=bay_h);
       // electronics bay walls
@@ -162,12 +166,11 @@ module lid() {
         translate([bay_x0 + wall + bay_x/2 + sx*oled_holes[0]/2, wall - 0.01, lid_t + bay_h/2 + sz*oled_holes[1]/2]) rotate([-90,0,0]) cylinder(d=5, h=oled_stand + 0.01);
     }
     // window over the bank screen
-    translate([wall + vest + gap + screen_from_port_end - 0.5, outer[1]/2 - (screen_across + 1)/2, -1]) cube([screen_along + 1, screen_across + 1, lid_t + 2]);
+    translate([wall + vest + gap + screen_from_port_end - 0.5, bank_cy - (screen_across + 1)/2, -1]) cube([screen_along + 1, screen_across + 1, lid_t + 2]);
     // wire hole (vertical) in the rear space: the jumper rises from the arm to the ESP32
     translate([wire_hole_x - (wire_in[1] + 1)/2, outer[1]/2 - (wire_in[0] + 1)/2, -1]) cube([wire_in[1] + 1, wire_in[0] + 1, lid_t + 2]);
-    // USB cable up into the channel, and from the channel into the bay
-    translate([wall + 6, outer[1] - ch_w - ch_wall - 2.4, -1]) cube([12, ch_w, lid_t + 2]);
-    translate([bay_x0 - 1, outer[1] - ch_w - ch_wall - 2.4, lid_t + 0.5]) cube([wall + 2, ch_w, ch_h - 1]);
+    // USB cable rises from the front pathway strip into the bay
+    translate([cab_hole_x, wall + 0.2, -1]) cube([cab_hole[0], cab_hole[1], lid_t + 2]);
     // OLED window in the FRONT wall of the bay
     translate([bay_x0 + wall + bay_x/2 - oled_lit[0]/2, -1, lid_t + bay_h/2 - oled_lit[1]/2]) cube([oled_lit[0], wall + 2, oled_lit[1]]);
     // OLED screw pilots (blind), from the standoff tops toward the front wall
@@ -250,16 +253,18 @@ module testslice() {
   translate([-70 + 5, outer[1] + 10, 0]) intersection() { base(); translate([70, -1, -1]) cube([76, 13, base_h + 2]); }
 }
 
-// ---- lid-screw fit test (s39): the first test plate cut the posts at 26 mm, so the lid could not be screwed. Here two base corners keep the FULL height and posts,
-// and two lid corners go with them: the plain front corner and the back corner under the cable channel (screwdriver access is the doubt).
-lf = 26;                       // corner block size (x and y)
+// ---- draft 8 fit test plate (part = "lidfit"): small cut-outs of the real parts, each in its print orientation. The first plate cut the posts at 26 mm (no screws possible); the old channel is gone (D-050).
+// A front-left base corner (full-height post)   B front port stop with its cable tunnel   C a 70 mm slice of the base (button window, logo, front stop blocks, floor and walls to 26 mm)
+// D plain lid corner (countersink)   E lid piece with the cable hole, bay wall corner and a cover post
+module cutbase(x0, x1, y0, y1, h, ox, oy) { translate([ox, oy, 0]) intersection() { translate([-x0, -y0, 0]) base(); cube([x1 - x0, y1 - y0, h]); } }
+module cutlid(x0, x1, y0, y1, h, ox, oy) { translate([ox, oy, 0]) intersection() { translate([-x0, -y0, 0]) lid(); cube([x1 - x0, y1 - y0, h]); } }
 module lidfit() {
-  // base corners stop where the port opening starts (y = 11.2 from each side): a longer cut would leave the wall above the opening hanging free (Studio: floating cantilever)
-  lf_y = outer[1]/2 - port_open[0]/2;
-  for (c = [[0, 0], [0, outer[1] - lf_y]]) translate([c[0], c[1], 0]) intersection() { translate([-c[0], -c[1], 0]) base(); cube([lf, lf_y, base_h]); }
-  // rail block: a 26 mm high cut of the base through the first rail pair and the logo, to try the real bank between the rails
-  translate([lf + 12 + lf + 12, 0, 0]) intersection() { translate([-rail_x[0][0] + 6, 0, 0]) base(); cube([rail_x[0][1] + 12, outer[1], test_h]); }
-  for (c = [[0, 0], [0, outer[1] - lf]]) translate([lf + 12 + c[0], c[1] + (c[1] > 0 ? 0 : 0), 0]) intersection() { translate([-c[0], -c[1], 0]) lid(); cube([lf, lf, lid_t + ch_h + ch_wall + 1]); }
+  lf_y = bank_cy - port_open[0]/2;                      // stop at the port opening so no wall hangs free over it
+  cutbase(0, 25, 0, lf_y, base_h, 0, 0);                // A
+  cutbase(18, 45, 0, 20, 26, 35, 0);                    // B
+  cutbase(40, 110, 0, outer[1], 26, 70, 0);             // C
+  cutlid(0, 25, 0, 25, lid_t + 1, 0, 100);              // D
+  cutlid(98, 135, 0, 26, lid_t + bay_h + 0.5, 40, 100); // E
 }
 
 if (part == "base") base();
@@ -275,5 +280,5 @@ else {
   color("#f2f2f2") translate([0, 0, base_h]) lid();
   color("#c8e6ff") translate([bay_x0, 0, base_h + lid_t + bay_h]) cover();
   color("#ffd9a0") translate([outer[0], outer[1]/2, arm_z]) arm();
-  color("#ffffff", 0.9) translate([wall + vest + gap, wall + (inner_y - bank[1])/2, floor_t + gap]) cube(bank);
+  color("#ffffff", 0.9) translate([wall + vest + gap, y_b0g, floor_t + gap]) cube(bank);
 }
