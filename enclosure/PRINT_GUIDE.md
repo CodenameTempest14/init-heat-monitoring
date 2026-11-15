@@ -69,3 +69,15 @@ Open `stl/testslice.stl` (Studio asks "single object or multiple parts": answer 
 **Time (sliced by the owner in s39, 0.4 mm nozzle, PETG Basic, 0.20mm Standard @BBL A1, 4 wall loops, 15 % infill, no support):** first slice (blocks 37 mm high): total 3 h 20 min, about 107 g. After cutting both base blocks to 26 mm: **total 2 h 58 min (model 2 h 47 min), 89.4 g**. My first guess of 1 to 2 hours was too low.
 
 **Known doubt (not a setting):** the lid screw at the corner next to the cable channel sits under the channel roof (channel interior 7.5 mm tall). The lid-corner piece will show whether a screwdriver reaches it. Try it with the real screw and driver.
+
+## 9. How to test the printed plate (map: `preview/testslice_checks.png`)
+Have ready: the real power bank, a charging plug, 2 M2.5 x 8 screws and your screwdriver, a caliper, a phone for photos. For each number say PASS or FAIL and what you saw.
+1. **Port opening (left wall of the port block):** is the top edge flat or sagging? Slide the bank's port end against it: does the 68 x 11 mm port panel line up? Push the charging plug in: does it fit? Measure the opening with the caliper (model: 70 x 14 mm).
+2. **Button window (back wall of the port block):** hold the bank in the block as in the case; can a fingertip reach and press the power button?
+3. **Bank stops (two blocks):** put the bank's end against them: how much is the play along the length and sideways (mm)? The model leaves 0.3 mm. Does the bank go in and come out without force?
+4. **Lid corner:** drive one M2.5 x 8 screw through the countersink into a scrap or the rear-block pad: does the head sit flush or sink too deep or stand proud? The big hole is the screen window: put the bank's screen under it and check the alignment. Also check that a screwdriver reaches the screw next to the cable channel (see "Known doubt" in section 8).
+5. **Rear block (arm pads on the right wall):** screw an M2.5 x 8 into a pilot: does it bite firmly without splitting the plastic? Do not over-tighten. Is the wire bore through the wall open?
+6. **Arm foot stub:** set its foot plate against the rear block's outer face: do the two holes line up with the pilots? Screw it on: does it sit flat and feel solid? Try to bend it by hand.
+7. **Logo strip:** look at the front face: is the engraving there, including the thin icon outline (about 1 mm)? Then try the paint: scuff lightly, fill with the acrylic paint pen, wipe the excess off before it dries. How clean is the result?
+Also photograph all pieces from above and the front, and write down any warping, stringing, the elephant-foot at the bottom edge, and how hard the brim was to remove.
+**Drop test:** the plate cannot do it (the slice holds only one end of the bank). Do the drop test described in section 7 on the full printed base later.
