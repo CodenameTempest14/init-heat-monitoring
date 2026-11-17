@@ -267,8 +267,19 @@ module lidfit() {
   cutlid(98, 135, 0, 26, lid_t + bay_h + 0.5, 40, 100); // E
 }
 
+// ---- pilot test (part = "pilottest", D-052): three short posts with 2.2 / 2.3 / 2.4 mm pilots plus a 2.4 mm cap plate with three countersunk 2.7 holes, so one M2.5 x 8 per post copies the real lid corner. About 4 g.
+pt_d = [2.2, 2.3, 2.4];
+module pilottest() {
+  for (i = [0:2]) translate([8 + 16*i, 8, 0]) {
+    difference() { union() { translate([-8, -8, 0]) if (i == 0) cube([48, 16, 2]); cylinder(d=post_d, h=2 + pilot_depth + 1.5); } translate([0, 0, 2 + 1.5]) cylinder(d=pt_d[i], h=pilot_depth + 1); }
+    translate([0, -5.2, 2]) linear_extrude(0.6) text(str(pt_d[i]), size=2.2, halign="center");
+  }
+  translate([0, 22, 0]) difference() { cube([48, 16, lid_t]); for (i = [0:2]) translate([8 + 16*i, 8, 0]) csk(lid_t); }
+}
+
 if (part == "base") base();
 else if (part == "lidfit") lidfit();
+else if (part == "pilottest") pilottest();
 else if (part == "testslice") testslice();
 else if (part == "lid") lid();
 else if (part == "cover") cover();
