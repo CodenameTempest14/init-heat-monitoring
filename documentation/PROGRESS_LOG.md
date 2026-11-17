@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-17 · s40
+Owner only. The 8 s39 commits pushed (fast-forward) to `codenametempest14` and `main`. Owner's photos of the arm, cover and pod lid: BOOT/EN pressable through the cover, pod lid firm, DHT22 seated with its M3 screw, arm straight, wire bore open; support residue still in the pod vent slots. Owner's caliper: USB-C plug head 11.3 x 6.5 mm, cable 3.4 mm, so **D-051** (lid cable hole 12.5 x 7.5 mm at x 106.2 mm; `lid.stl` and `lidfit.stl` re-exported). Assembly diagram for the lidfit checks (`enclosure/preview/lidfit_assembly.png`). Owner is printing `lidfit.stl`. A Supabase incident banner was seen; nothing touched. P07 still 0/7. All s40 work pushed to both branches at the close so the owner can clone it on a desktop.
+
 ## 2026-11-15 · s39
 Owner only. First test plate for the enclosure (`part=testslice`, five cut-outs, sliced in Bambu Studio with the owner: A1, 0.4 mm nozzle, PETG Basic white, textured PEI plate, 2 h 58 min, 89.4 g) printed and photographed: port-opening bridge flat, button window and screen window line up, logo and thin icon outline clear, M2.5 x 8 screws fit the arm pads perfectly; bank had a lot of sideways play; lid screws could not be tried because my 26 mm cut removed the posts. Decisions D-048 (PETG for the test), D-049 (side rails, replaced) and **D-050 draft 8 cable pathway** (owner idea: bank against the back wall, front strip as the USB cable path, channel removed). New `lidfit.stl`; arm, cover and pod lid sent to print at the close (their results unknown). Print guide sections 8 to 12; paper in step (rebuilt). All six STLs re-exported and matched to the model. P07 still 0/7. Nothing pushed (six local commits).
 
