@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-18 · s41
+Owner only, on the desktop (s40 was the laptop). Added hard rule 6 (device check, pull reminder). Lidfit: check 1 FAIL (A + D, M2.5 x 8 would not seat), checks 2 to 4 PASS; D-052 pilot 2.1 to 2.3 mm, `lidfit.stl` re-exported, pilot test plate `pilottest.stl` added. Installed OpenSCAD and Node on the desktop. Pushed to `main` and `desktop-tempest`. Unverified: D-052.
+
 ## 2026-11-17 · s40
 Owner only. The 8 s39 commits pushed (fast-forward) to `codenametempest14` and `main`. Owner's photos of the arm, cover and pod lid: BOOT/EN pressable through the cover, pod lid firm, DHT22 seated with its M3 screw, arm straight, wire bore open; support residue still in the pod vent slots. Owner's caliper: USB-C plug head 11.3 x 6.5 mm, cable 3.4 mm, so **D-051** (lid cable hole 12.5 x 7.5 mm at x 106.2 mm; `lid.stl` and `lidfit.stl` re-exported). Assembly diagram for the lidfit checks (`enclosure/preview/lidfit_assembly.png`). Owner is printing `lidfit.stl`. A Supabase incident banner was seen; nothing touched. P07 still 0/7. All s40 work pushed to both branches at the close so the owner can clone it on a desktop.
 
