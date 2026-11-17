@@ -12,6 +12,7 @@ Files:
 - `MEASURE_NEXT.md`: the checklist of what is still to measure, with instructions (2026-11-12).
 - `MEASUREMENTS.md`: the owner's measurements and the photo notes (what is still missing is listed at the bottom).
 - `init_case.scad`: the parametric model (OpenSCAD). `part` = assembly, base, lid, cover, arm or podlid. Values marked PLACEHOLDER are not measured.
+- `draw-lidfit-assembly.mjs`: draws `preview/lidfit_assembly.png`, how to lay out the five `lidfit` pieces with the real bank and cable for the four checks (`node enclosure/draw-lidfit-assembly.mjs`).
 - `draw-dimensions.mjs`: draws the dimensioned top and side views from the same numbers (`node enclosure/draw-dimensions.mjs`).
 - `preview/`: draft images (3D views and `draft5_dimensions.png`).
 - `stl/`: draft STL files, for a look in Bambu Studio only. Draft 7 is approved for the **PLA test print only**; the final PETG print waits for the test (fit, screws, stops, drop test).
