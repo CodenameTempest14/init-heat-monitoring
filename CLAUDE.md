@@ -31,7 +31,14 @@ Rules below are carried over from the Ad Astra project (`D:\System Documents\Doc
    Unverified source = left out, and the gap is reported in the Close Report. The list is kept in
    `paper/references.json` with the date checked and what each source was used for.
 
+6. **Device check and pull reminder (owner, 2026-11-17).** **Always ask the owner which device they are working on
+   right now: laptop or desktop.** Record it in the Start Report and in the continuation prompt, so the next session
+   knows which device the previous one used. **Never forget:** if the previous session was on one device and this
+   session is on the other (e.g. desktop before, laptop now), **remind the owner to pull from `main` first**
+   (`git pull origin main`) before any change. Pulling is the owner's to approve like any git operation; ask first.
+
 ## Every session
+- **Device:** the first reply asks which device the owner is on (hard rule 6) and, if it differs from the last session's, reminds them to pull `main`.
 - **Model advice:** the first reply says which Claude model to use and why. The Close Report recommends the model for the next session.
 - **Phase-owner question:** in the first reply ask whether this phase is built only by the owner or if Shem Dumpor is also working on it. Record the answer in the Start Report.
 - **Start:** write a Session Start Report before any change.
