@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-19 · s42
+Desktop, owner only. Owner printed the pilot plate: 2.4 mm is the perfect fit, so D-052 settled at `pilot_d` = 2.4. Re-exported base, lid, testslice, lidfit (arm, cover, podlid unchanged). Paper not changed (no screw pilots in it). No tests or paper build run (`npm install` still not run on the desktop).
+
 ## 2026-11-18 · s41
 Owner only, on the desktop (s40 was the laptop). Added hard rule 6 (device check, pull reminder). Lidfit: check 1 FAIL (A + D, M2.5 x 8 would not seat), checks 2 to 4 PASS; D-052 pilot 2.1 to 2.3 mm, `lidfit.stl` re-exported, pilot test plate `pilottest.stl` added. Installed OpenSCAD and Node on the desktop. Pushed to `main` and `desktop-tempest`. Unverified: D-052.
 

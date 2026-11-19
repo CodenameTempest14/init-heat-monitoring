@@ -28,7 +28,7 @@ wire_len = 220;                // jumper length (owner)
 
 // ---- screws: ONLY what is in the owner's box (D-044): DIN965 flat head, M2.5 x 8 for the case, M3 x 5 for the DHT22, M2.5 x 5 for the OLED
 // They bite straight into printed PETG (no inserts). Pilot holes are for self-tapping; the through holes are countersunk.
-pilot_d = 2.3;                 // D-052: was 2.1; the printed 2.1 pilot closed to a dimple and the M2.5 x 8 would not seat (lidfit check 1, s41). Still under the 2.49 mm screw so the thread bites.
+pilot_d = 2.4;                 // D-052 settled by the pilot plate (s42): 2.4 mm fits (was 2.1, then 2.3 guess); the printed 2.1 pilot closed to a dimple and the M2.5 x 8 would not seat (lidfit check 1, s41). Still under the 2.49 mm screw so the thread bites.
 thru_d = 2.7;
 csk_head = 5.2; csk_depth = 1.5;   // M2.5 DIN965 head about 5 mm (EST: owner to measure one)
 post_d = 7;
