@@ -72,6 +72,7 @@ y_b0g = wall + inner_y - back_clear - bank[1];   // bank front edge (y), pushed 
 bank_cy = y_b0g + bank[1]/2;                      // bank centre line (y): port opening and screen window follow it
 cab_hole = [12.5, 7.5];         // cable hole in the lid plate (x, y): the USB-C plug head (11.3 x 6.5, measured s40) must pass through it, so plug + 1.2 / 1.0 mm clearance
 cab_hole_x = 106.2;            // x of that hole: inside the bay (wall at 105.35), 1.15 mm before the first cover post
+snap_w = 3.0;                  // D-053: width of the snap neck above the cable tunnel in the front stop (cable is 3.4 mm, so the jacket squeezes about 0.4 mm as it is pressed in from above)
 inner_x = vest + bank[0] + 2*gap + rear_space;
 outer = [inner_x + 2*wall, inner_y + 2*wall];
 base_h = floor_t + bank[2] + 2*gap;
@@ -134,7 +135,8 @@ module base() {
   x_b0 = wall + vest + gap; x_b1 = x_b0 + bank[0]; y_b0 = y_b0g;
   for (yy = [wall - 0.01, y_b0 + bank[1] - 5]) translate([x_b0 - 8, yy, floor_t - 0.01]) difference() {
     cube([7.7, (yy < 10 ? y_b0 + 5 - wall + 0.01 : wall + inner_y - (y_b0 + bank[1] - 5) + 0.01), stop_h]);
-    if (yy < 10) translate([-1, -1, -1]) cube([7.7 + 2, 8.5, 12.5]);     // cable tunnel through the front stop (D-053): 7.5 wide x 12.5 tall, so the USB-C plug head (11.3 x 6.5) passes too, flush with the front wall and the floor
+    if (yy < 10) { translate([-1, 1.2, -1]) cube([7.7 + 2, 4, 6]);                                  // cable tunnel through the front stop (4 x 6, the original size)
+                   translate([-1, 1.2 + 2 - snap_w/2, 4]) cube([7.7 + 2, snap_w, stop_h]); }       // D-053: snap neck, open to the top, so the cable is pressed in from above and the plug head never has to pass the stop
   }
   for (yy = [wall + 11, wall + inner_y - 11 - 14]) translate([x_b1 + 0.3, yy, floor_t - 0.01]) cube([wall + inner_x - x_b1 - 0.3 + 0.01, 14, stop_h]);
   // front stop blocks (draft 8): low blocks on the cable-pathway side. The cable lies in the strip between the front wall and the bank and drapes over them.
