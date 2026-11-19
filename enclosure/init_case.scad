@@ -73,6 +73,7 @@ bank_cy = y_b0g + bank[1]/2;                      // bank centre line (y): port 
 cab_hole = [12.5, 7.5];         // cable hole in the lid plate (x, y): the USB-C plug head (11.3 x 6.5, measured s40) must pass through it, so plug + 1.2 / 1.0 mm clearance
 cab_hole_x = 106.2;            // x of that hole: inside the bay (wall at 105.35), 1.15 mm before the first cover post
 snap_w = 3.0;                  // D-053: width of the snap neck above the cable tunnel in the front stop (cable is 3.4 mm, so the jacket squeezes about 0.4 mm as it is pressed in from above)
+clip_seat = 3.6; clip_neck_h = 1.5; clip_len = 10;   // D-054: cable clip on the two low blocks: seat 3.6 wide (cable 3.4), neck = snap_w above it, 1.5 mm tall, 10 mm long, centred on the block
 inner_x = vest + bank[0] + 2*gap + rear_space;
 outer = [inner_x + 2*wall, inner_y + 2*wall];
 base_h = floor_t + bank[2] + 2*gap;
@@ -142,9 +143,15 @@ module base() {
   // front stop blocks (draft 8): low blocks on the cable-pathway side. The cable lies in the strip between the front wall and the bank and drapes over them.
   for (r = rail_x) {
     rw = y_b0 - rail_clear - wall + 0.01;
-    hull() {
-      translate([r[0], wall - 0.01, floor_t - 0.01]) cube([r[1], rw, rail_h - rail_chamfer]);
-      translate([r[0], wall - 0.01, floor_t - 0.01]) cube([r[1], rw - rail_chamfer, rail_h]);
+    difference() {
+      hull() {
+        translate([r[0], wall - 0.01, floor_t - 0.01]) cube([r[1], rw, rail_h - rail_chamfer]);
+        translate([r[0], wall - 0.01, floor_t - 0.01]) cube([r[1], rw - rail_chamfer, rail_h]);
+      }
+      // D-054 cable snap clip on top of the block: a round-ish seat for the cable with a narrower neck above it; press the cable in from above
+      cx = r[0] + r[1]/2 - clip_len/2; cy = wall - 0.01 + (rw - rail_chamfer)/2; ct = floor_t - 0.01 + rail_h;
+      translate([cx, cy - clip_seat/2, ct - clip_neck_h - clip_seat]) cube([clip_len, clip_seat, clip_seat + 0.01]);
+      translate([cx, cy - snap_w/2, ct - clip_neck_h - 0.01]) cube([clip_len, snap_w, clip_neck_h + 1]);
     }
   }
   // four lid screw posts

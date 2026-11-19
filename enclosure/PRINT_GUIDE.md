@@ -17,14 +17,14 @@ Each fits the 256 mm bed. The base and the lid are the long ones (215): leave ro
 - Final case: **PETG** (not bought yet; the guide will say which one once you have it). Fit tests: PLA (D-040).
 - Nozzle 0.4 mm, **[Bambu profile]** for layer height, speeds and temperatures of the chosen filament. Do not change them for the first print.
 - Walls: the model walls and floor are 3.2 mm (D-046) = 4 perimeters of a 0.4 mm nozzle **[estimate]**; lid, cover and pod walls are 2.4 mm = 3 perimeters. Infill 15 % to 20 % **[estimate]**; the plates and posts are mostly walls anyway.
-- Posts and screw pilots: the 2.1 mm pilot holes are small, so print them with at least 4 perimeters around the post **[estimate]** so the screw does not split it.
+- Posts and screw pilots: the 2.4 mm pilot holes are small, so print them with at least 4 perimeters around the post **[estimate]** so the screw does not split it.
 - Orientation of the vent slots (2 mm) and the cable channel roof is a bridge: check the preview in Studio.
 
 ## 3. Screws (D-044: only what is in your box)
 | Where | Screw | Hole in the model | Value status |
 |---|---|---|---|
-| lid to base (4), cover to bay posts (4), arm foot to rear wall (2) | DIN965 flat head M2.5 x 8 | pilot 2.1 mm, 6.5 deep; through hole 2.7 mm; countersink 5.2 x 1.5 | pilot [estimate]; head size [estimate] (measure one screw head and tell me) |
-| OLED to the standoffs (4) | M2.5 x 5 | pilot 2.1 mm, 4.2 deep | [estimate] |
+| lid to base (4), cover to bay posts (4), arm foot to rear wall (2) | DIN965 flat head M2.5 x 8 | pilot 2.4 mm (D-052, tested), 6.5 deep; through hole 2.7 mm; countersink 5.2 x 1.5 | pilot tested (s42); head size [estimate] (measure one screw head and tell me) |
+| OLED to the standoffs (4) | M2.5 x 5 | pilot 2.4 mm (D-052), 4.2 deep | [estimate] |
 | DHT22 tab to the pod post (1) | M3 x 5 | pilot 2.5 mm, 4.5 deep | [estimate]; the flat head sits on a 3 mm tab hole, tighten gently |
 Screw in slowly the first time; the thread cuts its own groove in the plastic. Do not over-tighten PETG.
 
@@ -111,3 +111,5 @@ Four photos, all with the parts held in the hand (not assembled in the case). **
 **Pilot test result (s42, D-052 settled):** the owner printed the pilot plate; the **2.4 mm** post took the M2.5 x 8 as a perfect fit (head flush). `pilot_d` = 2.4 mm. `base`, `lid`, `testslice` and `lidfit` were re-exported (`arm` and `cover` hold no pilots, so they are byte-identical).
 
 **Cable snap slot (s42, D-053, replaces the widened tunnel):** the front-stop tunnel is back to 4 x 6 mm, with a 3.0 mm wide neck cut from the tunnel up through the top of the stop. Press the cable in from above; the 3.4 mm jacket squeezes about 0.4 mm and the cable stays put. `base`, `lidfit` and `testslice` re-exported (OpenSCAD `NoError`). **Unverified:** print piece B and press the real cable in. If it will not go in, raise `snap_w` (3.2); if it pops out, lower it (2.8).
+
+**Cable clips on the two low blocks (s42, D-054):** each 12 mm block has a 10 mm long clip on top: a 3.6 mm wide seat for the 3.4 mm cable with a 3.0 mm wide, 1.5 mm tall neck above it. Press the cable in from above. `base`, `lidfit` and `testslice` re-exported (`NoError`). **Unverified:** not seen in a render, not printed. The side walls beside the seat are only 0.9 mm (the block is 5.4 mm wide); if they flex too much or crack, shorten the seat to 3.5 or drop the clip. Parameters: `clip_seat`, `clip_neck_h`, `clip_len`, `snap_w`.
