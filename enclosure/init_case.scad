@@ -134,7 +134,7 @@ module base() {
   x_b0 = wall + vest + gap; x_b1 = x_b0 + bank[0]; y_b0 = y_b0g;
   for (yy = [wall - 0.01, y_b0 + bank[1] - 5]) translate([x_b0 - 8, yy, floor_t - 0.01]) difference() {
     cube([7.7, (yy < 10 ? y_b0 + 5 - wall + 0.01 : wall + inner_y - (y_b0 + bank[1] - 5) + 0.01), stop_h]);
-    if (yy < 10) translate([-1, 1.2, -1]) cube([7.7 + 2, 4, 6]);     // cable tunnel through the front stop
+    if (yy < 10) translate([-1, -1, -1]) cube([7.7 + 2, 8.5, 12.5]);     // cable tunnel through the front stop (D-053): 7.5 wide x 12.5 tall, so the USB-C plug head (11.3 x 6.5) passes too, flush with the front wall and the floor
   }
   for (yy = [wall + 11, wall + inner_y - 11 - 14]) translate([x_b1 + 0.3, yy, floor_t - 0.01]) cube([wall + inner_x - x_b1 - 0.3 + 0.01, 14, stop_h]);
   // front stop blocks (draft 8): low blocks on the cable-pathway side. The cable lies in the strip between the front wall and the bank and drapes over them.
