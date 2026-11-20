@@ -34,7 +34,7 @@ You are continuing **classroom-heat-index-monitoring** (d:\\System Documents\\Do
 3. Open every reply with the status line from \`node tools/phase-report.mjs\`.
 4. No new feature is planned, designed or built until the owner approves it in documentation/specs/FEATURES.md.
 5. **Push only to your own branch** (owner: \`codenametempest14\`) and **ask before every push and every merge to \`main\`**, naming the target.
-6. **Research paper (CLAUDE.md rule 5):** keep \`paper/\` (.docx and .pdf, \`node paper/build.mjs\`) in step with every feature, change and new data; every reference must be opened and read by you, published 2021 to 2026, never invented.
+6. **Research paper (CLAUDE.md rule 5):** keep \`paper/\` in step with every feature, change and new data: update the text (\`paper/content.mjs\`) on either device, but rebuild the .docx and .pdf (\`node paper/build.mjs\`) **only on the laptop**; a desktop session lists "Paper pending rebuild" in its Close Report and CURRENT_STATE; every reference must be opened and read by you, published 2021 to 2026, never invented.
 7. **Device (CLAUDE.md rule 6):** ask which device the owner is on (laptop or desktop); if it differs from the previous session's, remind them to run \`git pull origin main\` first. The previous session ended on the **desktop** (s42).
 8. At the end: Session Close Report (with the Phase Progress table), update CURRENT_STATE.md, PROGRESS_LOG.md entry, then run \`node tools/continuation-prompt.mjs\` and **show the generated prompt and the progress table in the final message**.
 

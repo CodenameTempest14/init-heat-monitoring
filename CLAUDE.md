@@ -24,6 +24,10 @@ Rules below are carried over from the Ad Astra project (`D:\System Documents\Doc
    References, Appendices). It includes the diagrams of everything that involves the process (hardware, schematic,
    software, data flow) and the gathered data. **Whenever a feature, a change to the code or hardware, or new data
    is added, the paper and both files are updated in the same session** and listed in the Close Report.
+   *Amended 2026-11-21 (owner, s42):* the paper **text** (`paper/content.mjs`) is still updated in the same session on
+   either device, but the `.docx` and `.pdf` are **rebuilt only on the laptop** (the desktop has no working Playwright
+   browser). A desktop session that changes the paper text lists **"Paper pending rebuild"** in its Close Report and in
+   CURRENT_STATE, and the first laptop session rebuilds both files (`git pull origin main` first) and clears the line.
    **No hallucinated references (owner, s27):** every reference must be legit and reliable. Each has a link I
    opened and read in this session (the page itself, not a search snippet, and not a subagent's word alone for
    anything I cite); never invent or "complete from memory" an author, title, date, volume, pages, DOI or URL.
