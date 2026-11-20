@@ -2,6 +2,9 @@
 
 Newest first. One entry per session.
 
+## 2026-11-21 · s42 (continued, closed)
+Desktop, owner only. The owner printed the re-exported `lidfit` (2.4 mm pilot) and reports that it fits well, screws included (owner's word; photos to be sent later). D-052 to D-054 marked verified on that word; the full case (`base`, `lid`) is still not printed, so the cable snap neck and clips are only seen on the lidfit pieces. Paper: enclosure paragraph and the limits line updated (test pieces printed, full case not yet); `npm install` and Playwright Chromium installed on the desktop for the build. Pushed to `desktop-tempest` and `main`.
+
 ## 2026-11-19 · s42
 Desktop, owner only. Also D-053: front-stop cable tunnel kept at 4 x 6 mm with a 3.0 mm snap neck open to the top, so the cable is pressed in and held (base, lidfit, testslice re-exported; unverified until B is printed). Also D-054 (owner approved): a snap clip on each of the two low stop blocks to hold the cable. Owner printed the pilot plate: 2.4 mm is the perfect fit, so D-052 settled at `pilot_d` = 2.4. Re-exported base, lid, testslice, lidfit (arm, cover, podlid unchanged). Paper not changed (no screw pilots in it). No tests or paper build run (`npm install` still not run on the desktop).
 
